@@ -23,3 +23,6 @@ bool List::Insert(int i, int &x) {
     }
 }
 int main()
+{
+
+}
