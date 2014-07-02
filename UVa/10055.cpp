@@ -32,10 +32,10 @@ using namespace std;
 
 int main()
 {
-	int a,b;
-	while(scanf("%d%d", &a,&b)==2)
+	long long int a,b;
+	while(scanf("%lld%lld", &a,&b)==2)
 	{
-		printf("%d\n", a>b?a-b:b-a);
+		printf("%lld\n", a>b?a-b:b-a);
 	}
 	return 0;
 }
