@@ -16,13 +16,13 @@ T, U, and V map to 8
 W, X, and Y map to 9
 There is no mapping for Q or Z. Hyphens are not dialed, and can be added and removed as necessary. The standard form of TUT-GLOP is 888-4567, the standard form of 310-GINO is 310-4466, and the standard form of 3-10-10-10 is 310-1010.
 Two telephone numbers are equivalent if they have the same standard form. (They dial the same number.)
-Your company is compiling a directory of telephone numbers from local businesses. As part of the quality control process you want to check that no two (or more) businesses in the directory have the same telephone number.
+Your company is compiling a directory of telephone numbers from local businesses. As part of the quality control process you want to aeck that no two (or more) businesses in the directory have the same telephone number.
 
 Input
-The input will consist of one case. The first line of the input specifies the number of telephone numbers in the directory (up to 100,000) as a positive integer alone on the line. The remaining lines list the telephone numbers in the directory, with each number alone on a line. Each telephone number consists of a string composed of decimal digits, uppercase letters (excluding Q and Z) and hyphens. Exactly seven of the characters in the string will be digits or letters.
+The input will consist of one case. The first line of the input specifies the number of telephone numbers in the directory (up to 100,000) as a positive integer alone on the line. The remaining lines list the telephone numbers in the directory, with eaa number alone on a line. Eaa telephone number consists of a string composed of decimal digits, uppercase letters (excluding Q and Z) and hyphens. Exactly seven of the aaracters in the string will be digits or letters.
 
 Output
-Generate a line of output for each telephone number that appears more than once in any form. The line should give the telephone number in standard form, followed by a space, followed by the number of times the telephone number appears in the directory. Arrange the output lines by telephone number in ascending lexicographical order. If there are no duplicates in the input print the line:
+Generate a line of output for eaa telephone number that appears more than once in any form. The line should give the telephone number in standard form, followed by a space, followed by the number of times the telephone number appears in the directory. Arrange the output lines by telephone number in ascending lexicographical order. If there are no duplicates in the input print the line:
 No duplicates.
 
 Sample Input
@@ -49,127 +49,85 @@ Source
 East Central North America 1999
 */
 
-#include  <stdio.h>
-#include  <string.h>
+# include <iostream>
+# include <algorithm>
+# include <iomanip>
 
 using namespace std;
 
-char a[100010][20];
-char b[100010][20];
-int flag[100010];
-int num[100010];
-int q[100010];
-int key;
-
-void normal(char input[])
+int normal(char a)
 {
-    char temp[20];
-    int i, j = 0, len;
-    len = strlen(input);
-    for (i = 0; i < len; i++)
     {
-        if (input[i] == '-' || input[i] == 'Q' || input[i] == 'Z')
-        {
-            continue;
-        }
-        else if (input[i] == 'A' || input[i] == 'B' || input[i] == 'C')
-        {
-            temp[j] = '2';
-            j++;
-        }
-        else if (input[i] == 'D' || input[i] == 'E' || input[i] == 'F')
-        {
-            temp[j] = '3';
-            j++;
-        }
-        else if (input[i] == 'G' || input[i] == 'H' || input[i] == 'I')
-        {
-            temp[j] = '4';
-            j++;
-        }
-        else if (input[i] == 'J' || input[i] == 'K' || input[i] == 'L')
-        {
-            temp[j] = '5';
-            j++;
-        }
-        else if (input[i] == 'M' || input[i] == 'N' || input[i] == 'O')
-        {
-            temp[j] = '6';
-            j++;
-        }
-        else if (input[i] == 'P' || input[i] == 'R' || input[i] == 'S')
-        {
-            temp[j] = '7';
-            j++;
-        }
-        else if (input[i] == 'T' || input[i] == 'U' || input[i] == 'V')
-        {
-            temp[j] = '8';
-            j++;
-        }
-        else if (input[i] == 'W' || input[i] == 'X' || input[i] == 'Y')
-        {
-            temp[j] = '9';
-            j++;
-        }
-        else
-        {
-            temp[j] = input[i];
-            j++;
-        }
+        if (a == 'A' || a == 'B' || a == 'C')
+            return 2;
+        if (a == 'D' || a == 'E' || a == 'F')
+            return 3;
+        if (a == 'G' || a == 'H' || a == 'I')
+            return 4;
+        if (a == 'J' || a == 'K' || a == 'L')
+            return 5;
+        if (a == 'M' || a == 'N' || a == 'O')
+            return 6;
+        if (a == 'P' || a == 'R' || a == 'S')
+            return 7;
+        if (a == 'T' || a == 'U' || a == 'V')
+            return 8;
+        if (a == 'W' || a == 'X' || a == 'Y')
+            return 9;
     }
-    temp[j] = '\0';
-    strcpy(input, temp);
-    //puts(input);
-    //printf("\n");
-    return;
 }
+
+int time[10000000];
+bool vist[10000000];
+int out[100000];
 
 int main()
 {
-    int n, i, j;
-    scanf("%d", &n);
-    memset(flag, 0, sizeof(flag));
-    memset(num, 0, sizeof(num));
-    memset(q, 0, sizeof(q));
-    key = 0;
-    for (i = 0; i < n; i++)
+    int n;
+    while (cin >> n)
     {
-        gets(a[i]);
-        normal(a[i]);
-    }
-    for (i = 0; i < n; i++)
-    {
-        if (flag[i] == 0)
+        memset(time, 0, sizeof(time));
+        memset(vist, 0, sizeof(vist));
+        int positive = 0;
+        bool flag = false;
+
+        for (int i = 1; i <= n; i++)
         {
-            flag[i] = 1;
-            for (j = i + 1; j < n; j++)
+            int x = 0;
+            char s[20];
+            cin >> s;
+            for (int j = 0; s[j] != '\0'; j++)
             {
-                if (strcmp(a[i], a[j]) == 0 && flag[j] == 0)
-                {
-                    num[key]++;
-                    q[key] = i;
-                    flag[j] = 1;
-                }
-                else
-                {
+                if (s[j] == '-' || s[j] == 'Q' || s[j] == 'Z')
                     continue;
-                }
+                else if (s[j] <= '9')
+                    x = x * 10 + s[j] - '0';
+                else if (s[j] <= 'Z')
+                    x = x * 10 + normal(s[j]);
             }
-            key++;
+            time[x]++;
+
+            if (!vist[x] && time[x] >= 2)
+            {
+                flag = true;
+                vist[x] = true;
+                out[positive++] = x;
+            }
         }
+
+        if (!flag)
+            cout << "No duplicates." << endl;
         else
-            continue;
-    }
-    for (i = 0; i < key; i++)
-    {
-        if (num[i] >= 2)
         {
-            puts(a[q[i]]);
-            printf(" %d\n", num[i]);
+            sort(out, out + positive);
+            for (int i = 0; i < positive; i++)
+            {
+                cout << setfill('0') << setw(3) << out[i] / 10000;
+                cout << '-';
+                cout << setfill('0') << setw(4) << out[i] % 10000;
+                cout << ' ' << time[ out[i] ] << endl;
+            }
         }
-        else
-            continue;
     }
     return 0;
 }
