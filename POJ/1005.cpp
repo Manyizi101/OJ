@@ -14,12 +14,12 @@ int main()
 {
 	int n,year,flag;
 	float x,y;
+	flag=1;
 	cin>>n;
 	while(n--)
 	{
 		cin>>x>>y;
 		year=1;
-		flag=1;
 		while(100*year<PI*dis(x,y)*dis(x,y))
 			year++;
 		cout<<"Property "<<flag<<": This property will begin eroding in year "<<year<<"."<<endl;
