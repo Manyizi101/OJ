@@ -6,7 +6,7 @@ using namespace std;
 int isPrime(int in)
 {
     int i;
-    for (i = 2; i < in; i++)
+    for (i = 2; i <= sqrt(in); i++)
     {
         if (in % i == 0) return 0;
     }
@@ -24,7 +24,7 @@ int main()
             j++;
         }
     }
-    for(i=0;i<10;i++)	cout<<prime[i]<<endl;
+    for(i=0;i<20;i++)	cout<<prime[i]<<endl;
 begin:
     while (cin >> a && a != 0)
     {
@@ -35,6 +35,7 @@ begin:
             {
                 sum += prime[j];
                 num++;
+                cout<<prime[j];
                 if (sum == a)
                 {
                     //cout << num << endl;
