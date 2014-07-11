@@ -1,57 +1,46 @@
-#include  <iostream>
-#include  <cmath>
-
+#include <cstring>
+#include <iostream>
 using namespace std;
 
-int isPrime(int in)
-{
-    int i;
-    for (i = 2; i <= sqrt(in); i++)
-    {
-        if (in % i == 0) return 0;
-    }
-    return 1;
-}
+bool flag[10002];
+int prime[10002], sum[1402];
+int tmp;
 
 int main()
 {
-    int prime[10000], i, j = 0, a;
-    for (i = 2; i < 10001; i++)
+    int i, j, k ;
+    memset(flag, -1, sizeof(flag));
+    memset(sum, 0, sizeof(sum));
+    memset(prime, 0, sizeof(prime));
+
+    tmp = 0;
+    for ( i = 2; i <= 10000; i++ )
     {
-        if (isPrime(i))
+        if ( flag[i] )
         {
-            prime[j] = i;
-            j++;
+            prime[++tmp] = i;
+            for ( j = 2; i * j <= 10000; j++ )
+                flag[i * j] = 0;
         }
     }
-    for(i=0;i<20;i++)	cout<<prime[i]<<endl;
-begin:
-    while (cin >> a && a != 0)
+
+    for ( i = 1; i <= tmp; i++ )
+        sum[i] = sum[i - 1] + prime[i];
+
+    int n, ans;
+    while ( cin >> n && n )
     {
-        for (i = 0; prime[i] <= a; i++)
+        ans = i = 0;
+        while ( prime[i] < n && i < tmp ) i++;
+        if ( prime[i] == n ) ans++;
+
+        for ( j = i - 1; j >= 1; j-- )
         {
-            int num = 0, sum = 0;
-            for (j = i; prime[j] <= a; j++)
-            {
-                sum += prime[j];
-                num++;
-                cout<<prime[j];
-                if (sum == a)
-                {
-                    //cout << num << endl;
-                    //cout << sum << endl;
-                    cout << num << endl;
-                    goto begin;
-                }
-                else if (sum < a)  continue;
-                else
-                {
-                    break;
-                }
-            }
+            for ( k = 0; k < j; k++ )
+                if ( sum[j] - sum[k] == n )
+                    ans++;
         }
-        cout << 0 << endl;
-        goto begin;
+        cout << ans << endl;
     }
     return 0;
 }
