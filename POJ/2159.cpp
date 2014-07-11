@@ -1,45 +1,33 @@
-#include <stdio.h>
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <algorithm>
-
 using namespace std;
-
-void substitution(char a[], int dis)
-{
-    int i;
-    int len = strlen(a);
-    for (i = 0; i < len; i++)
-    {
-        a[i] += dis;
-        if (a[i] > 'Z')    a[i] -= 26;
-    }
-    return;
-}
 
 int main()
 {
-    bool ans = false;
-    int i, j;
-    char in[110], out[110], tmp[110];
-    cin >> in >> out;
-    int len = strlen(in);
-    for (i = 0; i < 26; i++)
+    int i;
+    int cipher[26], clear[26];
+    memset(cipher, 0, sizeof(cipher));
+    memset(clear, 0, sizeof(clear));
+    string in, out;
+    cin >> in;
+    for (i = 0; i < in.length(); i++)
     {
-        strcpy(tmp, in);
-        do
-        {
-            if (!strcmp(tmp, out))
-            {
-                ans = true;
-                goto answer;
-            }
-        }
-        while (next_permutation(tmp, tmp + 10));
-        substitution(in, 1);
+        cipher[in[i] - 'A']++;
     }
-answer:
-    if (ans == true)   cout << "YES";
-    else    cout << "NO";
+    cin >> out;
+    for (i = 0; i < out.length(); i++)
+    {
+        clear[out[i] - 'A']++;
+    }
+    sort(cipher, cipher + 26);
+    sort(clear, clear + 26);
+    for (i = 0; i < 26; i++)
+        if (cipher[i] != clear[i])
+        {
+            cout << "NO" << endl;
+            return 0;
+        }
+    cout << "YES" << endl;
     return 0;
 }
