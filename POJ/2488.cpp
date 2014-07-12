@@ -1,39 +1,106 @@
 #include <iostream>
-#include <algorithm>
 #include <cstring>
-using namespace std;
-
-int visited[7][7];
-int X[4] = { -2, 2, 2, -2};
-int Y[4] = {2, 2, -2, -2};
-
-int go(int x, int y, int p, int q)
-{
-    if (visited[x][y] == 1 && 0 < x && x < p+1 && 0 < y && y < q+1)    return 1;
-    else return 0;
-}
-
-void dfs(int x, int y)
-{
-    visited[x][y] = 1;
-    for (i = 0; i < 4; i++)
-        if (go(x + X[i], y + Y[i]))
-            dfs(x + X[i], y + Y[i]);
-
-}
-
+using namespace std;  
+  
+typedef class  
+{  
+    public:  
+        int row;  
+        char col;  
+}location;  
+  
+int p,q;   
+          
+bool chess['Z'+1][27];  
+  
+int x,y;  
+void path(int i,int j,int num)  
+{                              
+    switch(num)  
+    {  
+        case 1: {x=i-1; y=j-2; break;}       
+        case 2: {x=i+1; y=j-2; break;}    
+        case 3: {x=i-2; y=j-1; break;}    
+        case 4: {x=i+2; y=j-1; break;}  
+        case 5: {x=i-2; y=j+1; break;}  
+        case 6: {x=i+2; y=j+1; break;}  
+        case 7: {x=i-1; y=j+2; break;}  
+        case 8: {x=i+1; y=j+2; break;}  
+    }  
+    return;  
+}  
+  
+bool DFS(location* way,int i,int j,int step)  
+{  
+    chess[i][j]=true;  
+    way[step].row=i;  
+    way[step].col=j;  
+    if(step==way[0].row)  
+        return true;  
+  
+    for(int k=1;k<=8;k++)  
+    {  
+        path(i,j,k);  
+        int ii=x,jj=y;  
+        if(!chess[ii][jj] && ii>=1 && ii<=p && jj>='A' && jj<='A'+q-1)  
+            if(DFS(way,ii,jj,step+1))  
+                return true;  
+    }  
+      
+    chess[i][j]=false;  
+    return false;       
+}  
+  
 int main(int argc, char const *argv[])
-{
-    int n;
-    cin >> n;
-    while (n--)
-    {
-        int p, q, i, j;
-        memset(visited, 0, sizeof(visited));
-        cin >> p >> q;
-        for (i = 0, j = 0; i < p+2; i++)    visited[i][j] = 1;
-        for (i = 0, j = 0; j < q+2; j++)    visited[i][j] = 1;
-        dfs(p,q);
-    }
-    return 0;
-}
+{  
+    int test;  
+    cin>>test;  
+    int t=1;  
+    while(t<=test)  
+    {  
+
+  
+        memset(chess,false,sizeof(chess));  
+  
+        cin>>p>>q;  
+        if(p==1 && q==1)     
+        {  
+            cout<<"Scenario #"<<t++<<':'<<endl;  
+            cout<<"A1"<<endl<<endl;  
+            continue;  
+        }  
+        if(p*q>26 || p>=9 || q>=9 || p<=2 || q<=2)       
+        {  
+            cout<<"Scenario #"<<t++<<':'<<endl;  
+            cout<<"impossible"<<endl<<endl;  
+            continue;  
+        }  
+          
+        location* way=new location[p*q+1];  
+        way[0].row=p*q; 
+        bool flag=false;  
+        for(int j='A';j<='A'+q-1;j++)  
+        {  
+            for(int i=1;i<=p;i++)  
+                if(DFS(way,i,j,1))  
+                {  
+                    cout<<"Scenario #"<<t++<<':'<<endl;  
+                      
+                    for(int k=1;k<=way[0].row;k++)  
+                        cout<<way[k].col<<way[k].row;  
+                    cout<<endl<<endl;  
+                    flag=true;  
+                    break;  
+                }  
+                if(flag)  
+                    break;  
+        }  
+  
+        if(!flag)  
+        {  
+            cout<<"Scenario #"<<t++<<':'<<endl;  
+            cout<<"impossible"<<endl<<endl;  
+        }  
+    }  
+    return 0;  
+}  
