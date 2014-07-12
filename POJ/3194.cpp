@@ -1,41 +1,59 @@
-#include <iostream>
+#include <iostream>  
 #include <cstring>
-using namespace std;
-
-int i, j;
-int map[110][110];
-
-int main()
-{
-    int n;
-flag:
-    while (cin >> n && n != 0)
-    {
-        memset(map, 0, sizeof(map));
-        int x, y;
-        for (i = 1; i <= n - 1; i++)
-            for (j = 1; j <= n; j++)
-            {
-                cin >> x >> y;
-                map[y][x] = i;
-            }
-        for (i = 1; i <= n; i++)
-            for (j = 1; j <= n; j++)
-            {
-                if (map[i][j] == 0)    map[i][j] = n;
-            }
-        for (i = 1; i <= n; i++)
-            for (j = 1; j <= n; j++)
-            {
-                if (!(map[i][j] == map[i - 1][j] || map[i][j] == map[i][j + 1] || map[i][j] == map[i + 1][j] || map[i][j] == map[i][j - 1]))
-                {
-                    cout << "wrong" << endl;
-                    goto flag;
-                }
-            }
-
-        cout << "good" << endl;
-        goto flag;
-    }
-    return 0;
-}
+using namespace std;  
+int N, ans;  
+int map[101][101];  
+int visit[101][101];  
+int step[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};  
+int color[101];  
+bool Check(int x, int y)  
+{  
+    if (x >= N || x < 0 || y >= N || y < 0)  
+        return false;  
+    return true;  
+}  
+void DFS(int CurX, int CurY)  
+{  
+    ans++;  
+    visit[CurX][CurY] = 1;  
+    color[map[CurX][CurY]] = 1;  
+    for (int i = 0; i < 4; i++)  
+    {  
+        int x = CurX+step[i][0];  
+        int y = CurY+step[i][1];  
+        if (Check(x, y) == false || visit[x][y] == 1)  
+            continue;  
+        if (map[CurX][CurY] == map[x][y] || color[map[x][y]] == 0)  
+        {  
+            DFS(x, y);  
+        }  
+    }  
+}  
+int main()  
+{  
+    freopen("test.txt", "r", stdin);  
+    while (cin>>N && N !=0)  
+    {  
+        int index = 1;  
+        ans = 0;  
+        memset(map, 0, sizeof(map));  
+        memset(visit, 0, sizeof(visit));  
+        memset(color, 0, sizeof(color));  
+        for (int i = 0; i < N-1; i++)  
+        {  
+            for (int j = 0; j < N; j++)  
+            {  
+                int a, b;  
+                cin>>a>>b;  
+                map[a-1][b-1] = index;  
+            }  
+            index++;  
+        }  
+        DFS(0, 0);  
+        if (ans == N*N)  
+            cout<<"good"<<endl;  
+        else  
+            cout<<"wrong"<<endl;  
+    }  
+    return 0;  
+}  
