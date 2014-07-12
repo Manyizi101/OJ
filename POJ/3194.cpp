@@ -31,7 +31,6 @@ void DFS(int CurX, int CurY)
 }  
 int main()  
 {  
-    freopen("test.txt", "r", stdin);  
     while (cin>>N && N !=0)  
     {  
         int index = 1;  
