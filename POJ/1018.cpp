@@ -1,45 +1,115 @@
-#include <iostream>
-#include <algorithm>
+#include <iostream>  
+#include <algorithm>  
+#include <iomanip>  
 #include <cstring>
-using namespace std;
-
-int band[11][110];
-int price[11][110];
-int picked_band[11];
-int picked_price[11];
-float BP[11][110];
-float picked_BP[11]
-
-int main(int argc, char const *argv[])
-{
-	int n;
-	cin>>n;
-	while(n--)
-	{
-		int num,i,j;
-		memset(band,0,sizeof(band));
-		memset(price,0,sizeof(price));
-		memset(BP,0,sizeof(BP));
-		memset(picked_band,0,sizeof(picked_band));
-		memset(picked_price,0,sizeof(picked_price));
-		memset(picked_BP,0,sizeof(picked_BP));
-		cin>>i;
-		while(i--)
-		{
-			cin>>j;
-			while(j--)
-			{
-				cin>>band[i][j]>>prince[i][j];
-				BP[i][j]=(float)band[i][j]/(float)price[i][j];
-				if(BP[i][j]>picked_BP[i])
-				{
-					picked_BP[i]=BP[i][j];
-					picked_band[i]=band[i][j];
-					picked_price[i]=band[i][j];
-				}
-			}
-		}
-		
-	}
-	return 0;
-}
+using namespace std;  
+  
+class info  
+{  
+public:  
+    int B;  
+    double P;    
+    int id; 
+};  
+  
+int cmp(const void* a,const void* b)  
+{  
+    info* x=(info*)a;  
+    info* y=(info*)b;  
+  
+    if((x->B)==(y->B))   
+    {  
+        if((x->P)==(y->P))   
+            return (x->id)-(y->id);     
+  
+        return (x->P)-(y->P);  
+    }  
+  
+    return (x->B)-(y->B);   
+}  
+  
+double max(double a,double b)  
+{  
+    return a>b?a:b;  
+}  
+  
+int main(int argc, char const *argv[], int i, int j)
+{  
+    int test;  
+    cin>>test;  
+    for(int t=1;t<=test;t++)  
+    {  
+        int n;   
+        int m=0;  
+        cin>>n;  
+  
+        int* MaxB=new int[n+1];  
+        info* dev=new info[100*100+1];      
+  
+        int pd=0;  
+  
+       
+  
+          
+        for(i=1;i<=n;i++)  
+        {  
+            int mi;  
+            cin>>mi;  
+            m+=mi;  
+  
+            MaxB[i]=-1;  
+            for(j=1;j<=mi;j++)  
+            {  
+                pd++;  
+                cin>>dev[pd].B>>dev[pd].P;  
+                dev[pd].id=i;  
+  
+                MaxB[i]=max(MaxB[i],dev[pd].B);  
+            }  
+        }  
+  
+       
+  
+        qsort(dev,m+1,sizeof(info),cmp);  
+  
+       
+  
+        bool flag=false;  
+        double ans=0;  
+        for(i=1;i<=m-(n-1);i++)   
+        {                          
+            bool* vist=new bool[n+1];  
+            memset(vist,false,sizeof(bool)*(n+1));  
+  
+            vist[ dev[i].id ]=true;  
+            double price=dev[i].P;  
+            int count=1;     
+  
+            for(j=i+1;j<=m;j++)  
+            {  
+                if(vist[ dev[j].id ])  
+                    continue;  
+  
+                if(dev[i].B > MaxB[ dev[j].id ])   
+                {  
+                    flag=true;   
+                    break;       
+                }  
+  
+                vist[ dev[j].id ]=true;  
+                price+=dev[j].P;  
+                count++;  
+            }  
+            if(flag || count<n)  
+                break;  
+  
+            ans=max(ans,(dev[i].B/price));  
+        }  
+  
+        cout<<fixed<<setprecision(3)<<ans<<endl;  
+  
+        delete MaxB;  
+        delete dev;  
+    }  
+    return 0;  
+}  

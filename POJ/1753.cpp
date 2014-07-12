@@ -1,40 +1,76 @@
-/**
-Flip Game
-Time Limit: 1000MS		Memory Limit: 65536K
-Total Submissions: 29660		Accepted: 12851
-
-Description
-Flip game is played on a rectangular 4x4 field with two-sided pieces placed on each of its 16 squares. One side of each piece is white and the other one is black and each piece is lying either it's black or white side up. Each round you flip 3 to 5 pieces, thus changing the color of their upper side from black to white and vice versa. The pieces to be flipped are chosen every round according to the following rules: 
-Choose any one of the 16 pieces. 
-Flip the chosen piece and also all adjacent pieces to the left, to the right, to the top, and to the bottom of the chosen piece (if there are any).
-Consider the following position as an example: 
-bwbw 
-wwww 
-bbwb 
-bwwb 
-Here "b" denotes pieces lying their black side up and "w" denotes pieces lying their white side up. If we choose to flip the 1st piece from the 3rd row (this choice is shown at the picture), then the field will become: 
-bwbw 
-bwww 
-wwwb 
-wwwb 
-The goal of the game is to flip either all pieces white side up or all pieces black side up. You are to write a program that will search for the minimum number of rounds needed to achieve this goal. 
-
-Input
-The input consists of 4 lines with 4 characters "w" or "b" each that denote game field position.
-
-Output
-Write to the output file a single integer number - the minimum number of rounds needed to achieve the goal of the game from the given position. If the goal is initially achieved, then write 0. If it's impossible to achieve the goal, then write the word "Impossible" (without quotes).
-
-Sample Input
-bwwb
-bbwb
-bwwb
-bwww
-
-Sample Output
-4
-
-Source
-Northeastern Europe 2000
-*/
-
+#include<iostream>  
+using namespace std;  
+  
+bool chess[6][6]={false}; 
+bool flag;  
+int step;  
+int r[]={-1,1,0,0,0};
+int c[]={0,0,-1,1,0};  
+  
+bool judge_all(void)
+{  
+    int i,j;  
+    for(i=1;i<5;i++)  
+        for(j=1;j<5;j++)  
+            if(chess[i][j]!=chess[1][1])  
+                return false;  
+    return true;  
+}  
+  
+void flip(int row,int col)
+{  
+    int i;  
+    for(i=0;i<5;i++)  
+        chess[row+r[i]][col+c[i]]=!chess[row+r[i]][col+c[i]];  
+    return;  
+}  
+  
+void dfs(int row,int col,int deep)  
+{  
+    if(deep==step)  
+    {  
+        flag=judge_all();  
+        return;  
+    }  
+  
+    if(flag||row==5)return;  
+  
+    flip(row,col);      
+    if(col<4)  
+        dfs(row,col+1,deep+1);  
+    else  
+        dfs(row+1,1,deep+1);  
+  
+    flip(row,col);       
+    if(col<4)  
+        dfs(row,col+1,deep);  
+    else  
+        dfs(row+1,1,deep);  
+  
+    return;  
+}  
+  
+int main(void)  
+{  
+    char temp;  
+    int i,j;  
+    for(i=1;i<5;i++)  
+        for(j=1;j<5;j++)  
+        {  
+            cin>>temp;  
+            if(temp=='b')   
+                chess[i][j]=true;  
+        }  
+  
+    for(step=0;step<=16;step++)   
+    {                            
+        dfs(1,1,0);  
+        if(flag)break;  
+    }  
+  
+    if(flag)  
+        cout<<step<<endl;  
+    else  
+        cout<<"Impossible"<<endl;  
+    return 0;  
+}  
