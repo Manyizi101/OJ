@@ -1,58 +1,44 @@
 #include <iostream>
-#include <cstdio>
 using namespace std;
 
-char chess[10][10];
-int visited[10][10];
-int X[4] = { -1, 1, 1, -1};
-int Y[4] = {1, 1, -1, -1};
-int remain;
-int i,j;
+char pic[8][8];
+int col[8];
+int c;
+int n, k;
 
-int judge(int x, int y, int n)
+void dfs(int begin, int num)
 {
-    int i, j;
-    for (i = x, j = 0; j < n; j++)    visited[i][j] = 1;
-    for (j = y, i = 0; i < n; i++)    visited[i][j] = 1;
-}
-
-void dfs(int x, int y, int n)
-{
-    judge(x, y, n);
-    for (i = 0; i < 4; i++)
-        if (visited[x + X[i]][y + Y[i]] == 0)
+    for (int j = 0; j < n; j++)
+    {
+        if (pic[begin][j] == '#' && col[j] == 0)
         {
-            dfs(x + X[i], y + Y[i], n);
-            remain--;
+            if (num == 1)
+                c++;
+            else
+            {
+                col[j] = 1;
+                for (int h = begin + 1; h < n - num + 2; h++)
+                    dfs(h, num - 1);
+                col[j] = 0;
+            }
         }
+    }
 }
 
 int main(int argc, char const *argv[])
 {
-    int n, k, ans;
-    while (cin >> n >> k && n != -1 && k != -1)
+    while ((cin >> n >> k) && !(n == -1 && k == -1))
     {
-        memset(visited, 1, sizeof(visited));
-        ans = 0;
-        remain = k;
-        for (i = 0; i < n; i++)
-            for (j = 0; j < n; j++)
-            {
-                scanf("%c", &chess[i][j]);
-                if (chess[i][j] == '#')    visited[i][j] = 0;
-            }
-        for (i = 0; i < n; i++)
-            for (j = 0; j < n; j++)
-            {
-                dfs(i, j, n);
-                if (remain == 0)
-                {
-                    remain = k;
-                    ans++;
-                    break;
-                }
-            }
-        cout << ans << endl;
+        c = 0;
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                cin >> pic[i][j];
+        for (int i = 0; i < n; i++)
+            col[i] = 0;
+        for (int i = 0; i <= n - k; i++)
+        {
+            dfs(i, k);
+        }
+        cout << c << endl;
     }
-    return 0;
 }
