@@ -1,38 +1,57 @@
 #include <iostream>
-#include <cmath>
+#include <cstdio>
 #include <cstring>
+#include <cmath>
 using namespace std;
-
-int prime[36] = {1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149};
-int n;
-int facter[5010];
-int input[5010];
-int flag;
-int ans = 1;
-
-int main(int argc, char const *argv[])
+int p[4000], pNum = 0;
+bool f[20001];
+void Prime()
 {
-    memset(facter, 0, sizeof(facter));
-    memset(input, 0, sizeof(input));
-    cin >> n;
-    for (int i = 0; i < n; i++)
+    int i, j;
+    for (i = 2; i < 20001; i++)
     {
-        cin >> input[i];
-        for (int j = 0; j < 36; j++)
+        if (!f[i])
         {
-            if (input[i] % prime[j] == 0)   facter[i] = prime[j];
+            p[pNum++] = i;
+        }
+        for (j = 0; j < pNum && i * p[j] < 20001; j++)
+        {
+            f[i * p[j]] = 1;
+            if (!(i % p[j])) break;
         }
     }
-    flag = 0;
-    ans = input[0];
-    for (int i = 0; i < n; i++)
+}
+int main()
+{
+    int i, n, t, mmax = -1, pos;
+    scanf("%d", &n);
+    Prime();
+    while (n--)
     {
-        if (facter[i] > facter[flag])
+        scanf("%d", &t);
+        if (t == 1)
         {
-            ans = input[i];
-            flag = i;
+            if (mmax < 1)
+            {
+                mmax = 1;
+                pos = 1;
+            }
+        }
+        else
+        {
+            for (i = pNum - 1; i >= 0; i--)
+            {
+                if (t >= p[i] && t % p[i] == 0)
+                {
+                    if (mmax < p[i])
+                    {
+                        mmax = p[i];
+                        pos = t;
+                        break;
+                    }
+                }
+            }
         }
     }
-    cout << ans;
-    return 0;
+    printf("%d\n", pos);
 }
