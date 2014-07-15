@@ -1,27 +1,54 @@
-#include <iostream>
-#include <cstdio>
-#include <cmath>
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cmath>
+#include<cstring>
 using namespace std;
+const int N = 105;
+double mx, my, cx, cy;
 
-int n;
-float x,y;
-float dx,dy;
-float ans;
-int i;
+struct V
+{
+    double x, y;
+    bool operator < (const V &a) const
+    {
+        double t = atan2(y, x);
+        double at = atan2(a.y, a.x);
+        return t < at;
+    }
+} v[N << 1];
 
 int main(int argc, char const *argv[])
 {
-    while(cin>>n&&n!=0)
+    int n, i, ci, end;
+    double x, y;
+    while (~scanf("%d", &n) && n)
     {
-        x=y=ans=0;
-        for(i=0;i<n;i++)
+        for (i = 0; i < n; i++)
         {
-            cin>>dx>>dy;
-            x+=dx;
-            y+=dy;
-            ans=ans>sqrt(x*x+y*y)?ans:sqrt(x*x+y*y);
+            scanf("%lf%lf", &x, &y);
+            v[i << 1].x = x;
+            v[i << 1].y = y;
+            v[i << 1 | 1].x = -x;
+            v[i << 1 | 1].y = -y;
         }
-        printf("Maximum distance = %.3f meters.\n", ans);
+        sort(v, v + (n << 1));
+        cx = cy = 0;
+        for (i = 0; i < n; i++)
+        {
+            cx += v[i].x;
+            cy += v[i].y;
+        }
+        mx = cx; my = cy;
+        for (i = 0, end = n << 1; i < end; i++)
+        {
+            ci = (i + n) % end;
+            cx += v[ci].x - v[i].x;
+            cy += v[ci].y - v[i].y;
+            if (cx * cx + cy * cy > mx * mx + my * my)
+                mx = cx, my = cy;
+        }
+        printf("Maximum distance = %.3f meters.\n", sqrt((double)mx * mx + my * my));
     }
     return 0;
 }
