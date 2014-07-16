@@ -1,9 +1,12 @@
 #include <iostream>
 #include <algorithm>
+#include <cstdio>
+#include <cstring>
 using namespace std;
 
-int sticks[64], n, len, num;
+int sticks[64], n, len, num, sum;
 bool used[64];
+bool end;
 
 bool compare(int a, int b)
 {
@@ -16,8 +19,7 @@ bool dfs(int cur, int left, int level)
     {
         if (level == num - 2)
             return true;
-        for (cur = 0; used[cur]; cur++)
-            ;
+        for (cur = 0; used[cur]; cur++);
         used[cur] = true;
         if (dfs(cur + 1, len - sticks[cur], level + 1))
             return true;
@@ -51,14 +53,13 @@ int main(int argc, char const *argv[])
     {
         if (n == 0)
             break;
-        int sum = 0;
         for (int i = 0; i < n; i++)
         {
             scanf("%d", &sticks[i]);
             sum += sticks[i];
         }
         sort(sticks, sticks + n, compare);
-        bool end = false;
+        end = false;
         for (len = sticks[0]; len <= sum / 2; len++)
         {
             if (sum % len == 0)
