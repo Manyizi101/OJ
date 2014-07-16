@@ -1,62 +1,49 @@
-/*
-#include <iostream>
-#include <cstring>
+#include <cstdio>
 using namespace std;
 
-int marble[6];
-char str[6];
-int flag = 0;
+int num[6] = {0};
+int value[6] = {1, 2, 3, 4, 5, 6};
+int mod[6] = {60, 30, 20, 15, 12, 10};
+int t = 0;
+int cp[6] = {0};
 
-bool judge(int input[])
+int divide(int a)
 {
-    int i;
-    for (i = 0; i < 6; i++)    str[i] = input[i] + '0';
-    if (!(strcmp(str, "111000") && strcmp(str, "101100") && strcmp(str, "100110") && strcmp(str, "011010") && strcmp(str, "100011") && strcmp(str, "010101") && strcmp(str, "000000")&& strcmp(str, "011111")&& strcmp(str, "110111")))
-        return true;
-    else
-        return false;
-}
-
-int main(int argc, char const *argv[])
-{
-    while (cin >> marble[0] >> marble[1] >> marble[2] >> marble[3] >> marble[4] >> marble[5] && (marble[0] || marble[1] || marble[2] || marble[3] || marble[4] || marble[5]))
+    if (a == 0) return 1;
+    for (int i = 5; i >= 0; --i)
     {
-        flag++;
-        for (int i = 0; i < 6; i++)    marble[i] = marble[i] % 2;
-        if (judge(marble))   cout << "Collection #" << flag << ':' << endl << "Can be divided." << endl;
-        else cout << "Collection #" << flag << ':' << endl << "Can't be divided." << endl;
+        if (cp[i] && a >= value[i])
+        {
+            cp[i]--;
+            if (divide(a - value[i]) == 1) return 1;
+            cp[i]++;
+        }
     }
     return 0;
 }
-**/
-
-#include <iostream>
-#include <cstring>
-using namespace std;
-
-int marble[6];
-char str[6];
-int flag = 0;
-
-bool judge(int input[])
-{
-    int i,sum,value;
-    for(i=0;i<6;i++)    sum+=input[i];
-    for(i=0;i<6;i++)    value+=input[i]*(i+1);
-    if (sum%2==0&&value%2==0)
-        return true;
-    else
-        return false;
-}
 
 int main(int argc, char const *argv[])
 {
-    while (cin >> marble[0] >> marble[1] >> marble[2] >> marble[3] >> marble[4] >> marble[5] && (marble[0] || marble[1] || marble[2] || marble[3] || marble[4] || marble[5]))
+    while (true)
     {
-        flag++;
-        for (int i = 0; i < 6; i++)    marble[i] = marble[i] % 2;
-        if (judge(marble))   cout << "Collection #" << flag << ':' << endl << "Can be divided." << endl;
-        else cout << "Collection #" << flag << ':' << endl << "Can't be divided." << endl;
+        int sum = 0;
+        for (int i = 0; i < 6; ++i)
+        {
+            scanf("%d", &num[i]);
+            num[i] = num[i] % mod[i];
+            sum += value[i] * num[i];
+            cp[i] = num[i];
+        }
+        if (!sum) break;
+        printf("Collection #%d:\n", ++t);
+        if (sum % 2 != 0) printf("Can't be divided.\n");
+        else
+        {
+            sum = sum / 2;
+            if (divide(sum)) printf("Can be divided.\n");
+            else printf("Can't be divided.\n");
+        }
+        printf("\n");
     }
     return 0;
 }
