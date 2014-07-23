@@ -1,87 +1,70 @@
-/*
-#include  <cstdio>
-#include  <iostream>
-
+#include <iostream>
+#include <cmath>
+#include <cstdio>
 using namespace std;
 
-int gcd(int a, int b)
-{
-    return b?gcd(b, a%b):a;
-}
 
+long long x, y, m, n, l;
+long long a, b, d, k, s, t;
 
-int main()
+long long gcd(long long a, long long b)
 {
-    long long int x,y,m,n,l;
-    scanf("%I64d%I64d%I64d%I64d%I64d", &x,&y,&m,&n,&l);
-    for(int i=0; i<m*n/gcd(m,n)*l; i++)
+    long long c;
+    if (a < b)
     {
-        if((x+m*i)%l==(y+n*i)%l)
-        {
-            printf("%d", i);
-            return 0;
-        }
+        c = a;    a = b;
+        b = c;
     }
-    printf("Impossible");
-    return 0;
-}
-**/
-
-/*
-#include  <cstdio>
-#include  <iostream>
-using namespace std;
-
-long long int exGcd(long long int a,long long int b, long long int x, long long int y)
-{
-    if(b==0)
+    while (b)
     {
-        x=1;
-        y=0;
+        c = b;
+        b = a % b;
+        a = c;
+    }
+    return a;
+}
+
+long long extended_gcd(long long a, long long b, long long &x, long long &y)
+{
+    long long ans, t;
+    if (b == 0)
+    {
+        x = 1;    y = 0;
         return a;
-    }
-    long long int r=exGcd(b,a%b,x,y);
-    long long int t=x;
-    x=y;
-    y=t-a/b*y;
-    return r;
-}
-
-
-int main()
-{
-    long long int x,y,m,n,l;
-    long long int c=0,i=0;
-    scanf("%I64d%I64d%I64d%I64d%I64d", &x,&y,&m,&n,&l);
-    printf("%I64d", exGcd(l,n-m,c,i));
-    return 0;
-}
-**/
-
-#include  <cstdio>
-#include  <iostream>
-using namespace std;
-
-void gcdEx(const long long int a, const long long int b, long long int &x,long long int &y)
-{
-    if(b)
-    {
-        gcdEx(b,a%b,y,x);
-        y-=(long long int)(a/b)*x;
     }
     else
     {
-        x=1;
-        y=0;
+        ans = extended_gcd(b, a % b, x, y);
+        t = x;    x = y;
+        y = t - (a / b) * y;
     }
+    return ans;
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
-    long long int x,y,m,n,l;
-    long long int i=4,a;
-    scanf("%I64d%I64d%I64d%I64d%I64d", &x,&y,&m,&n,&l);
-    gcdEx(m+n,1,i,a);
-    printf("%I64d",i);
+    while (scanf("%lld %lld %lld %lld %lld", &x, &y, &m, &n, &l) != EOF)
+    {
+        a = n - m;
+        b = l;
+        d = x - y;
+        long long r = gcd(a, b);
+        if (d % r != 0)
+        {
+            printf("Impossible\n");
+            continue;
+        }
+        a /= r;
+        b /= r;
+        d /= r;
+        extended_gcd(a, b, s, k);
+        s = s * d;
+        k = k * d;
+        t = s / b;
+        s = s - t * b;
+        if (s < 0)
+            s += b;
+        printf("%lld\n", s);
+    }
     return 0;
 }
