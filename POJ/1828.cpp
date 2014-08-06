@@ -1,15 +1,12 @@
-#include <cstdio>
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 struct Point
 {
     int x; int y;
     int flag;
-};
-struct Point p[50050];
+}p[50050];
 int n;
 
 int cmp( const void *a , const void *b )
@@ -29,7 +26,7 @@ int main()
         memset(p, 0, sizeof(p));
         for (int i = 0; i < n; ++i)
         {
-            cin >> p[i].x >> p[i].y;
+            printf("%d%d", &p[i].x, &p[i].y);
         }
         qsort(p, n, sizeof(p[0]), cmp
              );
