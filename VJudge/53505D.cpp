@@ -1,11 +1,12 @@
 #include <iostream>
 #include <cstdio>
 #include <string.h>
+#include <math.h>
 using namespace std;
 #define MAXN 200
-#define inf 1000000000
+#define inf 100000000.0
 
-typedef int elem_t;
+typedef double elem_t;
 elem_t prim(int n, elem_t mat[][MAXN], int *pre)
 {
     elem_t min[MAXN], ret = 0;
@@ -19,40 +20,44 @@ elem_t prim(int n, elem_t mat[][MAXN], int *pre)
                 k = i;
         for (v[k] = 1, ret += min[k], i = 0; i < n; i++)
             if (!v[i] && mat[k][i] < min[i])
+            {
                 min[i] = mat[pre[i] = k][i];
+            }
     }
     return ret;
 }
 
 int main(int argc, char const *argv[])
 {
-    int n, m, i, j, k, t, x, y, sum;
+    int t, c, i, j;
+    double sum;
     elem_t mat[MAXN][MAXN];
-    int pre[MAXN], key[MAXN];
-    while (cin >> n >> m && n)
+    double x[MAXN], y[MAXN];
+    int pre[MAXN];
+    cin >> t;
+    while (t--)
     {
-        for (i = 0; i < m; i++)
-            for (j = 0; j < m; j++)
+        cin >> c;
+        sum = 0;
+        for (i = 0; i < c; i++)
+            for (j = 0; j < c; j++)
             {
                 if (i == j)    mat[i][j] = 0;
-                else
-                {
-                    mat[i][j] = inf;
-                    mat[j][i] = inf;
-                }
+                else    mat[i][j] = inf;
             }
-        for (t = 0; t < n; t++)
+        for (i = 0; i < c; i++)
+            cin >> x[i] >> y[i];
+        if (c == 1)
         {
-            cin >> x >> y;
-            cin >> mat[x - 1][y - 1];
-            mat[y - 1][x - 1] = mat[x - 1][y - 1];
+            cout << 0.0 << endl;
+            continue;
         }
-        sum = prim(m, mat, pre);
-        /*
-        简直无情，这样也能A= =，卧槽
-        **/
-        if (sum < inf) cout << sum << endl;
-        else cout << '?' << endl;
+        for (i = 0; i < c; i++)
+            for (j = c - 1; j >= i; j--)
+                mat[i][j] = sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]));
+        sum = prim(c, mat, pre);
+        if (sum <= 1000 && sum >= 10)  printf("%.1f\n", sum * 100);
+        else cout << "oh!" << endl;
     }
     return 0;
 }
