@@ -1,47 +1,66 @@
-#include  <cstdio>
-#include  <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <ctime>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
+#include <stack>
+#include <queue>
+#include <numeric>
+#include <iomanip>
+#include <bitset>
+#include <sstream>
+#include <fstream>
+#define debug puts("-----")
+#define pi (acos(-1.0))
+#define eps (1e-8)
+#define inf (1<<30)
+#define MAXN 110
 using namespace std;
 
-int x, y, i, j, ans;
-char Map[100][100];
-int visited[100][100];
+int n, m;
+char field[MAXN][MAXN + 1];
 
-int dfs(int i, int j)
+void dfs(int x, int y)
 {
-    if (!visited[i][j] && Map[i][j] == 'W')
+    field[x][y] = '.';
+    for (int dx = -1; dx <= 1; dx++)
     {
-        visited[i][j] = 1;
-        if (j + 1 < y && Map[i][j + 1] == 'W')     dfs(i, j + 1);
-        if (j + 1 < y && i - 1 >= 0 && Map[i - 1][j + 1] == 'W')    dfs(i - 1, j + 1);
-        if (i - 1 >= 0 && Map[i - 1][j] == 'W')    dfs(i - 1, j);
-        if (i - 1 >= 0 && j - 1 >= 0 && Map[i - 1][j - 1] == 'W')   dfs(i - 1, j - 1);
-        if (j - 1 >= 0 && Map[i][j - 1] == 'W')     dfs(i, j - 1);
-        if (j - 1 >= 0 && i + 1 < x && Map[i + 1][j - 1] == 'W')     dfs(i + 1, j - 1);
-        if (i + 1 < x && Map[i + 1][j] == 'W')      dfs(i + 1, j);
-        if (i + 1 < x && j + 1 < y && Map[i + 1][j + 1] == 'W')     dfs(i + 1, j + 1);
+        for (int dy = -1; dy <= 1; dy++)
+        {
+            int nx = x + dx, ny = y + dy;
+            if (0 <= nx && nx < n && 0 <= ny && ny < m && field[nx][ny] == 'W')
+                dfs(nx, ny);
+        }
     }
-    return 0;
+    return;
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
-    scanf("%d%d", &x, &y);
 
-    ans = 0;
-    memset(visited, 0, sizeof(visited));
-    for (i = 0; i < x; i++)    scanf("%s", Map[i]);
-    for (i = 0; i < x; i++)
+    int res = 0;
+    cin >> n >> m;
+    for (int i = 0; i < n; i++)
+        cin >> field[i];
+    for (int i = 0; i < n; i++)
     {
-        for (j = 0; j < y; j++)
+        for (int j = 0; j < m; j++)
         {
-            if (Map[i][j] == 'W' && !visited[i][j])
+            if (field[i][j] == 'W')
             {
                 dfs(i, j);
-                ans ++ ;
+                res++;
             }
         }
     }
-    printf("%d\n", ans);
-
+    cout << res << endl;
     return 0;
 }
