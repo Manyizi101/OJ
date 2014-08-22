@@ -25,42 +25,131 @@
 #define MAXN 35
 using namespace std;
 
-typedef pair<int, int, int> P;
+#define MAX_NUM 31
 
-char maze[MAXN][MAXN][MAXN];
-int vis[MAXN][MAXN][MAXN];
-int l, r, c;
-int dx[6] = { -1, 0, 1, 0, 0, 0};
-int dy[6] = {0, 1, 0, -1, 0, 0};
-int dz[6] = {0, 0, 0, 0, 1, -1};
-
-
-
-void init()
+class Node
 {
-    memset(maze, 0, sizeof(maze));
-    for (int i = 1; i <= l; i++)
-        for (int j = 1; j <= r; j++)
-            cin >> maze[i][j] + 1;
+public:
+    int l, r, c;
+    int time;
+public:
+    bool operator==(const Node &rhs) const
+    {
+        return l == rhs.l && r == rhs.r && c == rhs.c;
+    }
+};
+
+int layer, row, col;
+Node start, end;
+bool dic[MAX_NUM][MAX_NUM][MAX_NUM];
+bool flag[MAX_NUM][MAX_NUM][MAX_NUM];
+int steps[6][3] = { {0, 0, 1}, {0, 0, -1}, {0, 1, 0}, {0, -1, 0}, {1, 0, 0}, { -1, 0, 0} };
+
+bool CheckValid(const Node &node)
+{
+    int l = node.l, r = node.r, c = node.c;
+
+    if (l >= 0 && l < layer
+            && r >= 0 && r < row
+            && c >= 0 && c < col
+            && dic[l][r][c])
+    {
+        return true;
+    }
+    return false;
 }
 
-int bfs(int x, int y, int z)
+int TBFS()
 {
-    queue<P> que;
-    que.push(P(z, y, x));
-    vis[z][y][x] = 1;
-    while (que.size())
+    int i;
+    queue<Node> q;
+    q.push(start);
+    flag[start.l][start.r][start.c] = 1;
+
+    while (!q.empty())
     {
-        P p = que.front(); que.pop();
-        if (maze[p.third][p.second][p.first] == 'E')   break;
-        for (int i = 0; i < 6; i++)
+        Node tmp = q.front();
+        q.pop();
+
+        for (i = 0; i < 6; ++i)
         {
-            int nx = p.third + dz[i], ny = p.second + dy[i], nz = p.first + dx[i];
-            if (maze[nz][ny][nx] != '.' && !vis[nz][ny][nx])
+            Node node = tmp;
+            node.l += steps[i][0];
+            node.r += steps[i][1];
+            node.c += steps[i][2];
+            if (CheckValid(node) && !flag[node.l][node.r][node.c])
             {
-                que.push(P(nz, ny, nx));
-                vis[nz][ny][nx] = 1;
+                ++node.time;
+                flag[node.l][node.r][node.c] = 1;
+                q.push(node);
+
+                if (node == end)
+                {
+                    return node.time;
+                }
             }
         }
     }
+    return 0;
+}
+
+int main(int argc, char const *argv[])
+{
+    int i, j, k;
+    char ch;
+
+    while (1)
+    {
+        Node tmp;
+        scanf ("%d %d %d%*c", &layer, &row, &col); //注意这里的一个小小细节，%*c用来忽略输入后面的那个回车，学习了。
+        if (!layer && !row && !col)
+            break;
+        for (i = 0; i < layer; ++i)
+        {
+            for (j = 0; j < row; ++j)
+            {
+                for (k = 0; k < col; ++k)
+                {
+                    ch = getchar();
+                    if (ch == '#')
+                    {
+                        dic[i][j][k] = 0;
+                    }
+                    else if (ch == '.')
+                    {
+                        dic[i][j][k] = 1;
+                    }
+                    else if (ch == 'S')
+                    {
+                        start.l = i;
+                        start.r = j;
+                        start.c = k;
+                        start.time = 0;
+                        dic[i][j][k] = 1;
+                    }
+                    else if (ch == 'E')
+                    {
+                        end.l = i;
+                        end.r = j;
+                        end.c = k;
+                        end.time = 0;
+                        dic[i][j][k] = 1;
+                    }
+                }
+                getchar ();
+            }
+            getchar ();
+        }
+        memset(flag, 0, sizeof(flag));
+        int ret = TBFS();
+        if (ret)
+        {
+            printf ("Escaped in %d minute(s).\n", ret);
+        }
+        else
+        {
+            printf ("Trapped!\n");
+        }
+    }
+    return 0;
 }
