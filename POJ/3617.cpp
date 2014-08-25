@@ -34,10 +34,11 @@ int main(int argc, char const *argv[])
     cin >> n;
     for (i = 0; i < n; i++)
     {
-    	getchar();
+        getchar();
         scanf("%c", &s[i]);
     }
     int a = 0, b = n - 1;
+    int flag = 0;
     while (a <= b)
     {
         bool left = false;
@@ -54,9 +55,8 @@ int main(int argc, char const *argv[])
                 break;
             }
         }
-        if (left) putchar(s[a++]);
-        else putchar(s[b--]);
+        ++flag;
+        cout << (left ? s[a++] : s[b--]) << (flag % 80 ? "" : "\n");
     }
-    putchar('\n');
     return 0;
 }
