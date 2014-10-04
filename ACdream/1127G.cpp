@@ -1,56 +1,71 @@
 #include <cstdio>
-#include <iostream>
-#include <algorithm>
+#include <cstdlib>
 #include <cstring>
 #include <cmath>
+#include <ctime>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
+#include <stack>
+#include <queue>
+#include <numeric>
+#include <iomanip>
+#include <bitset>
+#include <sstream>
+#include <fstream>
+#define debug puts("-----")
+#define pi (acos(-1.0))
+#define eps (1e-8)
+#define inf (1<<28)
 using namespace std;
 #define MAXN 1005
 
-int n, m, y, remain;
-
-struct  node
+struct node
 {
-    int x, flag;
-    int ans;
+    int flag;
     int k;
+    int x;
 } no[MAXN];
 
-bool cmp(node a , node b)
+int n, m, y, remain;
+int i;
+
+bool cmp1(node a, node b)
+{
+    return (abs((a.k + 1) * 1.0 / m - a.x * 1.0 / y) - abs((a.k) * 1.0 / m - a.x * 1.0 / y)) > (abs((b.k + 1) * 1.0 / m - b.x * 1.0 / y) - abs((b.k) * 1.0 / m - b.x * 1.0 / y));
+}
+
+bool cmp2(node a, node b)
 {
     return a.flag < b.flag;
 }
 
-bool cmp2(node a , node b)
-{
-    return a.k >= b.k;
-}
-int i;
-
-
-
 int main(int argc, char const *argv[])
 {
-    scanf("%d%d%d", &n, &m, &y);
+    cin >> n >> m >> y;
     remain = m;
     for (i = 0; i < n; i++)
     {
-        scanf("%d", &no[i].x);
-        no[i].ans = no[i].x * (int)(m / y);
-        no[i].k = fabs(no[i].x * 1.0 / y - (no[i].ans+1) * 1.0 / m)-fabs(no[i].x * 1.0 / y - no[i].ans * 1.0 / m);
-        remain -= no[i].ans;
+        cin >> no[i].x;
+        no[i].k = floor(m * no[i].x / y);
+        remain -= no[i].k;
         no[i].flag = i;
     }
-    sort(no, no + n, cmp2);
+    sort(no, no + n, cmp1);
     i = 0;
     while (remain)
     {
-        no[i].ans++;
-        i++;
+        no[i].k++;
         remain--;
-        if (i >= n)    i -= n;
+        i++;
+        if (i >= n) i -= n;
     }
-    sort(no, no + n, cmp);
-    for (i = 0; i < n; i++)    printf("%d ", no[i].ans);
-    printf("\n");
+    sort(no, no + n, cmp2);
+    for (i = 0; i < n; i++)    cout << no[i].k << ' ';
     return 0;
 }
