@@ -28,9 +28,11 @@ long long int a, b, c;
 
 int main(int argc, char const *argv[])
 {
-    cin >> a >> b >> c;
-    long long int d = (a + 1 ) ^ (b + 1) ^ (c + 1);
-    if (d != 0)  cout << "Alice wins the game.\n";
-    else cout << "Bob wins the game.\n";
+    while (cin >> a >> b >> c&&(a||b||c))
+    {
+        long long int d = (a + 1 ) ^ (b + 1) ^ (c + 1);
+        if (d != 0)  cout << "Alice wins the game.\n";
+        else cout << "Bob wins the game.\n";
+    }
     return 0;
 }
