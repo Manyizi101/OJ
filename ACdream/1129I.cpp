@@ -56,14 +56,6 @@ int main(int argc, char const *argv[])
     return 0;
 }
 **/
-/*
-* this code is made by sole
-* Problem: 1234
-* Verdict: Wrong Answer
-* Submission Date: 2014-10-05 14:59:14
-* Time: 0MS
-* Memory: 1688KB
-*/
 
 #include<iostream>
 #include<cstdio>
@@ -78,7 +70,7 @@ int main(int argc, char const *argv[])
 #include<vector>
 #include<map>
 #include<set>
-#define pi 4
+#define pi acos(-1)
 #define eps 1e-8
 typedef long long LL;
 using namespace std;
@@ -87,7 +79,7 @@ double  R, r;
 
 double f(double x)
 {
-    return acos(x/R)*R*R-sqrt(R*R-x*x)*x;
+    return 2*R*R*asin(x/R) + 2*x*sqrt(R*R-x*x);
 }
 
 double simpson(double a, double b)
@@ -119,8 +111,8 @@ int main()
 
     if (R < r)
         swap(R, r);
-    double ans = solve(0.0, R);
-    double re = 8 * ans + r * r * pi * 2 * sqrt(R * R - r * r);
+    double ans = solve(0, r);
+    double re = 3 * ans;
     printf("%.4f\n", re);
 
     return 0;
