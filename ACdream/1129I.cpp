@@ -79,7 +79,7 @@ double  R, r;
 
 double f(double x)
 {
-    return 2*R*R*asin(x/R) + 2*x*sqrt(R*R-x*x);
+    return 4.0*sqrt(R*R-x*x)*sqrt(r*r-x*x);
 }
 
 double simpson(double a, double b)
@@ -112,7 +112,7 @@ int main()
     if (R < r)
         swap(R, r);
     double ans = solve(0, r);
-    double re = 3 * ans;
+    double re = 2 * ans;
     printf("%.4f\n", re);
 
     return 0;
