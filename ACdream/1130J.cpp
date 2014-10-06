@@ -41,7 +41,7 @@ void init()
 
 double f(double x)
 {
-
+	for(int i=1;i<fl;i++)
 }
 
 double g(double x)

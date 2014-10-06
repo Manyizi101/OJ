@@ -26,7 +26,8 @@
 using namespace std;
 
 int n,flag,ans;
-char x[16];
+char x[17];
+char y[17];
 
 void init()
 {
@@ -42,13 +43,18 @@ int main(int argc, char const *argv[])
 	freopen("monotone.out","w",stdout);
 	#endif
 	init();
-	bitset<17> tmp;
+	bitset<17> tmp1;
+	bitset<17> tmp2;
+	bitset<17> tmp3;
 	while(flag--)
 	{
-		tmp=ans;
+		tmp1=ans;
+		tmp2=(ans&1)>>1;
+		tmp3=tmp1^tmp2;
 		ans++;
-		for(int i=0;i<n;i++)	x[i]=tmp.to_string()[16-i];
-		printf("%s\n", x);
+		for(int i=0;i<n;i++)	x[i]=tmp3.to_string()[16-i];
+			for(int i=0;i<n;i++)	y[i]=x[n-i-1];
+		printf("%s\n", y);
 	}
 	return 0;
 }
