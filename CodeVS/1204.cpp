@@ -16,22 +16,14 @@
 #include <numeric>
 #include <iomanip>
 #include <bitset>
-#include <sstream>
-#include <fstream>
 #define debug puts("-----")
 #define pi (acos(-1.0))
 #define eps (1e-8)
 #define inf (1<<28)
+#define ll long long int
 using namespace std;
 
-#define MAXN 100000+10
-#define LOCAL
-
-char text[MAXN];
-char pattern[MAXN];
-char *ch = text;
-int length = 0;
-
+char text[110],pattern[110];
 /*
 * @brief 计算部分匹配表，即 next 数组.
 *
@@ -68,8 +60,8 @@ int kmp(const char *text, const char *pattern)
     int j = -1;
     const int n = strlen(text);
     const int m = strlen(pattern);
-    if (n == 0 && m == 0) return 0;
-    if (m == 0) return 0;
+    if (n == 0 && m == 0) return 0; /* "","" */
+    if (m == 0) return 0; /* "a","" */
     int *next = (int *)malloc(sizeof(int) * m);
     compute_prefix(pattern, next);
     for (i = 0; i < n; i++)
@@ -86,26 +78,11 @@ int kmp(const char *text, const char *pattern)
     return -1;
 }
 
-
 int main(int argc, char const *argv[])
 {
-#ifdef LOCAL
-    freopen("59115B.in", "r", stdin);
-    //freopen("59115B.out", "w", stdout);
-#endif
-    while (scanf("%s", text) && text[0] != '#')
-    {
-        length = strlen(text);
-        pattern[0] = text[0];
-        int i = kmp(text, pattern);
-        while (i < length)
-        {
-            i = kmp(text+i, pattern);
-            if (i >= 0)
-                strcpy(pattern, ch + i);
-            i++;
-        }
-        cout << pattern;
-    }
+	scanf("%s%s", text,pattern);
+    char *ch = text;
+    int i = kmp(text, pattern);
+    if (i >= 0) printf("%d", i+1);
     return 0;
 }

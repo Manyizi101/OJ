@@ -25,17 +25,12 @@
 #define ll long long int
 using namespace std;
 
-ll tmp, small=inf, big=-inf, n;
+double x,y;
 
 int main(int argc, char const *argv[])
 {
-    scanf("%lld", &n);
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%lld", &tmp);
-        if (tmp < small)   small = tmp;
-        if (tmp > big) big = tmp;
-    }
-    printf("%lld %lld", small, big);
-    return 0;
+	scanf("%lf%lf",&x,&y);
+	if(fabs(x-y)<=eps)	printf("yes");
+	else printf("no");
+	return 0;
 }

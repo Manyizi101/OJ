@@ -16,8 +16,6 @@
 #include <numeric>
 #include <iomanip>
 #include <bitset>
-#include <sstream>
-#include <fstream>
 #define debug puts("-----")
 #define pi (acos(-1.0))
 #define eps (1e-8)
@@ -25,17 +23,36 @@
 #define ll long long int
 using namespace std;
 
-ll tmp, small=inf, big=-inf, n;
+#define MAXN 3000+50
+
+char str[MAXN];
 
 int main(int argc, char const *argv[])
 {
-    scanf("%lld", &n);
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%lld", &tmp);
-        if (tmp < small)   small = tmp;
-        if (tmp > big) big = tmp;
-    }
-    printf("%lld %lld", small, big);
+	while (fgets(str, MAXN, stdin))
+	{
+		int len;
+		len = strlen(str);
+		int id;
+		if(str[len-1]=='\n')
+        {
+            id = len-1;
+        }
+        else id = len;
+		str[id] = ' ';
+		reverse(str, str + id);
+		int sl = 0;
+		for (int i = 0; i <=len; ++i)
+		{
+			if (str[i] == ' ')
+			{
+                    reverse(str + sl, str + i);
+					sl = (i + 1);
+			}
+		}
+		str[id] = '\0';
+		puts(str);
+
+	}
     return 0;
 }
