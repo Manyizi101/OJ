@@ -25,34 +25,8 @@
 #define ll long long int
 using namespace std;
 
-#define MAXN 100+10
-
-int n,a[MAXN];
-int m,b[MAXN];
-int j;
-
-void init()
-{
-	scanf("%d", &n);
-	for(int i=0;i<n;i++)	scanf("%d", &a[i]);
-	j=0;
-}
-
 int main(int argc, char const *argv[])
 {
-	init();
-	sort(a,a+n);
-	b[0]=a[0];
-	for(int i=1;i<n;i++)
-	{
-		if(a[i]==b[j])	continue;
-		else 
-		{
-			b[++j]=a[i];
-		}
-	}
-	printf("%d\n", j+1);
-	printf("%d", b[0]);
-	for(int i=1;i<=j;i++)	printf(" %d",b[i]);
+	/* code */
 	return 0;
 }
