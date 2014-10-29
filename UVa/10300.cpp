@@ -27,10 +27,6 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-	ll t,v;
-	while(~scanf("%lld%lld", &v,&t ))
-    {
-        printf("%lld\n", 2*v*t);
-    }
+	/* code */
 	return 0;
 }
