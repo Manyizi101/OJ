@@ -20,72 +20,34 @@
 #include <fstream>
 #define debug "output for debug\n"
 #define pi (acos(-1.0))
-#define eps (1e-4)
+#define eps (1e-8)
 #define inf (1<<28)
 #define ll long long int
 using namespace std;
 
-#define MAXN 16+10
+int a[1000][2],s[1000];
+int i,n,x,y;
 
-int n;
-
-struct BinaryTreeNode
+void dfs(int i,int k)
 {
-    int m_nValue;
-    BinaryTreeNode* m_pLeft;
-    BinaryTreeNode* m_pRight;
-    BinaryTreeNode* m_pSelf;
-}position[MAXN];
-
-void init()
-{
-    position[0].m_pLeft=NULL;
-    position[0].m_pRight=NULL;
-    position[0].m_pSelf=position[0].m_pSelf;
-    int left,right;
-    scanf("%d", &n);
-    for(int i=0;i<n;++i)
-    {
-        position[i].m_pSelf=position[i].m_pSelf;
-    }
-    for(int i=0;i<n;++i)
-    {
-        scanf("%d%d", &left, &right);
-        position[i].m_pLeft=position[left].m_pSelf;
-        position[i].m_pRight=position[right].m_pSelf;
-    }
+	s[k]=s[k]+1;
+	if(k>x)	x=k;
+	if(a[i][1]!=0)	dfs(a[i][1],k+1);
+	if(a[i][2]!=0)	dfs(a[i][2],k+1);
 }
 
-int GetNodeNum(BinaryTreeNode * pRoot)
+int main(void)
 {
-	if(pRoot == NULL) // 递归出口
-		return 0;
-	return GetNodeNum(pRoot->m_pLeft) + GetNodeNum(pRoot->m_pRight) + 1;
-}
-
-int GetDepth(BinaryTreeNode * pRoot)
-{
-	if(pRoot == NULL) // 递归出口
-		return 0;
-	int depthLeft = GetDepth(pRoot->m_pLeft);
-	int depthRight = GetDepth(pRoot->m_pRight);
-	return depthLeft > depthRight ? (depthLeft + 1) : (depthRight + 1);
-}
-
-int GetLeafNodeNum(BinaryTreeNode * pRoot)
-{
-	if(pRoot == NULL)
-		return 0;
-	if(pRoot->m_pLeft == NULL && pRoot->m_pRight == NULL)
-		return 1;
-	int numLeft = GetLeafNodeNum(pRoot->m_pLeft); // 左子树中叶节点的个数
-	int numRight = GetLeafNodeNum(pRoot->m_pRight); // 右子树中叶节点的个数
-	return (numLeft + numRight);
-}
-
-int main()
-{
-    init();
-    printf("%d %d\n", GetLeafNodeNum(position), GetDepth(position));
-    return 0;
+	scanf("%d",&n);
+	memset(a,0,sizeof(a));
+	memset(s,0,sizeof(s));
+	for(i=1;i<=n;i++)
+		scanf("%d%d",&a[i][1],&a[i][2]);
+	x=0;
+	dfs(1,1);
+	y=0;
+	for(i=1;i<1000;i++)
+		if(s[i]>y)	y=s[i];
+	printf("%d %d",y,x);
+	return 0;
 }
