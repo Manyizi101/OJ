@@ -25,35 +25,20 @@
 #define ll long long int
 using namespace std;
 
-#define MAXN 20+10
+#define MAXN 1<<10
 
-int t,f,farm[MAXN],animals[MAXN],value[MAXN];
-int ans;
-
-void init()
-{
-    memset(farm,0,sizeof(farm));
-    memset(animals,0,sizeof(animals));
-    memset(value,0,sizeof(value));
-    ans=0;
-    scanf("%d", &f);
-    for(int i=0;i<f;i++)
-    {
-        scanf("%d%d%d", &farm[i], &animals[i], &value[i]);
-    }
-}
+char a[MAXN],b[MAXN];
 
 int main(int argc, char const *argv[])
 {
-	scanf("%d", &t);
-	while(t--)
+    while(~scanf("%s",a))
     {
-        init();
-        for(int i=0;i<f;i++)
+        memset(b,0,sizeof(b));
+        for(int i=0;i<strlen(a);i++)
         {
-            ans+=farm[i]*value[i];
+            b[i]=a[i]-7;
         }
-        printf("%d\n", ans);
+        printf("%s\n", b);
     }
 	return 0;
 }
