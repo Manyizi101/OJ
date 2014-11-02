@@ -1,4 +1,3 @@
-/*
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -54,57 +53,20 @@ void init()
 int main(int argc, char const *argv[])
 {
     init();
-    while(~scanf("%d", &n),n)
+    int casen=0;
+    while(~scanf("%d", &n)&&n)
     {
+        if(casen>0) printf("\n");
+        casen++;
         if(ans[n]==0)
-            printf("There are no solutions for %d.\n\n", n);
+            printf("There are no solutions for %d.\n", n);
         else
         {
             for(int i=0; i<ans[n]; i++)
             {
-                printf("%05d / %05d =%d \n", a[n][i], b[n][i], n);
+                printf("%05d / %05d = %d\n", a[n][i], b[n][i], n);
             }
-            printf("\n");
         }
     }
     return 0;
-}
-**/
-
-
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <ctime>
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <deque>
-#include <list>
-#include <set>
-#include <map>
-#include <stack>
-#include <queue>
-#include <numeric>
-#include <iomanip>
-#include <bitset>
-#include <sstream>
-#include <fstream>
-#define debug puts("-----")
-#define pi (acos(-1.0))
-#define eps (1e-8)
-#define inf (1<<28)
-#define ll long long int
-using namespace std;
-
-int x,y,n;
-
-int main()
-{
-    while(scanf("%d", &n),n)
-    {
-
-    }
 }
