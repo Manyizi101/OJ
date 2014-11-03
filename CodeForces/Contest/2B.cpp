@@ -18,6 +18,8 @@
 #include <bitset>
 #include <sstream>
 #include <fstream>
+#include <functional>
+#include <stdarg.h>
 #define debug "output for debug\n"
 #define pi (acos(-1.0))
 #define eps (1e-4)
@@ -25,53 +27,104 @@
 #define ll long long int
 using namespace std;
 
-#define MAXN 1000+10
+#define N 1100+10
 
-int n;
-int a[MAXN][MAXN];
-vector<char> route;
+const int TWO = 0;
+const int FIVE = 1;
 
-void init()
-{
-    for(int i=0;i<=n;++i)
-        for(int j=0;j<=n;++j)
-        scanf("%d", &a[i][j]);
-}
+int sum[N][N][2];
+int dir[N][N][2];
+char output[N*4];
+int n=0,i=0,j=0,k=0;
+ll tmp=0,ans=0;
+int x=0,y=0,n25[2];
+int len=0, type=0,nowx=0,nowy=0;
+bool ok=false;
 
-int dfs(int x,int y)
-{
-    if(x==3&&y==3)  return 0;
-    if(x+1<4&&(a[x+1][y]!=2&&a[x+1][y]!=5))
-    {
-        route.push_back('R');
-        dfs(x+1, y);
-    }
-    else if(y+1<4&&(a[x][y+1]!=2&&a[x][y+1]!=5))
-    {
-        route.push_back('D');
-        dfs(x,y+1);
-    }
-    else if(x+1<4&&(a[x+1][y]==2||a[x+1][y]==5))
-    {
-        route.push_back('R');
-        dfs(x+1,y);
-    }
-    else
-    {
-        route.push_back('D');
-        dfs(x,y+1);
-    }
-}
 
 int main()
 {
-    while(~scanf("%d", &n))
+
+    while(~scanf("%d",&n))
     {
-        init();
-        dfs(1,1);
-        for(vector<int>::iterator it=route.begin();it!=route.end();++it)
+        ok = false;
+        for(i=0; i<n; i++)
         {
-            printf("%c", 'a');
+            for(j=0; j<n; j++)
+            {
+                scanf("%d",&tmp);
+                if(tmp == 0)
+                {
+                    ok = true;
+                    x = i,y = j;
+                    n25[TWO] = n25[FIVE] = 1;
+                }
+                else
+                {
+                    n25[TWO] = n25[FIVE] = 0;
+                    while(tmp %2 == 0)
+                    {
+                        n25[TWO]++;
+                        tmp >>= 1;
+                    }
+                    while(tmp %5 == 0)
+                    {
+                        n25[FIVE]++;
+                        tmp /= 5;
+                    }
+                }
+
+                for(k=0; k<2; k++)
+                {
+                    if(!i && !j)
+                    {
+                        sum[i][j][k] = n25[k];
+                    }
+                    else if(j && i)
+                    {
+                        if(sum[i-1][j][k] < sum[i][j-1][k])
+                        {
+                            dir[i][j][k] = 1;
+                            sum[i][j][k] = sum[i-1][j][k] + n25[k];
+                        }
+                        else
+                        {
+                            dir[i][j][k] = 0;
+                            sum[i][j][k] = sum[i][j-1][k] + n25[k];
+                        }
+                    }
+                    else if(!i)
+                    {
+                        dir[i][j][k] = 0;
+                        sum[i][j][k] = sum[i][j-1][k] + n25[k];
+                    }
+                    else if(!j)
+                    {
+                        dir[i][j][k] = 1;
+                        sum[i][j][k] = sum[i-1][j][k] + n25[k];
+                    }
+                }
+            }
+        }
+
+        k = TWO;
+        if(sum[n-1][n-1][TWO] > sum[n-1][n-1][FIVE]) k = FIVE;
+        if(sum[n-1][n-1][k] > 1 && ok)
+        {
+            printf("1\n");
+            for(int i = 0; i < x; i++) putchar('D');
+            for(int j = 0; j < y; j++) putchar('R');
+            for(int i = x; i < n-1; i++) putchar('D');
+            for(int j = y; j < n-1; j++) putchar('R');
+            putchar('\n');
+        }
+        else
+        {
+            printf("%d\n", sum[n-1][n-1][k]);
+            output[2*n-2] = 0;
+            for(i = n-1, j = n-1; i > 0 || j > 0; dir[i][j][k]?i--:j--)
+                output[i+j-1] = dir[i][j][k]?'D':'R';
+            printf("%s\n", output);
         }
     }
     return 0;
