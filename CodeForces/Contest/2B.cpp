@@ -32,18 +32,16 @@ using namespace std;
 const int TWO = 0;
 const int FIVE = 1;
 
-int sum[N][N][2];
-int dir[N][N][2];
-char output[N*4];
-int n=0,i=0,j=0,k=0;
-ll tmp=0,ans=0;
-int x=0,y=0,n25[2];
-int len=0, type=0,nowx=0,nowy=0;
-bool ok=false;
-
-
 int main()
 {
+    int sum[N][N][2];
+    int dir[N][N][2];
+    char output[N*4];
+    int n,i,j,k;
+    ll tmp,ans;
+    int x,y,n25[2];
+    int len, type,nowx,nowy;
+    bool ok;
 
     while(~scanf("%d",&n))
     {
