@@ -21,41 +21,49 @@
 #define debug "output for debug\n"
 #define pi (acos(-1.0))
 #define eps (1e-8)
-#define inf (1<<28)
+#define inf 0x3f3f3f3f
 #define ll long long int
 using namespace std;
 
-int t,a,f;
+#define MAXN 5000+10
+
+ll n;
+ll a[MAXN];
+ll b[MAXN];
+ll dp[MAXN];
+ll small,ans,flag;
+
+void init()
+{
+    memset(dp, 0, sizeof(dp));
+    scanf("%I64d", &n);
+    for(int i=0;i<n;i++)
+    {
+        scanf("%I64d", &a[i]);
+        b[i]=a[i];
+    }
+    sort(b,b+n);
+}
 
 int main(int argc, char const *argv[])
 {
-    scanf("%d", &t);
-    while(t--)
+    init();
+    for(int i=0;i<n;i++)
     {
-        scanf("%d%d", &a,&f);
-        while(f--)
+        for(int j=0;j<n;j++)
         {
-            for(int i=1; i<=a; i++)
+            dp[j]+=abs(a[i]-b[j]);
+            if(j>1)
             {
-                for(int j=1; j<=i; j++)
-                {
-                    printf("%d", i);
-                }
-                printf("\n");
+                dp[j]=min(dp[j-1],dp[j]);
             }
-            for(int i=a-1; i>=1; i--)
+            for(int x=0;x<n;x++)
             {
-                for(int j=a-1; j>=a-i; j--)
-                {
-                    printf("%d", i);
-                }
-                printf("\n");
+                printf("%I64d ",dp[x]);
             }
-            if(f>0)
-                printf("\n");
-        }
-        if(t>0)
             printf("\n");
+        }
     }
+    printf("%I64d\n", dp[n-1]);
     return 0;
 }
