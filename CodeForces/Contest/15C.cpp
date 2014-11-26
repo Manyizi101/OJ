@@ -59,32 +59,32 @@ using namespace std;
 
 #define MAXN 100000+10
 
-ll n;
-ll a[MAXN],b[MAXN];
+ll n,x,m,ans=0;
+
+ll nim(ll x)
+{
+    ll tmp=x%4;
+    if(tmp==1)
+        return 1;
+    else if(tmp==2)
+        return x+1;
+    else if(tmp==3)
+        return 0;
+    else
+        return x;
+}
+
 int main(int argc, char const *argv[])
 {
-    while(~scanf("%I64d", &n))
+    scanf("%I64d", &n);
+    while(n--)
     {
-        ll ans = 0;
-        for(ll i=1; i<=n; i++)
-        {
-            scanf("%I64d%I64d", &a[i], &b[i]);
-            ll ed = a[i]+b[i]-1;
-            if(a[i]&1)
-            {
-                ans ^= a[i];
-                a[i]++, b[i]--;
-            }
-            if(b[i])
-            {
-                ll siz = b[i]>>1;
-                if(siz&1)
-                    ans^=1;
-                if(b[i]&1)
-                    ans^=ed;
-            }
-        }
-        ans?puts("tolik"):puts("bolik");
+        scanf("%I64d %I64d", &x, &m);
+        m=nim(m+x-1);
+        x=nim(x-1);
+        ans^=x^m;
     }
+    ans?puts("tolik"):puts("bolik");
     return 0;
 }
+
