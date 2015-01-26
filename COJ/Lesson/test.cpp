@@ -1,11 +1,4 @@
-#include  <cstdio>
-#include  <iostream>
-
-
-using namespace std;
-
-int main()
+int CountX(LNode* HL,ElemType x)
 {
-    cout<<1;
-    return 0;
+	
 }
