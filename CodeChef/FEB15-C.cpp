@@ -26,20 +26,23 @@
 using namespace std;
 
 int t;
-int n;
-int tmp;
+ll n;
+ll s;
 
 int main(int argc, char const *argv[])
 {
 	scanf("%d", &t);
 	while(t--)
 	{
-		n=0;
-		while(scanf("%1d", &tmp))
+		scanf("%lld%lld", &n, &s);
+		ll sum=n*(n+1)/2;
+		ll i=0,ans=sum-s;
+		while(ans>i)
 		{
-			n+=tmp;
+			ans-=i;
+			i++;
 		}
-		n%3==0?puts("YES"):puts("NO");
+		cout<<i<<endl;
 	}
 	return 0;
 }

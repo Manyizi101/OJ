@@ -25,21 +25,30 @@
 #define ll long long int
 using namespace std;
 
-int t;
-int n;
-int tmp;
+#define MAXN 100000+10
+
+int t, n;
+int a[MAXN];
 
 int main(int argc, char const *argv[])
 {
-	scanf("%d", &t);
-	while(t--)
-	{
-		n=0;
-		while(scanf("%1d", &tmp))
-		{
-			n+=tmp;
-		}
-		n%3==0?puts("YES"):puts("NO");
-	}
-	return 0;
+    scanf("%d", &t);
+    while (t--)
+    {
+        int tmp = 0, Max = 0;
+        scanf("%d", &n);
+        for (int i = 0; i < n; i++)
+        {
+            scanf("%d", &a[i]);
+        }
+        sort(a, a + n);
+        for (int i = 1; i < n; i++)
+        {
+            if (a[i] == a[i - 1])    tmp++;
+            if (a[i] > a[i - 1])	tmp = 0;
+            Max = max(Max, tmp);
+        }
+        cout << n - Max - 1 << endl;
+    }
+    return 0;
 }

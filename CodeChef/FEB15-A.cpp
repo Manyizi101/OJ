@@ -25,21 +25,35 @@
 #define ll long long int
 using namespace std;
 
+#define MAXN 
+
 int t;
-int n;
-int tmp;
+char a[100000];
 
 int main(int argc, char const *argv[])
 {
 	scanf("%d", &t);
 	while(t--)
 	{
-		n=0;
-		while(scanf("%1d", &tmp))
+		int x=0,y=0;
+		int n=0;
+		/*
+		getchar();
+		while(~scanf("%c", &a)&&a!='\n')
 		{
-			n+=tmp;
+			n++;
+			if((n%2==1&&a=='-')||(n%2==0&&a=='+'))	x++;
+			else y++;	
 		}
-		n%3==0?puts("YES"):puts("NO");
+		**/
+		scanf("%s", a);
+		int len=strlen(a);
+		for(int i=0;i<len;i++)
+		{
+			if((i%2==1&&a[i]=='-')||(i%2==0&&a[i]=='+'))	x++;
+			else y++;	
+		}
+		cout<<min(x,y)<<endl;
 	}
 	return 0;
 }
