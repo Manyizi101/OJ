@@ -25,24 +25,29 @@
 #define ll long long int
 using namespace std;
 
-int t;
-ll n;
-ll s;
+#define MAXN 50+10
+
+int n, k;
+int a[MAXN];
+int ans = 0;
+
+bool cmp(int x, int y)
+{
+    return x > y;
+}
 
 int main(int argc, char const *argv[])
 {
-	scanf("%d", &t);
-	while(t--)
-	{
-		scanf("%lld%lld", &n, &s);
-		ll sum=n*(n+1)/2;
-		ll i=0,ans=sum-s;
-		while(ans>i)
-		{
-			ans-=i;
-			i++;
-		}
-		cout<<i<<endl;
-	}
-	return 0;
+    scanf("%d%d", &n, &k);
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &a[i]);
+    }
+    sort(a, a + n, cmp);
+    for(int i=0;i<n;i++)
+    {
+    	if(a[i]>=a[k-1]&&a[i]>0)	ans++;
+    }
+    cout<<ans<<endl;
+    return 0;
 }
