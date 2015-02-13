@@ -55,6 +55,7 @@
 #define eps (1e-8)
 #define inf 0x3f3f3f3f
 #define ll long long int
+//#define LOCAL
 using namespace std;
 
 #define MAXN 10000+10
@@ -67,6 +68,10 @@ char tguess[MAXN];
 
 int main(int argc, char const *argv[])
 {
+	#ifdef LOCAL
+	freopen("489.in", "r", stdin);
+	freopen("489.out", "w", stdout);
+	#endif
 aaa:
     while(scanf("%d", &flag)&&flag!=-1)
     {

@@ -25,21 +25,23 @@
 #define ll long long int
 using namespace std;
 
-#define MAXN 100+10
-
-int n;
-char a[MAXN];
+int n, ans = 0;
+int tmp, t;
 
 int main(int argc, char const *argv[])
 {
     scanf("%d", &n);
     while (n--)
     {
-        memset(a, 0, sizeof(a));
-        scanf("%s", a);
-        int len = strlen(a);
-        if (len <= 10) cout << a << endl;
-        else cout << a[0] << len - 2 << a[len - 1] << endl;
+        t = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            scanf("%d", &tmp);
+            t += tmp;
+        }
+        if (t >= 2)    ans++;
     }
+    cout << ans;
     return 0;
 }
+

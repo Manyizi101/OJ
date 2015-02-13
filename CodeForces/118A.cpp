@@ -27,19 +27,33 @@ using namespace std;
 
 #define MAXN 100+10
 
-int n;
 char a[MAXN];
+char b[MAXN];
+char vow[] = "aoyeuiAOYEUI";
+
+bool judge(char x)
+{
+	for(int i=0;i<12;i++)
+	{
+		if(x==vow[i])	return true;
+	}
+	return false;
+}
 
 int main(int argc, char const *argv[])
 {
-    scanf("%d", &n);
-    while (n--)
+    scanf("%s", a);
+    int lena = strlen(a);
+    int lenb=0;
+    for (int i = 0; i < lena; i++)
     {
-        memset(a, 0, sizeof(a));
-        scanf("%s", a);
-        int len = strlen(a);
-        if (len <= 10) cout << a << endl;
-        else cout << a[0] << len - 2 << a[len - 1] << endl;
+        if (a[i] >= 'A' && a[i] <= 'Z')
+            a[i] = a[i] - 'A' + 'a';
+        if(!judge(a[i]))	b[lenb++]=a[i];
+    }
+    for(int i=0;i<lenb;i++)
+    {
+    	cout<<'.'<<b[i];
     }
     return 0;
 }

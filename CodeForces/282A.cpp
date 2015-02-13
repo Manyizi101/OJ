@@ -25,21 +25,26 @@
 #define ll long long int
 using namespace std;
 
-#define MAXN 100+10
+#define MAXN 4
 
 int n;
-char a[MAXN];
+string a;
+int x=0;
+
+void judge(string a)
+{
+	if(a=="++X"||a=="X++")	x++;
+	else if(a=="--X"||a=="X--")	x--;
+}
 
 int main(int argc, char const *argv[])
 {
-    scanf("%d", &n);
-    while (n--)
-    {
-        memset(a, 0, sizeof(a));
-        scanf("%s", a);
-        int len = strlen(a);
-        if (len <= 10) cout << a << endl;
-        else cout << a[0] << len - 2 << a[len - 1] << endl;
-    }
-    return 0;
+	scanf("%d", &n);
+	while(n--)
+	{
+		cin>>a;
+		judge(a);
+	}
+	cout<<x;
+	return 0;
 }
