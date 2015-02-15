@@ -25,10 +25,22 @@
 #define ll long long int
 using namespace std;
 
-#define MAXN 
+#define MAXN 100000+10
+
+int n,m,k;
+int a[6][MAXN]；
+int dp[MAXN];
 
 void init()
 {
+	scanf("%d%d%d", &n,&m,&k);
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<m;j++)
+		{
+			scanf("%d", &a[i][j]);
+		}
+	}
 }
 
 int main(int argc, char const *argv[])

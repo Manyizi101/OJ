@@ -25,18 +25,43 @@
 #define ll long long int
 using namespace std;
 
-#define MAXN 20+10
+#define MAXN  100+10
 
 char a[MAXN];
+
+bool rule(char a[])
+{
+    for (int i = 1; i < strlen(a); i++)
+    {
+        if (a[i] >= 'a' && a[i] <= 'z')    return false;
+    }
+    return true;
+}
+
+bool judge(char a[])
+{
+    if (rule(a)) return true;
+    else return false;
+}
 
 int main(int argc, char const *argv[])
 {
     scanf("%s", a);
-    if(a[0]>='5'&&a[0]!='9')	a[0]='0'+'9'-a[0];
-    for(int i=1;i<strlen(a);i++)
+    if (judge(a))
     {
-    	if(a[i]>='5')	a[i]='0'+'9'-a[i];
+        if (a[0] >= 'a' && a[0] <= 'z')
+            a[0] = a[0] - 'a' + 'A';
+        else
+            a[0] = a[0] - 'A' + 'a';
+        for (int i = 1; i < strlen(a); i++)
+        {
+            a[i] = a[i] - 'A' + 'a';
+        }
+        cout << a;
     }
-    cout<<a;
+    else
+    {
+        cout << a;
+    }
     return 0;
 }
