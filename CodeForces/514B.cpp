@@ -29,31 +29,34 @@ using namespace std;
 
 int n, st, ed;
 int x[MAXN], y[MAXN];
-float k[MAXN];
+bool k[MAXN];
 int ans = 0;
 
-void cal(int i)
+bool cal(int i,int j)
 {
-    if (x[i] - st != 0)
-        k[i] = (float)(y[i] - ed) / (float)(x[i] - st);
-    else
-        k[i] = inf;
+    if((x[i]-st)*(y[j]-ed)==(x[j]-st)*(y[i]-ed))    return true;
+    else return false;
 }
 
 
 int main(int argc, char const *argv[])
 {
     scanf("%d%d%d", &n, &st, &ed);
-    for (int i = 0; i < n; i++)
+    memset(k,false, sizeof(k));
+    for(int i=0;i<n;i++)
     {
-        scanf("%d%d", &x[i], &y[i]);
-        cal(i);
+        scanf("%d%d", &x[i],&y[i]);
     }
-    sort(k, k + n);
-    ans = 1;
-    for (int i = 1; i < n; i++)
+    for(int i=0;i<n;i++)
     {
-        if (k[i] != k[i - 1])    ans++;
+        if(!k[i])
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(cal(i,j))    k[j]=true;
+            }
+            ans++;
+        }
     }
     cout << ans;
     return 0;
