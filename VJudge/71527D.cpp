@@ -28,67 +28,59 @@ using namespace std;
 #define MAXN 1500+10
 
 int n, m;
-int dp[MAXN][MAXN], dp[MAXN][MAXN];
-
-struct node
-{
-	int val;
-	int used;
-	int rank;
-} a[MAXN][MAXN];
-
-struct dpx
-{
-	int val;
-	int num;
-}dp[MAXN];
-
-bool cmp(node a, node b)
-{
-	return a.val > b.val;
-}
+int a[MAXN][MAXN];
+ll dp[MAXN][MAXN], min_dp[MAXN][MAXN], max_dp[MAXN][MAXN];
+const ll INF = -(1LL << 60);
 
 void init()
 {
+	memset(dp, 200, sizeof(dp));
+	memset(min_dp, 200, sizeof(min_dp));
+	memset(max_dp, 200, sizeof(max_dp));
+	memset(min_dp[0], 0, sizeof(min_dp[0]));
+	memset(max_dp[0], 0, sizeof(max_dp[0]));
 	scanf("%d%d", &n, &m);
-	for (int i = 0; i < n; i++)
+	for (int i = 1; i <= n; ++i)
 	{
-		for (int j = 0; j < m; j++)
+		for (int j = 1; j <= m; ++j)
 		{
-			scanf("%d", &a[i][j].val);
-			a[i][j].rank = j;
+			scanf("%d", &a[i][j]);
 		}
-		for (int j = 0; j < m; j++)
-		{
-			if (a[i][j].val != 0)
-			{
-				dp[i].val += a[i][j].val;
-				dp[i].num++;
-				a[i][j].used = 1;
-				break;
-			}
-		}
-		sort(a[i], a[i] + m, cmp);
 	}
 }
 
 int main(int argc, char const *argv[])
 {
 	init();
-	for(int i=0;i<n;i+=2)
+	for (int i = 1; i <= n; ++i)
 	{
-		for(int j=0;j<m;j++)
+		ll tmp = 0;
+		for (int j = 1; j <= m; ++j)
 		{
-			if(a[i][j].val>==0)
+			tmp += a[i][j];
+			if (i & 1)
 			{
-				dp[i].val+=a[i][j].val;
-				dp[i].num++;
+				dp[i][j] = tmp + min_dp[i - 1][j - 1];
+			}
+			else
+			{
+				dp[i][j] = tmp + max_dp[i - 1][j + 1];
 			}
 		}
+		for (int j = m; j >= 1; --j)
+		{
+			max_dp[i][j] = max(dp[i][j], max_dp[i][j + 1]);
+		}
+		for (int j = 1; j <= m; ++j)
+		{
+			min_dp[i][j] = max(dp[i][j], min_dp[i][j - 1]);
+		}
 	}
-	for(int i=1;i<n;i+=2)
+	ll ans = INF;
+	for (int i = 1; i <= m; ++i)
 	{
-
+		ans = max(ans, dp[n][i]);
 	}
+	cout << ans;
 	return 0;
 }
