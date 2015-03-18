@@ -1,11 +1,20 @@
-bool IsPrime(unsigned n)  //此处n是一个大于2的整数
+
+const long N = 200000;
+long prime[N] = {0}, num_prime = 0;
+int isNotPrime[N] = {1, 1};
+int main()
 {
-	for (unsigned i = 2; i < n / 2 + 1; ++i)
+	for (long i = 2 ; i < N ; i ++)
 	{
-		if (n % i == 0)
+		if (! isNotPrime[i])
+			prime[num_prime ++] = i;
+		//关键处1
+		for (long j = 0 ; j < num_prime && i * prime[j] <  N ; j ++)
 		{
-			return false;
+			isNotPrime[i * prime[j]] = 1;
+			if ( !(i % prime[j] ) ) //关键处2
+				break;
 		}
 	}
-	return true;
+	return 0;
 }
