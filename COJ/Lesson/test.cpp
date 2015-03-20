@@ -1,20 +1,16 @@
-
-const long N = 200000;
-long prime[N] = {0}, num_prime = 0;
-int isNotPrime[N] = {1, 1};
-int main()
+Matrix qMPow(Matrix &A, int n)
 {
-	for (long i = 2 ; i < N ; i ++)
-	{
-		if (! isNotPrime[i])
-			prime[num_prime ++] = i;
-		//关键处1
-		for (long j = 0 ; j < num_prime && i * prime[j] <  N ; j ++)
-		{
-			isNotPrime[i * prime[j]] = 1;
-			if ( !(i % prime[j] ) ) //关键处2
-				break;
-		}
-	}
-	return 0;
+    Matrix rslt(A.N);
+    rslt.unit();
+    if (n == 0) return rslt;
+    while (n)
+    {
+        if (n & 1) // 若幂为奇数
+        {
+            rslt = rslt * A;
+        }
+        A = A * A;
+        n >>= 1; // 右位移等价于除以2 	
+    }
+    return rslt;
 }
