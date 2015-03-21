@@ -1,53 +1,24 @@
-# include <stdio.h>
-# include <math.h>
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<string>
+#include<algorithm>
+#include<math.h>
+#include<iomanip>
+#include<queue>
+#include<map>
+#include<set>
+#include<vector>
+using namespace std;
 
-
-int IsPrime[1000010] ;
-int Primes[1000010] ;
-int cnt = 0 ;
-
-
-void init()
+__int64 gcd(__int64 m, __int64 n)
 {
-	int i, j ;
-	for (i = 1 ; i <= 1000000 ; i++)
-		IsPrime[i] = 1 ;
-	for (i = 2 ; i <= 1000 ; i++)
-		if (IsPrime[i])
-		{
-			for (j = i * i ; j <= 1000000 ; j += i)
-				IsPrime[j] = 0 ;
-		}
-	for (i = 1 ; i <= 1000000 ; i++)
-		if (IsPrime[i])
-		{
-			IsPrime[i] = cnt ;
-			Primes[cnt++] = i ;
-		}
+	if (n == 0)return m;
+	return gcd(n, m % n);
 }
-
-
-int calc(int n)
+int main()
 {
-	int i, lim = sqrt(n) + 1, rtn = 0 ;
-	for (i = 1 ; Primes[i] <= lim && n != 1; i++)
-	{
-		while (n % Primes[i] == 0)
-		{
-			n /= Primes[i] ;
-			rtn = i ;
-		}
-	}
-	if (n == 1) return rtn ;
-	return IsPrime[n] ;
-}
-
-
-int main ()
-{
-	int n ;
-	init() ;
-	while (~scanf ("%d", &n))
-		printf ("%d\n", calc(n)) ;
-	return 0 ;
+	__int64 a, b;
+	scanf("%I64dI64d", &a, &b);
+	printf("%I64d\n", gcd(a, b));
 }
