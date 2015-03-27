@@ -18,7 +18,7 @@ __int64 gcd(__int64 m, __int64 n)
 }
 int main()
 {
-	__int64 a, b;
-	scanf("%I64dI64d", &a, &b);
+	__int64 a, b,c;
+	scanf("%I64d%I64d", &a, &b, &c);
 	printf("%I64d\n", gcd(a, b));
 }
