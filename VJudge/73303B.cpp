@@ -22,28 +22,17 @@
 #define ll long long int
 const double pi = acos(-1.0);
 const double eps = (1e-8);
-const int inf = 1 << 20;
+const int inf = 1<<31;
 using namespace std;
 
-char x;
-int a1;
-ll ans;
-ll a[4];
+const int MAXN = ;
 
 void init()
 {
-	memset(a, 0, sizeof(a));
-	a1 = 0;
-	for (int i = 0; i < 4; i++)
-	{
-		cin >> a[i];
-	}
-	sort(a, a + 4);
 }
 
-int main(int argc, char const * argv[])
+int main(int argc, char const *argv[])
 {
 	init();
-	cout << ans;
 	return 0;
 }
