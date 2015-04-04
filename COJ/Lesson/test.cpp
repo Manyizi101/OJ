@@ -1,10 +1,4 @@
-/**
- * C++: 无回路有向图(Directed Acyclic Graph)的拓扑排序
- *      该DAG图是通过邻接表实现的。  
- *
- * @author skywang
- * @date 2014/04/22
- */
+
 
 #include <iomanip>
 #include <iostream>
