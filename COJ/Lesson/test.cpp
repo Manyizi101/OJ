@@ -1,21 +1,28 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int a, b;
+const int MAXN = 10 + 10;
 
-int fun1(int a, int b)
+int a[MAXN];
+
+int cmp(const void *a,const void *b)
 {
-	return b == 0 ? a : fun1(b, a % b);
-}
-
-int fun2(int a, int b)
-{
-	return a * b / fun1(a, b);
+    return *(int *)a-*(int *)b;
 }
 
 int main(int argc, char const *argv[])
 {
-	scanf("%d,%d", &a, &b);
-	printf("最大公约数：%d\n", fun1(a, b));
-	printf("最小公倍数：%d", fun2(a, b));
+	for (int i = 0; i < 8; i++)
+	{
+		scanf("%d,", &a[i]);
+	}
+	scanf("%d%d", &a[8], &a[9]);
+	qsort(a,10,sizeof(a[0]),cmp);
+	for (int i = 0; i < 9; i++)
+	{
+		printf("%d,", a[i]);
+	}
+	printf("%d", a[9]);
 	return 0;
 }
