@@ -25,29 +25,28 @@ const double eps = (1e-8);
 const int inf = 1 << 31;
 using namespace std;
 
-int n;
 
-void init()
+int f(int a,int b)
+
 {
-	scanf("%d", &n);
+
+if(a<b)
+
+return f((b-a),a);
+
+else if(a ==b)
+
+return 2*a;
+
+else
+
+return f(f(a/2,b),f(b,b%2));
+
 }
 
 int main(int argc, char const *argv[])
 {
-	init();
-	for (int i = 1; i < n; i++)
-	{
-		for (int j = 0; j < n - i; j++)	cout << " ";
-		for (int j = 0; j < 2 * i - 1; j++)	cout << "*";
-		cout << endl;
-	}
-	for (int i = 0; i < 2 * n - 1; i++)	cout << "*";
-	cout << endl;
-	for (int i = 1; i < n; i++)
-	{
-		for (int j = 0; j < i; j++)	cout << " ";
-		for (int j = 0; j < 2 * (n - i) - 1; j++)	cout << "*";
-		cout << endl;
-	}
+	cout<<f(3,5);
 	return 0;
 }
+
