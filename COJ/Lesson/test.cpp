@@ -25,15 +25,22 @@ const double eps = (1e-8);
 const int inf = 1<<31;
 using namespace std;
 
-int a[3];
+const int MAXN = 100;
+ll a[MAXN],n;
+
+ll f(int n)
+{
+	if(a[n]!=-1)	return a[n];
+	if(n==0||n==1)	return a[n]=1;
+	else return a[n]=f(n-1)+f(n-2);
+}
 
 int main(int argc, char const *argv[])
 {
-	while(~scanf("%d%d%d", &a[0],&a[1],&a[2]))
+	memset(a,-1,sizeof(a));
+	while(~scanf("%lld",&n))
 	{
-		sort(a,a+3);
-		if(a[0]*a[0]+a[1]*a[1]==a[2]*a[2])	cout<<"True"<<endl;
-		else cout<<"False"<<endl;
+		cout<<f(n)<<endl;
 	}
 	return 0;
 }
