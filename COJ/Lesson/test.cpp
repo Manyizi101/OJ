@@ -25,24 +25,29 @@ const double eps = (1e-8);
 const int inf = 1 << 31;
 using namespace std;
 
-const int MAXN = 10 + 10;
-
-char a[MAXN];
-int ans=0;
+int n;
 
 void init()
 {
-	scanf("%s", a);
+	scanf("%d", &n);
 }
 
 int main(int argc, char const *argv[])
 {
 	init();
-	int len=strlen(a);
-	for(int i=0;i<len;i++)
+	for (int i = 1; i < n; i++)
 	{
-		ans=ans*2+a[i]-'0';
+		for (int j = 0; j < n - i; j++)	cout << " ";
+		for (int j = 0; j < 2 * i - 1; j++)	cout << "*";
+		cout << endl;
 	}
-	cout<<ans;
+	for (int i = 0; i < 2 * n - 1; i++)	cout << "*";
+	cout << endl;
+	for (int i = 1; i < n; i++)
+	{
+		for (int j = 0; j < i; j++)	cout << " ";
+		for (int j = 0; j < 2 * (n - i) - 1; j++)	cout << "*";
+		cout << endl;
+	}
 	return 0;
 }
