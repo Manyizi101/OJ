@@ -1,28 +1,48 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <ctime>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
+#include <stack>
+#include <queue>
+#include <numeric>
+#include <iomanip>
+#include <bitset>
+#include <sstream>
+#include <fstream>
+#define debug puts("-----")
+#define ll long long int
+const double pi = acos(-1.0);
+const double eps = (1e-8);
+const int inf = 1 << 31;
+using namespace std;
 
 const int MAXN = 10 + 10;
 
-int a[MAXN];
+char a[MAXN];
+int ans=0;
 
-int cmp(const void *a,const void *b)
+void init()
 {
-    return *(int *)a-*(int *)b;
+	scanf("%s", a);
 }
 
 int main(int argc, char const *argv[])
 {
-	for (int i = 0; i < 8; i++)
+	init();
+	int len=strlen(a);
+	for(int i=0;i<len;i++)
 	{
-		scanf("%d,", &a[i]);
+		ans=ans*2+a[i]-'0';
 	}
-	scanf("%d%d", &a[8], &a[9]);
-	qsort(a,10,sizeof(a[0]),cmp);
-	for (int i = 0; i < 9; i++)
-	{
-		printf("%d,", a[i]);
-	}
-	printf("%d", a[9]);
+	cout<<ans;
 	return 0;
 }
