@@ -1,42 +1,51 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <ctime>
 #include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
+#include <stack>
+#include <queue>
+#include <numeric>
+#include <iomanip>
+#include <bitset>
+#include <sstream>
+#include <fstream>
+#define debug puts("-----")
+#define ll long long int
+const double pi = acos(-1.0);
+const double eps = (1e-8);
+const int inf = 1 << 31;
 using namespace std;
- 
-class Integer{
-private:
-    int _num;
-//getLength()函数获取_num长度
-    int getLength(){
-    	int x=_num;
-    	int len=0;
-    	while(x!=0||x%10!=0)
-    	{
-    		len++;
-    		x/=10;
-    	}
-    	return len;
-    }
-public:
-//Integer类构造函数
-    Integer(int num){
-    	_num=num;
-    }
-//反转_num
-    int inversed(){
-    	int len = getLength();
-    	int tmp=_num;
-    	int ans=0;
-    	for(int i=0;i<len;i++)
-    	{
-    		ans=ans*10+tmp%10;
-    		tmp/=10;
-    	}
-    	return ans;
-    }
-};
- 
-int main() {
-    int n;
-    cin >> n;
-    Integer integer(n);
-    cout << integer.inversed() << endl;
+
+int n;
+
+bool check(int n)
+{
+	int tmp = n;
+	if(n==1)	return false;
+	while (tmp != 1)
+	{
+		if (tmp % 2 == 0)	{tmp /= 2;}
+		else if (tmp % 3 == 0)	{tmp /= 3;}
+		else if (tmp % 5 == 0)	{tmp /= 5;}
+		else return false;
+	}
+	return true;
+}
+
+int main(int argc, char const *argv[])
+{
+	while (cin >> n)
+	{
+		check(n) ? cout << "True\n" : cout << "False\n";
+	}
+	return 0;
 }
