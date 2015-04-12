@@ -1,37 +1,42 @@
-/* students please write your program here */
-
 #include <iostream>
 using namespace std;
-class Integer {
+ 
+class Integer{
 private:
-	int _num;
+    int _num;
+//getLength()函数获取_num长度
+    int getLength(){
+    	int x=_num;
+    	int len=0;
+    	while(x!=0||x%10!=0)
+    	{
+    		len++;
+    		x/=10;
+    	}
+    	return len;
+    }
 public:
-//构造函数
-	Integer(int num) {
-		_num = num;
-	}
-//计算当前Integer 和 b之间的最大公约数
-	int gcd(Integer b)
-	{
-		int x = _num;
-		int y = b._num;
-		while (y != 0)
-		{
-			int r = y;
-			y = x % y;
-			x = r;
-		}
-		return x;
-	}
+//Integer类构造函数
+    Integer(int num){
+    	_num=num;
+    }
+//反转_num
+    int inversed(){
+    	int len = getLength();
+    	int tmp=_num;
+    	int ans=0;
+    	for(int i=0;i<len;i++)
+    	{
+    		ans=ans*10+tmp%10;
+    		tmp/=10;
+    	}
+    	return ans;
+    }
 };
-
-
-
+ 
 int main() {
-	int a, b;
-	cin >> a >> b;
-	Integer A(a);
-	Integer B(b);
-	cout << A.gcd(B) << endl;
-	return 0;
+    int n;
+    cin >> n;
+    Integer integer(n);
+    cout << integer.inversed() << endl;
 }
