@@ -1,51 +1,31 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <ctime>
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <deque>
-#include <list>
-#include <set>
-#include <map>
-#include <stack>
-#include <queue>
-#include <numeric>
-#include <iomanip>
-#include <bitset>
-#include <sstream>
-#include <fstream>
-#define debug puts("-----")
-#define ll long long int
-const double pi = acos(-1.0);
-const double eps = (1e-8);
-const int inf = 1 << 31;
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
-int n;
+int a[11];
 
-bool check(int n)
+int cmp (const void * a, const void * b)
 {
-	int tmp = n;
-	if(n==1)	return false;
-	while (tmp != 1)
+  return ( *(int*)a - *(int*)b );
+}
+
+void init()
+{
+	for(int i=0;i<8;i++)
 	{
-		if (tmp % 2 == 0)	{tmp /= 2;}
-		else if (tmp % 3 == 0)	{tmp /= 3;}
-		else if (tmp % 5 == 0)	{tmp /= 5;}
-		else return false;
+		scanf("%d,", &a[i]);
 	}
-	return true;
+	scanf("%d", &a[8]);
+	scanf("%d", &a[9]);
 }
 
 int main(int argc, char const *argv[])
 {
-	while (cin >> n)
+	init();
+	qsort (a, 10, sizeof(int), cmp);
+	for(int i=0;i<9;i++)
 	{
-		check(n) ? cout << "True\n" : cout << "False\n";
+		printf("%d,", a[i]);
 	}
+	printf("%d", a[9]);
 	return 0;
 }
