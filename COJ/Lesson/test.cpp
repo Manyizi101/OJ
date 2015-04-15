@@ -1,31 +1,23 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-int a[11];
-
-int cmp (const void * a, const void * b)
+#include<algorithm>
+#include<iostream>
+using namespace std;
+int main()
 {
-  return ( *(int*)a - *(int*)b );
-}
-
-void init()
-{
-	for(int i=0;i<8;i++)
-	{
-		scanf("%d,", &a[i]);
-	}
-	scanf("%d", &a[8]);
-	scanf("%d", &a[9]);
-}
-
-int main(int argc, char const *argv[])
-{
-	init();
-	qsort (a, 10, sizeof(int), cmp);
-	for(int i=0;i<9;i++)
-	{
-		printf("%d,", a[i]);
-	}
-	printf("%d", a[9]);
-	return 0;
+    int n, m = 0;
+    cin >> n;
+    string s[n];
+    m /= (n / 2);
+    sort(s, s + n);
+    for (int i = 0; i < n; i++)for (int j = i + 1; j < n; j++)
+        {
+            if (s[i].size() + s[j].size() == m)
+            {
+                cout << s[i];
+                for (int k = 0; k < s[j].size() - 1; k++)cout << s[j][k];
+                cout << endl;
+                s[i] = "";
+                s[j] = "";
+            }
+        }
+    return 0;
 }
