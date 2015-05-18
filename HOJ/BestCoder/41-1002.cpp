@@ -25,37 +25,28 @@ const double eps = (1e-8);
 const int inf = 1 << 31;
 using namespace std;
 
-const int MAXN = 20000 + 10;
+int t, n, odd, even, tmp;
+map<string, int> mp;
 
-int t, n;
-string a[MAXN];
-int ans, sum;
-
-int gcd(int a, int b)
-{
-	return b == 0 ? a : gcd(b, a % b);
-}
 
 void init()
 {
-	ans = 0;
+	string s;
+	mp.clear();
+	tmp = odd = even = 0;
 	scanf("%d", &n);
 	for (int i = 0; i < n; i++)
 	{
-		cin >> a[i];
+		cin >> s;
+		mp[s]++;
+		if (s.length() & 1)	odd++;
+		else even++;
 	}
-	for (int i = 0; i < n - 1; i++)
-	{
-		for (int j = i + 1; j < n; j++)
-		{
-			if (a[i].compare(a[j]) == 0)
-			{
-				continue;
-			}
-			if ((a[i].length() + a[j].length()) % 2 == 0)	ans++;
-		}
-	}
-	sum = n * (n - 1) / 2;
+}
+
+int gcd(int a , int b)
+{
+	return b == 0 ? a : gcd(b, a % b);
 }
 
 int main(int argc, char const *argv[])
@@ -64,10 +55,15 @@ int main(int argc, char const *argv[])
 	while (t--)
 	{
 		init();
-		if (sum != ans)
-			cout << (sum - ans) / gcd(sum, ans) << '/' << sum / gcd(sum, ans) << endl;
-		else
-			cout << "0/1" << endl;
+		map<string, int>::iterator it;
+		for (it = mp.begin(); it != mp.end(); it++)
+		{
+			int v = (*it).second;
+			if (v > 1) tmp += v * (v - 1) / 2;
+		}
+		int up = odd * even + tmp;
+		int down = n * (n - 1) / 2;
+		up == 0 ? cout << "0/1\n" : cout << up / gcd(up, down) << "/" << down / gcd(up, down) << endl;
 	}
 	return 0;
 }
