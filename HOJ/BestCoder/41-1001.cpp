@@ -26,36 +26,22 @@ const int inf = 1 << 31;
 using namespace std;
 
 const int MAXN = 6;
+int t, ans, cnt;
+int a[MAXN], b[MAXN], is[15];
 
-int t;
-int ans = -1, ansb = -1;;
-struct node
-{
-	char a;
-	int b;
-} card[MAXN], cardb[MAXN];
-
-bool cmp(node a, node b)
-{
-	if (a.a == b.a)	return a.b < b.b;
-	return a.a < b.a;
-}
 
 void init()
 {
 	ans = -1;
-	ansb = -1;
-	memset(card, 0, sizeof(card));
-	for (int i = 0; i < 5; i++)
+	char hua;
+	int shu;
+	for (int i = 1; i <= 5; i++)
 	{
 		getchar();
-		scanf("%c%d", &card[i].a, &card[i].b);
-		cardb[i].a = card[i].a;
-		cardb[i].b = card[i].b;
-		if (cardb[i].b == 1)	cardb[i].b += 13;
+		scanf("%c%d", &hua, &shu);
+		a[i] = hua - 'A' + 1;
+		b[i] = shu;
 	}
-	sort(card, card + 5, cmp);
-	sort(cardb, cardb + 5, cmp);
 }
 
 int main(int argc, char const *argv[])
@@ -64,23 +50,35 @@ int main(int argc, char const *argv[])
 	while (t--)
 	{
 		init();
-		int tmp = 1;
 		for (int i = 1; i < 5; i++)
 		{
-			if (card[i].a == card[i - 1].a && card[i].b == card[i - 1].b + 1)	tmp++;
-			else	tmp = 1;
-			ans = max(tmp, ans);
+			memset(is, 0, sizeof(is));
+			for (int j = 1; j <= 5; j++)
+			{
+				if (a[j] == i)
+				{
+					is[b[j]] = 1;
+					if (b[j] == 1)	is[14] = 1;
+				}
+			}
+			//for (int i = 0; i < 15; i++)	cout << is[i] << " ";
+			//cout << endl;
+			int cnt;
+			for (int j = 1; j <= 10; j++)
+			{
+				/*
+				if (is[j])	cnt++;
+				else cnt = 0;
+				**/
+				cnt = 0;
+				for (int k = 0; k < 5; k++)
+				{
+					cnt += is[j + k];
+				}
+				ans = max(cnt, ans);
+			}
 		}
-		tmp = 1;
-		for (int i = 1; i < 5; i++)
-		{
-			if (cardb[i].a == cardb[i - 1].a && cardb[i].b == cardb[i - 1].b + 1)	tmp++;
-			else	tmp = 1;
-			ansb = max(tmp, ansb);
-		}
-		ans = max(ansb, ans);
 		cout << 5 - ans << endl;
 	}
 	return 0;
-
 }
