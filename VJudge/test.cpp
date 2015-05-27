@@ -19,29 +19,50 @@
 #include <sstream>
 #include <fstream>
 #define debug puts("-----")
-#define pi (acos(-1.0))
-#define eps (1e-8)
-#define inf (1<<30)
+
+typedef long long int ll;
+const double pi = acos(-1.0);
+const double eps = 1e-8;
+const int inf = 0x3f3f3f3f;
+const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-int a, b, c, d;
-int ans = 0;
+const int MAXN = 100010;
+int t, n, a[MAXN];
+vector<int> v;
+
+inline void gao(int now)
+{
+    if (v.empty() || now >= v[v.size() - 1])
+    {
+        v.push_back(now);
+    }
+    else
+    {
+        v[upper_bound(v.begin(), v.end(), now) - v.begin()] = now;
+    }
+}
 
 int main()
 {
-    for (a = 1; a <= 6; a++)
+    scanf("%d", &t);
+    while (t--)
     {
-        for (b = 0; b <= 7; b++)
+        v.clear();
+        scanf("%d", &n);
+        for (int i = 1; i <= n; i++)    scanf("%d", &a[i]);
+        int now;
+        for (int i = n; i >= 1; i--)
         {
-            for (c = 4; c <= 8; c++)
-            {
-                for (d = 2; d <= 6; d++)
-                {
-                    if (a + b + c + d == 20) ans++;
-                }
-            }
+            now = 2 * a[i] + 1;
+            gao(now);
         }
+        for (int i = 1; i <= n; i++)
+        {
+            now = a[i] * 2;
+            gao(now);
+        }
+        cout << v.size() << endl;
     }
-    cout << ans << endl;
     return 0;
 }
