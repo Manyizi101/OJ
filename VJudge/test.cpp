@@ -59,7 +59,7 @@ int main()
         }
         for (int i = 1; i <= n; i++)
         {
-            now = a[i] * 2;
+            now = 2 * a[i];
             gao(now);
         }
         cout << v.size() << endl;
