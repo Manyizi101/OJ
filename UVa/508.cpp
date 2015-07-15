@@ -24,16 +24,8 @@
 #define inf (1<<30)
 using namespace std;
 
-string a;
-string banner = "CODEFORCES";
-
 int main(int argc, char const *argv[])
 {
-    cin >> a;
-    int l = 0, r = 0;
-    const int N = a.size();
-    while (l < min(10, N) && a[l] == banner[l]) l++;
-    while (r < min(10, N) && a[N - r - 1] == banner[10 - r - 1])    r++;
-    cout << (((l + r) >= 10) ? "YES" : "NO");
+    /* code */
     return 0;
 }
