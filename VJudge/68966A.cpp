@@ -34,14 +34,13 @@ int l, r;
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    while (cin >> m >> n)
+    while (~scanf("%d%d", &m, &n))
     {
         MaxSum = ThisSum = 0;
         l = r = 0;
-        for (int i = 0; i < n; i++)    cin >> x[i];
         for (int i = 0; i < n; i++)
         {
+            scanf("%d", &x[i]);
             ThisSum += x[i];
             if (ThisSum > MaxSum)
             {
@@ -64,7 +63,7 @@ int main()
             }
             if (m == 1)    break;
         }
-        cout << MaxSum << endl;
+        printf("%d\n", MaxSum);
     }
     return 0;
 }
