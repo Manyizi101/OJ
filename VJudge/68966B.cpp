@@ -32,6 +32,7 @@ int n, a[MAXN];
 
 int main()
 {
+    ios::sync_with_stdio(false);
     while (cin >> n)
     {
         for (int i = 1; i <= n; i++)
