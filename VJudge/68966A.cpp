@@ -28,42 +28,32 @@ const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
 const int MAXN = 1000000 + 10;
-int m, n, x[MAXN];
-int MaxSum, ThisSum;
-int l, r;
+
+int dp[MAXN], a[MAXN], n, m;
+int Max[MAXN], sum;
 
 int main()
 {
-    while (~scanf("%d%d", &m, &n))
+    ios::sync_with_stdio(false);
+    while (cin >> m >> n)
     {
-        MaxSum = ThisSum = 0;
-        l = r = 0;
-        for (int i = 0; i < n; i++)
+        for (int i = 1; i <= n; i++)
         {
-            scanf("%d", &x[i]);
-            ThisSum += x[i];
-            if (ThisSum > MaxSum)
+            cin >> a[i];
+            dp[i] = 0;
+            Max[i] = 0;
+        }
+        for (int i = 1; i <= m; i++)
+        {
+            sum = -inf;
+            for (int j = i; j <= n; j++)
             {
-                MaxSum = ThisSum;
-                r = i;
-            }
-            if (ThisSum < 0)
-            {
-                ThisSum = 0;
-                l = i;
+                dp[j] = max(dp[j - 1] + a[j], Max[j - 1] + a[j]);
+                Max[j - 1] = sum;
+                sum = max(dp[j], sum);
             }
         }
-        sort(x + l, x + r + 1);
-        for (int i = l; i < r + 1; i++)
-        {
-            if (m != 1 && x[i] < 0)
-            {
-                MaxSum -= x[i];
-                m--;
-            }
-            if (m == 1)    break;
-        }
-        printf("%d\n", MaxSum);
+        cout << sum << endl;
     }
     return 0;
 }
