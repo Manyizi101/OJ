@@ -1,76 +1,48 @@
-#include <algorithm>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <ctype.h>
-#include <iostream>
-#include <map>
-#include <queue>
-#include <set>
-#include <stack>
-#include <string>
-#include <vector>
-#define eps 1e-8
-#define INF 0x7fffffff
-#define maxn 100005
-#define PI acos(-1.0)
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<set>
 using namespace std;
-typedef long long LL;
-const int mod = 1000000007;
-int a[101000];
-int vis[101100];
-int l[111110], r[111110];
-int main()
-{
-    int n;
-    while (~scanf("%d", &n))
-    {
-        memset(vis, 0, sizeof(vis));
-        for (int  i = 1; i <= n; i++)
-        {
-            scanf("%d", &a[i]);
+void solve(int x, set<int> &result) {
+    int k, high, b2, a;
+    int c, sum, b1;
+    for (k = 1; k <= x; k *= 10) {
+        high = x / k;
+        c = high / 11;
+        c *= k;
+        b1 = high % 11;
+        if ((b1 != 0 || c != 0) && b1 < 10) {
+            b1 *= k;
+            a = (x - b1 - 11 * c) / 2;
+            if (2 * a + b1 + 11 * c == x)
+                result.insert(a + b1 + c * 10);
         }
-        int ans = 0;
-        for (int i = 1; i <= n; i++)
-        {
-            l[i] = 0;
-            int num  = 0;
-            for (int j = 1; j <= sqrt(a[i]) + 1; j++)
-            {
-                if (a[i] % j == 0 )
-                {
-                    l[i] = max(l[i], vis[j] + 1);
-                    l[i] = max(l[i], vis[a[i] / j] + 1);
-                }
-
-            }
-            vis[a[i]] = i;
+        b2 = high % 11 - 1;
+        if ((b2 != 0 || c != 0) && b2 >= 0) {
+            b2 *= k;
+            int a2 = (x - b2 - 11 * c) / 2;
+            if (x == 2 * a2 + b2 + 11 * c)
+                result.insert(a2 + b2 + 10 * c);
         }
-        for (int i = 0; i <= 10000; i++) vis[i] = n + 1;
-        for (int i = n; i >= 1; i--)
-        {
-            int num = 0;
-            r[i] = n + 1;
-            for (int j = 1; j <= sqrt(a[i]); j++)
-            {
-                if (a[i] % j == 0 )
-                {
-                    r[i] = min(r[i], vis[j] - 1);
-                    r[i] = min(r[i], vis[a[i] / j] - 1);
-                }
-
-            }
-            vis[a[i]] = i;
-        }
-        for (int i = 1; i <= n; i++)
-        {
-            ans = ans + (r[i] - i + 1) * (i - l[i] + 1) % mod;
-            //cout<<l[i]<<"   "<<r[i]<<endl;
-        }
-        ans %= mod;
-        printf("%d\n", ans);
     }
-
 }
+int main() {
+    int x, i;
+    while (cin >> x, x) {
+        set<int>result;
+        //set结构不仅可以排序，而且可以去除重复的
+        //下次要多多学习，总结！
+        solve(x, result);
+        if (result.empty()) {
+            printf("No solution.\n");
+        }
+        else {
+            set<int>::iterator it = result.begin();
+            printf("%d", *it);
+            while (++it != result.end())
+                printf(" %d", *it);
+            printf("\n");
+        }
+    }
+    return 0;
+}3
