@@ -30,7 +30,6 @@ using namespace std;
 const int MAXN = 15 + 10;
 
 int t, n;
-int dead;
 
 struct  node
 {
@@ -38,12 +37,10 @@ struct  node
     int d, c;
 } course[MAXN];
 
-bool cmp(node a, node b)
+struct nodedp
 {
-    if (a.d == b.d && a.c == b.c)  return a.name < b.name;
-    else if (a.d == b.d)   return a.c > b.c;
-    else return a.d < b.d;
-}
+    int w, sd, next, mj;
+} dp[1 << 16];
 
 int main()
 {
@@ -51,24 +48,51 @@ int main()
     cin >> t;
     while (t--)
     {
+        memset(dp, 0, sizeof(dp));
         cin >> n;
+        dp[0].next = -1;
+        dp[0].w = 0;
+        dp[0].sd = 0;
         for (int i = 0; i < n; i++)
         {
-            cin >> course[i].name >> course[i].d >> course[i].c;
+            cin >> course[i].name >> course[i].c >> course[i].d;
         }
-        sort(course, course + n, cmp);
-        dead = course[0].d - course[0].c;
-        for (int i = 1; i < n; i++)
+        int m = 1 << (n + 1);
+        for (int i = 1; i < m; i++)
         {
-            if ((course[i].d - course[i - 1].d) > (course[i].c - course[i - 1].c))
-                continue;
-            else
+            dp[i].w = inf;
+            for (int j = n - 1; j >= 0; --j)
             {
-                dead += course[i].d - course[i].c;
+                if ((i >> j) & 1)
+                {
+                    int k = i - (1 << j);
+                    int c = dp[k].w;
+                    if (course[j].d + dp[k].sd > course[j].c)    c += course[j].d + dp[k].sd - course[j].c;
+                    if (dp[i].w > c)
+                    {
+                        dp[i].w = c;
+                        dp[i].next = k;
+                        dp[i].mj = j;
+                        dp[i].sd = dp[k].sd + course[j].d;
+                    }
+                }
             }
         }
-        cout << dead << endl;
-        for (int i = 0; i < n; i++)    cout << course[i].name << endl;
+        int u = 0;
+        for (int i = 0; i < n; i++)    u |= (1 << i);
+        cout << dp[u].w << endl;
+        stack<string> str;
+        while (true)
+        {
+            str.push(course[dp[u].mj].name);
+            u = dp[u].next;
+            if (u == 0)    break;
+        }
+        while (!str.empty())
+        {
+            cout << str.top() << endl;
+            str.pop();
+        }
     }
     return 0;
 }
