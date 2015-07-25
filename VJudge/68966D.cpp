@@ -31,6 +31,11 @@ const int MAXN = 17;
 int dp[1 << MAXN], c[MAXN], d[MAXN];
 int t, n;
 
+struct node
+{
+    int pre,t,
+};
+
 int main()
 {
     ios::sync_with_stdio(false);
