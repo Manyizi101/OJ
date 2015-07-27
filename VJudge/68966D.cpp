@@ -27,37 +27,69 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int MAXN = 17;
-int dp[1 << MAXN], c[MAXN], d[MAXN];
+const int N = 17;
 int t, n;
 
 struct node
 {
-    int pre,t,
-};
+    string s;
+    int d, c;
+} course[N];
+
+struct nodedp
+{
+    int w, sd, next, mj;
+} dp[1 << N];
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin >> t;
+    scanf("%d", &t);
     while (t--)
     {
         memset(dp, 0, sizeof(dp));
-        cin >> n;
-        string a;
-        int b;
-        for (int i = 1; i <= n; i++)
+        dp[0].w = 0;
+        dp[0].next = -1;
+        dp[0].sd = 0;
+        scanf("%d", &n);
+        for (int i = 0; i < n; i++)
         {
-            cin >> a >> d[i] >> c[i];
+            cin >> course[i].s;
+            scanf("%d%d", &course[i].d, &course[i].c);
         }
-        for (int i = (1 << MAXN) - 1; i >= 0; i--)
+        for (int i = 1; i < (1 << (n + 1)); i++)
         {
-            for (int j = 1; j <= n && (i - (1 << j) >= 0); j++)
+            dp[i].w = inf;
+            for (int j = n - 1; j >= 0; j--)
             {
-                dp[i] += max(dp[i - (1 << j)] + c[j], dp[i]);
+                if ((i >> j) & 1)
+                {
+                    int k = i - (1 << j);
+                    int c = dp[k].w;
+                    if (course[j].c + dp[k].sd > course[j].d)
+                        c += course[j].c + dp[k].sd - course[j].d;
+                    if (dp[i].w > c)
+                    {
+                        dp[i].w = c;
+                        dp[i].next = k;
+                        dp[i].mj = j;
+                        dp[i].sd = dp[k].sd + course[j].c;
+                    }
+                }
             }
         }
-        cout << dp[(1 << n) - 1] << endl;
+        int u = (1 << n) - 1;
+        printf("%d\n", dp[u].w);
+        stack<string> str;
+        while (u)
+        {
+            str.push(course[dp[u].mj].s);
+            u = dp[u].next;
+        }
+        while (!str.empty())
+        {
+            cout << str.top() << endl;
+            str.pop();
+        }
     }
     return 0;
 }
