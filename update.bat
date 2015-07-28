@@ -1,3 +1,5 @@
+E:
+cd E:\ДњТы\OJ
 git add --all
 git commit -m "updated at %date% %time%"
 git push
