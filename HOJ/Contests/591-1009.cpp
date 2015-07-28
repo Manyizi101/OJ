@@ -61,13 +61,11 @@ int LIS(int *arraya, int *arrayb, int nLength)
         {
             B[nLISLen] = i;
             nLISLen++;
-            //cout << "st " << i << endl;
         }
         else
         {
             int pos = BinarySearch(B, i, nLISLen);
             B[pos] = i;
-            //cout << "er " << i << endl;
         }
     }
     return nLISLen;
