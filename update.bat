@@ -1,5 +1,5 @@
-E:
-cd E:\´úÂë\OJ
+ï»¿E:
+cd E:\ä»£ç \OJ
 git add --all
 git commit -m "updated at %date% %time%"
 git push
