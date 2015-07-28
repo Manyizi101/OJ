@@ -36,9 +36,10 @@ int BinarySearch(int *arraya, int value, int nLength)
 {
     int begin = 0;
     int end = nLength - 1;
-    while (begin <= end)
+    int mid = begin + (end - begin) / 2;
+    while (begin < end)
     {
-        int mid = begin + (end - begin) / 2;
+        mid = begin + (end - begin) / 2;
         if (l[arraya[mid]] == l[value] && r[arraya[mid]] == r[value])
             return mid;
         else if (l[arraya[mid]] > l[value] && r[arraya[mid]] < r[value])
@@ -47,7 +48,7 @@ int BinarySearch(int *arraya, int value, int nLength)
             begin = mid + 1;
     }
     //cout << begin << endl;
-    return end;
+    return mid;
 }
 
 int LIS(int *arraya, int *arrayb, int nLength)
@@ -79,13 +80,13 @@ int main()
         memset(B, 0, sizeof(B));
         int tmp[MAXN];
         for (int i = 0; i < n; i++)    scanf("%d", &tmp[i]);
-        for (int i = n - 1; i >= 0; i--)   l[n - i - 1] = tmp[i];
+        for (int i = n - 1; i >= 0; i--)    l[n - i - 1] = tmp[i];
         for (int i = 0; i < n; i++)    scanf("%d", &tmp[i]);
-        for (int i = n - 1; i >= 0; i--)   r[n - i - 1] = tmp[i];
+        for (int i = n - 1; i >= 0; i--)    r[n - i - 1] = tmp[i];
         int len = LIS(l, r, n);
         printf("%d\n", len);
-        printf("%d", n - B[len - 1] );
-        for (int i = len - 2; i >= 0 ; i--)  printf(" %d", n - B[i]);
+        printf("%d", B[len] + 1);
+        for (int i = len - 1; i > 0 ; i--)  printf(" %d", B[len - i] + 1);
         printf("\n");
     }
     return 0;
