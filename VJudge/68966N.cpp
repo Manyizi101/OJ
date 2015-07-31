@@ -39,15 +39,9 @@ int lis()
     dp[0] = a[0];
     for (int i = 1; i < n; ++i)
     {
-        if (a[i] > dp[len - 1])
-        {
-            dp[len++] = a[i];
-        }
-        else
-        {
-            int pos = upper_bound(dp, dp + len, a[i]) - dp;
-            dp[pos] = a[i];
-        }
+        int pos = lower_bound(dp, dp + len, a[i]) - dp;
+        len = max(len, pos + 1);
+        dp[pos] = a[i];
     }
     return len;
 }
