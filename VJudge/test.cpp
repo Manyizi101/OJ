@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
@@ -27,9 +26,39 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+const int MAXN = 1010;
+int n;
+int a[MAXN];
+int dp[MAXN];
+
+int lis()
+{
+    memset(dp, 0, sizeof(dp));
+    int Max;
+    for (int i = 0; i < n; ++i)
+    {
+        Max = 0;
+        for (int j = 0; j < i; ++j)
+        {
+            if (a[i] > a[j])
+            {
+                Max = max(Max, dp[j]);
+            }
+        }
+        dp[i] = Max + 1;
+    }
+    Max = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        if (dp[i] > Max)    Max = dp[i];
+    }
+    return Max;
+}
+
 int main()
 {
-    int a[] = {1, 2, 2, 3, 4, 4, 5};
-    cout << lower_bound(a, a + 7, 3) - a << endl << upper_bound(a, a + 7, 3) - a << endl;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) scanf("%d", &a[i]);
+    cout << lis() << endl;
     return 0;
 }

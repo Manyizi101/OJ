@@ -40,8 +40,8 @@ int lis()
     for (int i = 1; i < n; ++i)
     {
         int pos = lower_bound(dp, dp + len, a[i]) - dp;
-        len = max(len, pos + 1);
         dp[pos] = a[i];
+        len = max(len, pos + 1);
     }
     return len;
 }
