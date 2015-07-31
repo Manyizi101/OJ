@@ -30,11 +30,12 @@ using namespace std;
 const int MAXN = 1010;
 int n;
 int a[MAXN];
+int dp[MAXN];
 
 int lis()
 {
+    memset(dp, 0, sizeof(int)*n);
     int len = 1;
-    int dp[MAXN];
     dp[0] = a[0];
     for (int i = 1; i < n; ++i)
     {
