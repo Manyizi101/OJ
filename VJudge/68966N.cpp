@@ -30,30 +30,25 @@ using namespace std;
 const int MAXN = 1010;
 int n;
 int a[MAXN];
-int dp[MAXN][MAXN];
 
 int lis()
 {
-    int q[MAXN];
-    int Max;
-    for (int k = 0; k < n; ++k)
+    int len = 1;
+    int dp[MAXN];
+    dp[0] = a[0];
+    for (int i = 1; i < n; ++i)
     {
-        Max = 0;
-        for (int j = 0; j < k; ++j)
+        if (a[i] > dp[len - 1])
         {
-            if (a[k] > a[j])
-            {
-                if (q[j] > Max)    Max = q[j];
-            }
+            dp[len++] = a[i];
         }
-        q[k] = Max + 1;
+        else
+        {
+            int pos = upper_bound(dp, dp + len, a[i]) - dp;
+            dp[pos] = a[i];
+        }
     }
-    Max = 0;
-    for (int i = 0; i < n; ++i)
-    {
-        if (q[i] > Max)    Max = q[i];
-    }
-    return Max;
+    return len;
 }
 
 int main()
