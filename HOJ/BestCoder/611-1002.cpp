@@ -29,5 +29,12 @@ using namespace std;
 
 int main()
 {
+    freopen("611-1002.out", "w", stdout);
+    cout << 1 << endl;
+    for (int i = 0; i < 20000; i++)
+    {
+        printf("%c", (i % 26) + 'a');
+    }
+    printf("\n");
     return 0;
 }

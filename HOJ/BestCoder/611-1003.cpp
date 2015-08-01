@@ -42,9 +42,9 @@ int lcm(int a, int b)
 
 int main()
 {
-    unsigned int tmp = 0;
     const unsigned int mod = pow(2, 32);
-    for (int n = 1; n <= 100; n++)
+    float tmp = 0;
+    for (int n = 1; n <= 10; n++)
     {
         ans = 0;
         for (int i = 1; i <= n; ++i)
@@ -56,13 +56,13 @@ int main()
                     for (int l = 1; l <= n; ++l)
                     {
                         ans += lcm(gcd(i, j), gcd(k, l));
+                        //cout << lcm(gcd(i, j), gcd(k, l)) << endl;
                     }
                 }
             }
         }
-        printf("%u %f\n", ans % mod, ans % mod * 1.0 / (double)tmp);
-        tmp = ans;
-
+        printf("%f %f\n", log(sqrt(ans % mod)), log(sqrt(ans % mod)) - tmp);
+        tmp = log(sqrt(ans % mod));
     }
     return 0;
 }
