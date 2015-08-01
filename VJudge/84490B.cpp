@@ -29,21 +29,20 @@ using namespace std;
 
 const int maxn = 50 + 10;
 
-int t, n, a[maxn];
-float b[maxn * 3];
-int len = 0;
-float ans;
+int t, n;
+double a[maxn];
 
-bool judge(int x)
+bool check(double x)
 {
-    float seg = b[x];
-    for (int i = 2; i <= n - 1; ++i)
+    double t = a[0];
+    for (int i = 1; i < n - 1; ++i)
     {
-        if (seg == (float)a[i])    continue;
-        else if(seg<=(float)a[i]-x)     seg=(float)a[i];
-        else if((float)a[i])
+        if (t == a[i]) continue;
+        else if (t <= (a[i] - x))  t = a[i];
+        else if ((a[i] + x) <= a[i + 1]) t = a[i] + x;
+        else return false;
     }
-    return true;
+    return  true;
 }
 
 int main()
@@ -51,24 +50,16 @@ int main()
     scanf("%d", &t);
     while (t--)
     {
-        len = 0;
-        scanf("%d%d", &n, &a[0]);
-        for (int i = 1; i < n; ++i)
+        scanf("%d", &n);
+        for (int i = 0; i < n; ++i)    scanf("%lf", &a[i]);
+        sort(a, a + n);
+        double ans = 0;
+        for (int i = 1; i < n ; ++i)
         {
-            scanf("%d", &a[i]);
-            b[len++] = abs(a[i] - a[i - 1]);
-            b[len++] = abs(a[i] - a[i - 1]) * 1.0 / 2;
+            if (check(a[i] - a[i - 1]))  ans = max(ans, a[i] - a[i - 1]);
+            else if (check((a[i] - a[i - 1]) / 2.0))   ans = max(ans, ((a[i] - a[i - 1]) / 2.0));
         }
-        sort(b, b + len);
-        for (int i = len - 1; i >= 0; --i)
-        {
-            if (judge(i))
-            {
-                ans = b[i];
-                break;
-            }
-        }
-        printf("%.3f\n", ans);
+        printf("%.3lf\n", ans);
     }
     return 0;
 }
