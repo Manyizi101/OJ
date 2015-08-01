@@ -39,6 +39,7 @@ int main()
     {
         scanf("%d", &a[i]);
     }
+    //初始化只有一个元素的区间
     for (int i = 1; i <= n; ++i)
     {
         dp[i][i] = a[i] * n;
