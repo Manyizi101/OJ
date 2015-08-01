@@ -29,11 +29,12 @@ using namespace std;
 
 const int maxn  = 110;
 int a[maxn][maxn], dp[maxn][maxn];
+
 struct node
 {
     int x, y;
     int val;
-} ans[maxn*maxn];
+} ans[maxn * maxn];
 
 bool cmp(node a, node b)
 {
