@@ -27,34 +27,34 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+int n;
 
-int n, k;
-
-bool ok()
+int cal(int x)
 {
-    int i = 1, t;
-    while (i * i < k * (k - 1) / 2)    ++i;
-    for (; i * i < n; ++i)
+    int ans = 0;
+    int flag = 0;
+    while (x > 0)
     {
-        t = n - i * i;
-        if (t > k) return true;
-        if (t < k)
-        {
-            if (k * (k + 1) / 2 <= n)   return true;
-        }
+        flag++;
+        if (flag & 1)
+            ans += (x % 10);
         else
-        {
-            if (n != k * (k + 1) / 2 + 1)  return true;
-        }
+            ans -= (x % 10);
+        x /= 10;
     }
-    return false;
+    if (flag & 1)
+        return ans;
+    else
+        return -ans;
 }
 
 int main()
 {
-    while (~scanf("%d%d", &n, &k))
+    int ans = 0;
+    for (int i = 1; i <= 100; i++)
     {
-        ok() ? puts("YES") : puts("NO");
+        ans += cal(i);
+        cout << ans << " " << cal(i) << endl;
     }
     return 0;
 }
