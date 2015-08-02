@@ -27,42 +27,27 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-unsigned int mod(unsigned int dividend, unsigned int divisor)
+ll qpow(ll a, ll b, ll c)
 {
-    if (dividend < divisor)
-        return  dividend;
-    unsigned int k, c, quotient = 0, remainder;
-    while (dividend > divisor)
-    {
-        for (k = 0, c = divisor; dividend >= c; c <<= 1, k++)
-        {
-            if (dividend - c < divisor)
-            {
-                quotient += 1 << k;
-                remainder = dividend - c;
-                break;
-            }
-        }
-        if (dividend - c < divisor)
-            break;
-        quotient += 1 << (k - 1);
-        dividend -= c >> 1;
+    ll ans = 1;
+    a = a % c;
+    while (b > 0) {
+        if (b & 1)
+            ans = (ans * a) % c;
+        b = b / 2;
+        a = (a * a) % c;
     }
-    return remainder;
+    return ans;
 }
 
 int main()
 {
-    unsigned int n, m, ans, i;
-    while (scanf("%u%u", &n, &m) != EOF)
+    ll n, m, ans;
+    while (scanf("%I64d%I64d", &n, &m) != EOF)
     {
-        ans = 0;
-        for (i = 1; i <= n; i++)
-        {
-            if (i & 1)  ans = mod(((ans << 1) + 1), m);
-            else ans = mod(ans << 1 , m);
-        }
-        printf("%u\n", ans);
+        if (n & 1) ans = (qpow(2, n + 1, m * 3) - 1) / 3;
+        else ans = (qpow(2, n + 1, m * 3) - 2) / 3;
+        printf("%I64d\n", (ans % m));
     }
     return 0;
 }
