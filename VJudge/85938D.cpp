@@ -35,6 +35,7 @@ char tmpx, tmpy;
 queue<pair<int , int >  > q;
 int ans = 0;
 int vis[maxn][maxn];
+int bu[maxn][maxn];
 
 bool judge(int x, int y)
 {
@@ -42,8 +43,9 @@ bool judge(int x, int y)
     else return false;
 }
 
-void bfs(int x, int y)
+int bfs(int x, int y)
 {
+    bu[x][y] = 1;
     vis[x][y] = 1;
     q.push(make_pair(x, y));
     while (!q.empty())
@@ -55,10 +57,11 @@ void bfs(int x, int y)
         {
             if (((tx + dir[i][0] != edx) || (ty + dir[i][1] != edy) && judge(tx + dir[i][0], ty + dir[i][1])))
             {
+                bu[tx + dir[i][0]][ty + dir[i][1]] = bu[tx][ty] + 1;
                 vis[tx + dir[i][0]][ty + dir[i][1]] = 1;
                 q.push(make_pair(tx + dir[i][0], ty + dir[i][1]));
             }
-            else return;
+            else return bu[tx][ty] + 1;
         }
     }
     return;
@@ -77,7 +80,7 @@ int main()
         getchar();
         edx = tmpx - 'a' + 1;
         edy = tmpy - '0';
-        bfs(stx, sty);
+        ans = bfs(stx, sty);
         if (stx == edx && sty == edy)  ans = 0;
         cout << ans << endl;
     }
