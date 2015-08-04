@@ -54,7 +54,7 @@ int main()
     int l, r, mid;
     while (~scanf("%d", &n) && n)
     {
-        if (cc != 1)   printf("\n");
+        if (cc != 0)   printf("\n");
         cc = 1;
         scanf("%d%lf%lf%lf%lf", &m, &x1, &y1, &x2, &y2);
         for (int i = 0; i < n; ++i)
@@ -62,12 +62,26 @@ int main()
             scanf("%lf%lf", U + i, L + i);
         }
         U[n] = L[n] = x2;
-
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = n - 1; j >= 0; --j)
+            {
+                if (U[i] > U[j])
+                {
+                    swap(U[i], U[j]);
+                    swap(L[i], L[j]);
+                }
+                else if (U[i] == U[j])
+                {
+                    if (L[i] > L[j])  swap(L[i], L[j]);
+                }
+            }
+        }
         memset(res, 0, sizeof(res));
         for (int i = 0; i < m; ++i)
         {
             scanf("%lf%lf", &p[i].x, &p[i].y);
-            l = 0, r = n;
+            l = 0, r = n ;
             while (l < r)
             {
                 mid = (l + r) / 2;
