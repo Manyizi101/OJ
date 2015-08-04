@@ -29,7 +29,8 @@ using namespace std;
 
 const int maxn = 5000 + 10;
 
-int n, m, cc = 0;
+int n, m;
+int ans[maxn];
 
 struct node
 {
@@ -54,29 +55,29 @@ int main()
     int l, r, mid;
     while (~scanf("%d", &n) && n)
     {
-        if (cc != 0)   printf("\n");
-        cc = 1;
+        memset(ans, 0, sizeof(ans));
         scanf("%d%lf%lf%lf%lf", &m, &x1, &y1, &x2, &y2);
         for (int i = 0; i < n; ++i)
         {
             scanf("%lf%lf", U + i, L + i);
         }
         U[n] = L[n] = x2;
-        for (int i = 0; i <= n; ++i)
+        for (int i = 0; i < n; ++i)
         {
-            for (int j = n; j >= 0; --j)
+            for (int j = n - 1; j >= i; --j)
             {
-                if (min(U[i], L[i]) > min(U[j], L[j]))
+                if (U[i] == U[j])
+                {
+                    if (L[i] > L[j])  swap(L[i], L[j]);
+                }
+                else if (U[i] > U[j])
                 {
                     swap(U[i], U[j]);
                     swap(L[i], L[j]);
                 }
             }
         }
-        // for (int i = 0; i <= n; i++)
-        // {
-        //     cout << U[i] << " " << L[i] << endl;
-        // }
+
         memset(res, 0, sizeof(res));
         for (int i = 0; i < m; ++i)
         {
@@ -97,7 +98,13 @@ int main()
         }
         for (int i = 0; i <= n; ++i)
         {
-            printf("%d: %d\n", i, res[i]);
+            ans[res[i]]++;
+        }
+        cout << "Box" << endl;
+        for (int i = 1; i <= m; i++)
+        {
+            if (ans[i])
+                cout << i << ": " << ans[i] << endl;
         }
     }
     return 0;
