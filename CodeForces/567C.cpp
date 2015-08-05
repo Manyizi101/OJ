@@ -33,7 +33,7 @@ int n, k;
 ll a[maxn];
 ll ans;
 
-map<int, int> l, r;
+map<ll, ll> l, r;
 
 int main()
 {
@@ -53,9 +53,15 @@ int main()
         for (int i = 2; i <= n - 1; ++i)
         {
             l[a[i - 1]]++;
-            if (a[i] % k != 0)   {r[a[i + 1]]--; continue;}
+            if (a[i] % k != 0)
+            {
+                if (r[a[i + 1]] != 0)
+                    r[a[i + 1]]--;
+                continue;
+            }
+            if (r[a[i + 1]] != 0)
+                r[a[i + 1]]--;
             ll tj = a[i] / k, tx = a[i] * k;
-            r[a[i + 1]]--;
             ans += l[tj] * r[tx];
         }
         printf("%I64d\n", ans);
