@@ -29,10 +29,12 @@ using namespace std;
 
 const int maxn = 100 + 10;
 
+//返回坐标的平方
 inline double sqr(const double &x)
 {
     return x * x;
 }
+//返回坐标的正负
 inline int sgn(const double &x)
 {
     return x < -eps ? -1 : x > eps;
@@ -69,28 +71,30 @@ struct point
     {
         return sgn(a.x - b.x) < 0 || (sgn(a.x - b.x) == 0 && sgn(a.y - b.y) < 0);
     }
+    //返回点到原点的距离
     double norm()
     {
         return sqrt(sqr(x) + sqr(y));
     }
+    //返回两个点的外积
     friend double det(const point &a, const point &b)
     {
         return a.x * b.y - a.y * b.x;
     }
+    //返回两个点的内积
     friend double dot(const point &a, const point &b)
     {
         return a.x * b.x + a.y * b.y;
     }
+    //返回两个点之间线段的长度
     friend double dist(const point &a, const point &b)
     {
         return (a - b).norm();
     }
+    //返回两点构成的直线的仰角
     double arg()
     {
         return atan2(y, x);
-//        double res = atan2(y, x);   //(-pi, pi]
-//        if(res < -pi / 2 + eps) res += 2 * pi; //eps修正精度
-//        return res;
     }
     //逆时针旋转angle弧度
     point rotate(const double &angle)
@@ -111,6 +115,7 @@ struct point
     }
     void out()
     {
+        //输出默认采用两位小数，注意修改
         printf("%.2f %.2f\n", x, y);
     }
 };
