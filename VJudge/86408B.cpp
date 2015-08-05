@@ -28,61 +28,38 @@ const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
 
-
-const int NP = 1000005;
-int ispri[NP] = {}, prime[NP], pcnt = 0;
-void getprime()
-{
-    ispri[0] = ispri[1] = 1;
-    for (long long i = 2; i < NP; i++)
-        if (ispri[i] == 0)
-        {
-            prime[++pcnt] = i;
-            for (long long j = i * i; j < NP; j += i)
-                ispri[j] = 1;
-        }
-}
-
 ll gcd(ll a, ll b)
 {
     return b == 0 ? a : gcd(b, a % b);
 }
 
-ll gcdx(ll a, ll b)
-{
-    for (i = 1; i <= sqrt(n); i++)
-    {
-        while (n != prime[i])
-        {
-            if (n % prime[i] == 0)
-            {
-                return prime[i];
-            }
-        }
-    }
-}
-
+const int maxn = 10006;
 int t;
-ll x, y, k;
-
-ll dfs(ll x, ll y, ll k)
-{
-    if (gcd(x, y) == 1) break;
-    else
-    {
-        ll tmp = gcdx(x, y);
-        dfs(x/tmp,y/tmp,)
-    }
-}
+ll x, y, k, m;
+ll num[maxn];
 
 int main()
 {
-    getprime();
     scanf("%d", &t);
     while (t--)
     {
+        m = 0;
         scanf("%I64d%I64d%I64d", &x, &y, &k);
-
+        ll n = gcd(x, y);
+        for (ll i = 1; i * i <= n; i++)
+        {
+            if (n % i == 0)
+            {
+                num[m++] = i;
+                if (i * i != n)  num[m++] = n / i;
+            }
+        }
+        if (m < k) printf("-1\n");
+        else
+        {
+            sort(num, num + m);
+            printf("%I64d\n", num[m - k]);
+        }
     }
     return 0;
 }
