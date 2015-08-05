@@ -27,30 +27,49 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-ll cal(ll n, ll k)
+
+const int NP = 1000005;
+int ispri[NP] = {}, prime[NP], pcnt = 0;
+void getprime()
 {
-    if (k == 1)
-    {
-        return n;
-    }
-    ll i = 0; // 循环标志
-    int len = 1;
-    // n>=2才执行下面的循环
-    for (i = 2; i <= n; i++)
-    {
-        while (n != i)
+    ispri[0] = ispri[1] = 1;
+    for (long long i = 2; i < NP; i++)
+        if (ispri[i] == 0)
         {
-            if (n % i == 0)
+            prime[++pcnt] = i;
+            for (long long j = i * i; j < NP; j += i)
+                ispri[j] = 1;
+        }
+}
+
+ll a[NP];
+ll b[NP];
+ll np;
+
+void cal(ll n)
+{
+    np = 0;
+    ll i = 0; // 循环标志
+    // n>=2才执行下面的循环
+    for (i = 1; i <= sqrt(n); i++)
+    {
+        while (n != prime[i])
+        {
+            if (n % prime[i] == 0)
             {
-                len++;
-                n = n / i;
-                if (k == len)  return n;
+                b[np] = prime[i];
+                a[np]++;
+                n = n / prime[i];
             }
             else
+            {
+                np--;
                 break;
+            }
         }
+        np++;
     }
-    return -1;
+    return;
 }
 
 ll gcd(ll a, ll b)
@@ -63,16 +82,20 @@ ll x, y, k;
 
 int main()
 {
+    getprime();
     scanf("%d", &t);
     while (t--)
     {
         scanf("%I64d%I64d%I64d", &x, &y, &k);
         ll num = gcd(x, y);
-        ll ans = cal(num, k);
+        cal(num);
+        for (int i = 0; i < np; ++i)
+        {
+            cout << b[i] << " " << a[i] << endl;
+        }
         // cout << len << endl;
         // for (int i = 0; i < len; i++)  cout << a[i] << " ";
         // cout << endl;
-        printf("%I64d\n", ans);
     }
     return 0;
 }
