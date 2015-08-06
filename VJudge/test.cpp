@@ -1,88 +1,89 @@
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <string>
-#include <set>
-//#include <map>
-#include <queue>
-#include <utility>
-#include <stack>
-#include <list>
-#include <vector>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
 #include <ctime>
-#include <ctype.h>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
+#include <stack>
+#include <queue>
+#include <numeric>
+#include <iomanip>
+#include <bitset>
+#include <sstream>
+#include <fstream>
+#define debug puts("-----")
+
+typedef long long int ll;
+const double pi = acos(-1.0);
+const double eps = 1e-8;
+const int inf = 0x3f3f3f3f;
+const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
+int t, n, m;
+int vis[110000];
+int ans [100100];
+ll sum = 0;
+ll ed ;
+int cur , pos;
 
-struct point {   //点的结构
-    double x, y;
-    point (double a = 0, double b = 0)
-    {
-        x = a, y = b;
-    }
-} p[5005];
-double U[5005], L[5005];
-int res[5005];
-
-double multi (point a, point b, point c)    //叉积判断点线关系
+int dfs(int st)
 {
-    double x1, y1, x2, y2;
-    x1 = b.x - a.x;
-    y1 = b.y - a.y;
-    x2 = c.x - b.x;
-    y2 = c.y - b.y;
-    return x1 * y2 - x2 * y1;
+    if (cur == ed)
+    {
+        printf("%d", pos);
+        for (int i = 0; i < pos; i++)
+            printf(" %d", ans[i]);
+        printf("\n");
+        return 1;
+    }
+    for (int i = st; i >= 1; --i)
+    {
+        if (!vis[i] && cur + i <= ed)
+        {
+            vis[i] = 1;
+            ans[pos] = i;
+            pos++;
+            cur += i;
+            if (dfs(i - 1))
+                return 1;
+            cur -= i;
+            pos--;
+            vis[i] = 0;
+        }
+    }
+    return 0;
 }
 
 int main()
 {
-    int n, i, m, l, r, mid, cc = 1;
-    double x1, y1, x2, y2;
-    while (scanf ("%d", &n), n)
+    freopen("A.in", "r", stdin);
+    freopen("A.out", "w", stdout);
+    int t;
+    scanf("%d", &t);
+    while (t--)
     {
-        if (cc == 2)
-            printf ("\n");
-        cc = 2;
-        scanf ("%d%lf%lf%lf%lf", &m, &x1, &y1, &x2, &y2);
-        for (i = 0; i < n; i++)
-            scanf ("%lf%lf", U + i, L + i); //输入分割线的上端+下端的横坐标
-        U[n] = L[n] = x2;    //加最后一条边（矩型的右边），二分有用
-        for (int i = 0; i <= n; ++i)
+        scanf("%d%d", &n, &m);
+        memset(vis, 0, sizeof(vis));
+        sum = (n + 1) * n / 2;
+        if (sum % m != 0 || sum / m < n)
         {
-            for (int j = n; j >= 0; --j)
-            {
-                if (min(U[i], L[i]) > min(U[j], L[j]))
-                {
-                    swap(U[i], U[j]);
-                    swap(L[i], L[j]);
-                }
-            }
+            printf("NO\n");
+            continue;
         }
-
-        /***********************************华丽的分割线***********************************/
-
-        //下面是利用 叉积+二分 查找点所在位置，二分太强大了
-        memset (res, 0, sizeof(res));
-        for (i = 0; i < m; i++)
+        printf("YES\n");
+        ed = sum / m;
+        for (int i = 0; i < m; i++)
         {
-            scanf ("%lf%lf", &p[i].x, &p[i].y);    //输入要找的点
-            l = 0, r = n;
-            while (l < r)
-            {
-                mid = (l + r) / 2;
-                point b(L[mid], y2), c(U[mid], y1);    //第mid条分割线bc
-                if (multi (p[i], b, c) > 0)
-                    r = mid;
-                else l = mid + 1;
-            }
-            mid = (l + r) / 2;
-            res[mid]++;    //得知此点在第mid个区间
+            cur = pos = 0;
+            dfs(n);
         }
-        for (i = 0; i <= n; i++)
-            printf ("%d: %d\n", i, res[i]);
     }
     return 0;
 }
