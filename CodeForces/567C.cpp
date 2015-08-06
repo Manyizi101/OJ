@@ -59,10 +59,10 @@ int main()
                     r[a[i + 1]]--;
                 continue;
             }
-            if (r[a[i + 1]] != 0)
-                r[a[i + 1]]--;
             ll tj = a[i] / k, tx = a[i] * k;
             ans += l[tj] * r[tx];
+            if (r[a[i + 1]] != 0)
+                r[a[i + 1]]--;
         }
         printf("%I64d\n", ans);
     }
