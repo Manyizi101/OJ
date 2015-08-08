@@ -27,10 +27,19 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-char a[100];
+ll a[61];
+
 
 int main()
 {
-    gets(a);
+    double x = (1 + sqrt(5)) / 2;
+    freopen("test.out", "w", stdout);
+    printf("{");
+    for (int i = 1; i <= 60; ++i)
+    {
+        a[i] = floor(x * pow(1.5, i));
+        printf("%I64d,", a[i]);
+    }
+    printf("}");
     return 0;
 }
