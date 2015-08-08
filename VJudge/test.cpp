@@ -1,45 +1,47 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <ctime>
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <deque>
-#include <list>
-#include <set>
-#include <map>
-#include <stack>
-#include <queue>
-#include <numeric>
-#include <iomanip>
-#include <bitset>
-#include <sstream>
-#include <fstream>
-#define debug puts("-----")
-
-typedef long long int ll;
-const double pi = acos(-1.0);
-const double eps = 1e-8;
-const int inf = 0x3f3f3f3f;
-const ll INF = 0x3f3f3f3f3f3f3f3fLL;
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<cstring>
+#include<string>
+#include<cstdio>
+#include<vector>
+#define pb push_back
+#define debug puts("=====================");
 using namespace std;
-
-ll a[61];
-
-
-int main()
+typedef long long ll;
+const int N = 100;
+ll dp[N][N];
+ll ans[N];
+int main ()
 {
-    double x = (1 + sqrt(5)) / 2;
     freopen("test.out", "w", stdout);
-    printf("{");
-    for (int i = 1; i <= 60; ++i)
+    memset(dp, 0, sizeof(dp));
+    int n;
+    for (int i = 1; i <= 60; i++)
     {
-        a[i] = floor(x * pow(1.5, i));
-        printf("%I64d,", a[i]);
+        dp[i][1] = 1;
+        for (int j = 2; j <= i; j++)
+        {
+            for (int k = 0; k < i - 2; k++)
+            {
+                dp[i][j] += dp[k][j - 1];
+            }
+        }
+    }
+    printf("{");
+    for (int i = 1; i <= 60; i++)
+    {
+        ans[i] = 0;
+        for (int j = 1; j <= i; j++)
+        {
+            for (int k = 1; k <= j; k++)
+            {
+                ans[i] += dp[j][k];
+            }
+        }
+        printf("\"");
+        cout << ans[i];
+        printf("\",");
     }
     printf("}");
-    return 0;
 }
