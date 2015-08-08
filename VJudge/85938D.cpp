@@ -32,7 +32,6 @@ const int maxn = 10;
 int a[maxn][maxn], dir[8][2] = {{ -1, -2}, {1, -2}, {2, -1}, {2, 1}, {1, 2}, { -1, 2}, { -2, 1}, { -2, -1}};
 int stx, sty, edx, edy;
 char tmpx, tmpy;
-queue<pair<int , int >  > q;
 int ans = 0;
 int vis[maxn][maxn];
 int bu[maxn][maxn];
@@ -45,8 +44,9 @@ bool judge(int x, int y)
 
 int bfs(int x, int y)
 {
-    bu[x][y] = 1;
+    bu[x][y] = 0;
     vis[x][y] = 1;
+    queue<pair<int , int >  > q;
     q.push(make_pair(x, y));
     while (!q.empty())
     {
@@ -55,34 +55,43 @@ int bfs(int x, int y)
         q.pop();
         for (int i = 0; i < 8; ++i)
         {
-            if (((tx + dir[i][0] != edx) || (ty + dir[i][1] != edy) && judge(tx + dir[i][0], ty + dir[i][1])))
+            if (judge(tx + dir[i][0], ty + dir[i][1]))
             {
-                bu[tx + dir[i][0]][ty + dir[i][1]] = bu[tx][ty] + 1;
-                vis[tx + dir[i][0]][ty + dir[i][1]] = 1;
-                q.push(make_pair(tx + dir[i][0], ty + dir[i][1]));
+                if ((tx + dir[i][0] == edx) && (ty + dir[i][1] == edy))
+                {
+                    return bu[tx][ty] + 1;
+                }
+                else
+                {
+                    bu[tx + dir[i][0]][ty + dir[i][1]] = bu[tx][ty] + 1;
+                    vis[tx + dir[i][0]][ty + dir[i][1]] = 1;
+                    q.push(make_pair(tx + dir[i][0], ty + dir[i][1]));
+                }
             }
-            else return bu[tx][ty] + 1;
         }
     }
-    return;
+    return 0;
 }
 
 int main()
 {
     while (~scanf("%c%c", &tmpx, &tmpy))
     {
+        printf("To get from %c%c to ", tmpx, tmpy);
         memset(vis, 0, sizeof(vis));
+        memset(bu, 0, sizeof(bu));
         ans = 0;
         stx = tmpx - 'a' + 1;
         sty = tmpy - '0';
         getchar();
         scanf("%c%c", &tmpx, &tmpy);
         getchar();
+        printf("%c%c takes ", tmpx, tmpy);
         edx = tmpx - 'a' + 1;
         edy = tmpy - '0';
-        ans = bfs(stx, sty);
         if (stx == edx && sty == edy)  ans = 0;
-        cout << ans << endl;
+        else ans = bfs(stx, sty);
+        printf("%d knight moves.\n", ans);
     }
     return 0;
 }
