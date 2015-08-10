@@ -1,47 +1,57 @@
-#include<iostream>
-#include<cmath>
-#include<algorithm>
-#include<cstring>
-#include<string>
-#include<cstdio>
-#include<vector>
-#define pb push_back
-#define debug puts("=====================");
-using namespace std;
-typedef long long ll;
-const int N = 100;
-ll dp[N][N];
-ll ans[N];
-int main ()
-{
-    freopen("test.out", "w", stdout);
-    memset(dp, 0, sizeof(dp));
-    int n;
-    for (int i = 1; i <= 60; i++)
-    {
-        dp[i][1] = 1;
-        for (int j = 2; j <= i; j++)
-        {
-            for (int k = 0; k < i - 2; k++)
-            {
-                dp[i][j] += dp[k][j - 1];
-            }
-        }
+#include <cstdio>
+#define lson l , m , rt << 1
+#define rson m + 1 , r , rt << 1 | 1
+const int maxn = 55555;
+int sum[maxn << 2];
+void PushUP(int rt) {
+    sum[rt] = sum[rt << 1] + sum[rt << 1 | 1];
+}
+void build(int l, int r, int rt) {
+    if (l == r) {
+        scanf("%d", &sum[rt]);
+        return ;
     }
-    printf("{");
-    for (int i = 1; i <= 60; i++)
-    {
-        ans[i] = 0;
-        for (int j = 1; j <= i; j++)
-        {
-            for (int k = 1; k <= j; k++)
-            {
-                ans[i] += dp[j][k];
-            }
-        }
-        printf("\"");
-        cout << ans[i];
-        printf("\",");
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    PushUP(rt);
+}
+void update(int p, int add, int l, int r, int rt) {
+    if (l == r) {
+        sum[rt] += add;
+        return ;
     }
-    printf("}");
+    int m = (l + r) >> 1;
+    if (p <= m) update(p , add , lson);
+    else update(p , add , rson);
+    PushUP(rt);
+}
+int query(int L, int R, int l, int r, int rt) {
+    if (L <= l && r <= R) {
+        return sum[rt];
+    }
+    int m = (l + r) >> 1;
+    int ret = 0;
+    if (L <= m) ret += query(L , R , lson);
+    if (R > m) ret += query(L , R , rson);
+    return ret;
+}
+int main() {
+    int T , n;
+    scanf("%d", &T);
+    for (int cas = 1 ; cas <= T ; cas ++) {
+        printf("Case %d:\n", cas);
+        scanf("%d", &n);
+        build(1 , n , 1);
+        char op[10];
+        while (scanf("%s", op)) {
+            if (op[0] == 'E') break;
+            int a , b;
+            scanf("%d%d", &a, &b);
+            if (op[0] == 'Q') printf("%d\n", query(a , b , 1 , n);
+                                         else if (op[0] == 'S') update(a , -b , 1 , n , 1);
+                                         else update(a , b , 1 , n , 1);
+                }
+}
+return 0;
 }
