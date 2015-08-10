@@ -27,120 +27,82 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int maxn = 25;
+const int maxn = 105;
 
-int t,m,n,k,ans;
-int dir[4][2]= {{-1,0},{1,0},{0,1},{0,-1}};
+int g[maxn][maxn];
+int vis[25][25][25];
+int n,m,k,ans;
+int dir[4][2]= {1,0,-1,0,0,1,0,-1};
 
 struct node
 {
-    int k,vis,bu,val;
-} a[maxn][maxn];
+    int x,y;
+    int step;
+    int k;
+};
 
-bool judge(int x,int y)
+void bfs()
 {
-    if(1<=x&&x<=m&&1<=y&&y<=n&&a[x][y].vis==0)  return true;
-    else return false;
-}
+    node u;
+    u.x=1;
+    u.y=1;
+    u.step=0;
+    u.k=k;
+    queue<node> q;
+    vis[1][1][k]=1;
+    q.push(u);
 
-int bfs()
-{
-    a[1][1].vis=1;
-    a[1][1].bu++;
-    a[1][1].k=k;
-    if(a[1][1].val)
-    {
-        a[1][1].k--;
-    }
-    if(a[1][1].k<0) return -1;
-    queue<pair<int,int> > q;
-    q.push(make_pair(1,1));
     while(!q.empty())
     {
-        int ty = q.front().first;
-        int tx = q.front().second;
+        u=q.front();
         q.pop();
-        //cout<<q.front().first<<" "<<q.front().second<<endl;
-
-        for(int i=0; i<4; ++i)
+        if(u.x==n&&u.y==m)
         {
-            if(judge(ty+dir[i][0],tx+dir[i][1]))
+            ans=u.step;
+            return;
+        }
+
+        node v;
+        if(u.k>=0)
+        {
+            for(int i=0; i<4; i++)
             {
-                a[ty+dir[i][0]][tx+dir[i][1]].vis=1;
-                if(a[ty+dir[i][0]][tx+dir[i][1]].val)
+                v.x=u.x+dir[i][0];
+                v.y=u.y+dir[i][1];
+                v.step=u.step+1;
+
+                if(g[v.x][v.y]) v.k=u.k-1;
+                else v.k=k;
+                if(v.x>=1&&v.x<=n&&v.y>=1&&v.y<=m&&!vis[v.x][v.y][v.k])
                 {
-                    a[ty+dir[i][0]][tx+dir[i][1]].k=a[ty][tx].k-1;
-                }
-                else
-                {
-                    a[ty+dir[i][0]][tx+dir[i][1]].k=k;
-                }
-                if(a[ty+dir[i][0]][tx+dir[i][1]].k<0)
-                {
-                    a[ty+dir[i][0]][tx+dir[i][1]].k=a[ty][tx].k;
-                    continue;
-                }
-                else
-                {
-                    q.push(make_pair(ty+dir[i][0],tx+dir[i][1]));
-                    a[ty+dir[i][0]][tx+dir[i][1]].bu=a[ty][tx].bu+1;
+                    if(v.k>=0)
+                    {
+                        vis[v.x][v.y][v.k]=1;
+                        q.push(v);
+                    }
                 }
             }
         }
     }
-    return  a[m][n].bu;
 }
+
 int main()
 {
-    scanf("%d", &t);
-    while(t--)
+    int T;
+    scanf("%d",&T);
+    for(int t=1; t<=T; t++)
     {
-        memset(a,0,sizeof(a));
-        scanf("%d%d%d", &m,&n,&k);
-        for(int i=1; i<=m; ++i)
-        {
-            for(int j=1; j<=n; ++j)
-            {
-                scanf("%d", &a[i][j].val);
-            }
-        }
-        if(n==m&&n==1)  ans=0;
-        else
-            ans=bfs();
-        printf("%d\n", ans);
+        memset(g,0,sizeof(g));
+        memset(vis,0,sizeof(vis));
+        cin>>n>>m>>k;
+
+        for(int i=1; i<=n; i++)
+            for(int j=1; j<=m; j++)
+                cin>>g[i][j];
+
+        ans=-1;
+        bfs();
+        cout<<ans<<"\n";
     }
+    return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
