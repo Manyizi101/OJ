@@ -27,114 +27,72 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-//返回坐标的平方
-inline double sqr(const double &x)
+struct Point
 {
-    return x * x;
-}
-//返回坐标的正负
+    double x,y;
+};
+
 inline int sgn(const double &x)
 {
     return x < -eps ? -1 : x > eps;
 }
 
-struct point
+double dot (double x1,double y1, double x2,double y2)
 {
-    double x, y;
-    point(const double &x = 0, const double &y = 0): x(x), y(y) {}
-    friend point operator + (const point &a, const point &b)
-    {
-        return point(a.x + b.x, a.y + b.y);
-    }
-    friend point operator - (const point &a, const point &b)
-    {
-        return point(a.x - b.x, a.y - b.y);
-    }
-    friend point operator * (const point &a, const double &b)
-    {
-        return point(a.x * b, a.y * b);
-    }
-    friend point operator * (const double &a, const point &b)
-    {
-        return point(a * b.x, a * b.y);
-    }
-    friend point operator / (const point &a, const double &b)
-    {
-        return point(a.x / b, a.y / b);
-    }
-    friend bool operator == (const point &a, const point &b)
-    {
-        return !sgn(a.x - b.x) && !sgn(a.y - b.y);
-    }
-    friend bool operator < (const point &a, const point &b)
-    {
-        return sgn(a.x - b.x) < 0 || (sgn(a.x - b.x) == 0 && sgn(a.y - b.y) < 0);
-    }
-    //返回点到原点的距离
-    double norm()
-    {
-        return sqrt(sqr(x) + sqr(y));
-    }
-    //返回两个点的外积
-    friend double det(const point &a, const point &b)
-    {
-        return a.x * b.y - a.y * b.x;
-    }
-    //返回两个点的内积
-    friend double dot(const point &a, const point &b)
-    {
-        return a.x * b.x + a.y * b.y;
-    }
-    //返回两个点之间线段的长度
-    friend double dist(const point &a, const point &b)
-    {
-        return (a - b).norm();
-    }
-    //返回两点构成的直线的仰角
-    double arg()
-    {
-        return atan2(y, x);
-    }
-    //逆时针旋转angle弧度
-    point rotate(const double &angle)
-    {
-        return rotate(cos(angle), sin(angle));
-    }
-    point rotate(const point &p, const double &angle)
-    {
-        return (*this - p).rotate(angle) + p;
-    }
-    point rotate(const double &cosa, const double &sina)
-    {
-        return point(x * cosa - y * sina, x * sina + y * cosa);
-    }
-    int in()
-    {
-        return scanf("%lf %lf", &x, &y);
-    }
-    void out()
-    {
-        //输出默认采用两位小数，注意修改
-        printf("%.2f %.2f\n", x, y);
-    }
-};
+    return x1*y2-x2*y1;
+}
 
-const int maxn = 20;
+double cross(Point a ,Point b,Point c)
+{
+    return dot(b.x-a.x,b.y-a.y,c.x-a.x,c.y-a.y);
+}
 
+double lineseg(Point a, Point b, Point c, Point d)
+{
+    return (sgn(cross(a,b,c))^sgn(cross(a,b,d))==-2)&&(sgn(cross(c,d,a))^sgn(cross(c,d,b))==-2);
+}
+
+double mydist(Point a, Point b)
+{
+    return sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+}
+
+double g[200][200];
+int s,t;
 int n;
-point l[maxn][maxn];
-double x, y;
+Point line[200][2];
+Point pts[200];
 
 int main()
 {
-    scanf("%d", &n);
-    for (int i = 0; i < n; ++i)
+    double x,y1,y2,y3,y4;
+    wile(cin>>n)
     {
-        scanf("%d", &x);
-        for (int j = 0; j < m; ++j)
+        if(n==-1)   break;
+        s=0,t=4*n+1;
+        pts[0].x=0;
+        pts[0].y=5;
+        pts[t].x=10;
+        pts[t].y=5;
+
+        for(int i=0;i<n;++i)
         {
-            scnaf()
+            cin>>x>>y1>>y2>>y3>>y4;
+
+            line[i*3][0].x=x;
+            line[i*3][0].y=0;
+            line[i*3][1].x=x;
+            line[i*3][1].y=y1;
         }
     }
     return 0;
 }
+
+
+
+
+
+
+
+
+
