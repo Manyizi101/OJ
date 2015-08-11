@@ -119,6 +119,7 @@ struct point
     }
 };
 
+/*
 struct line
 {
     point s, t;
@@ -211,43 +212,134 @@ struct line
         s.out(), t.out();
     }
 };
+**/
+
+struct line {
+    double sx, sy, ex, ey;
+    double k, b, A, B, C;
+    int id;
+    line(double _sx = 0, double _sy = 0, double _ex = 0, double _ey = 0, int _id = 0) {
+        sx = _sx; sy = _sy;
+        ex = _ex; ey = _ey;
+        id = _id;
+        k = (_sy - _ey) / (_sx - _ex);
+        b = _sy - _sx * k;
+        A = (-k);
+        B = 1;
+        C = (- _sx) * A - _sy;
+    }
+};
 
 int n;
 vector<line> ans;
 line x;
 
-int main()
-{
-    while (~scanf("%d", &n) && n)
-    {
-        ans.clear();
-        x.in();
-        x.id = 1;
-        ans.push_back(x);
-        for (int i = 1; i < n; ++i)
-        {
-            x.in();
-            x.id = i + 1;
-            for (unsigned j = 0; j < ans.size(); ++j)
-            {
-                if (issegxseg(ans[j], x))
-                {
-                    ans.erase(ans.begin() + j);
-                }
-            }
-            ans.push_back(x);
-        }
-        printf("Top sticks: ");
-        for (unsigned i = 0; i < ans.size() - 1; ++i)
-        {
-            printf("%d, ", ans[i].id);
-        }
-        printf("%d.\n", ans[ans.size() - 1].id);
+bool cross_Judge(line a , line b) {
+    double a11 = a.ex - a.sx;
+    double a12 = a.ey - a.sy;
+    double a21 = b.sx - a.sx;
+    double a22 = b.sy - a.sy;
+    double a31 = b.ex - a.sx;
+    double a32 = b.ey - a.sy;
+    if ((a11 * a22 - a21 * a12) * (a11 * a32 - a31 * a12) < 0)
+        return true;
+    return false;
+}
+bool same(line a , line b) {
+    if (a.sx == b.sx && a.sy == b.sy && a.ex == b.ex && a.ey == b.ey) return true;
+    if (a.sx == b.ex && a.sy == b.ey && a.ex == b.sx && a.ey == b.sy) return true;
+    return false;
+}
+bool cover(line a , line b) {
+    if (a.k == b.k && a.b == b.b) {
+        if (a.sx < b.sx && a.sx > b.ex) return true;
+        if (a.sx > b.sx && a.sx < b.ex) return true;
+        if (a.ex < b.sx && a.ex > b.ex) return true;
+        if (a.ex > b.sx && a.ex < b.ex) return true;
+        if (b.sx < a.sx && b.sx > a.ex) return true;
+        if (b.sx > a.sx && b.sx < a.ex) return true;
+        if (b.ex < a.sx && b.ex > a.ex) return true;
+        if (b.ex > a.sx && b.ex < a.ex) return true;
     }
+    return false;
+}
+bool cross(line a , line b) {
+    if (same(a, b)) return true;
+    if (cover(a, b)) return true;
+    if (min(a.sx, a.ex) > max(b.sx, b.ex)) return false;
+    if (min(b.sx, b.ex) > max(a.sx, a.ex)) return false;
+    if (min(a.sy, a.ey) > max(b.sy, b.ey)) return false;
+    if (min(b.sy, b.ey) > max(a.sy, a.ey)) return false;
+    return (cross_Judge(a, b) && cross_Judge(b, a));
 }
 
+// int main()
+// {
+//     while (~scanf("%d", &n) && n)
+//     {
+//         ans.clear();
+//         x.in();
+//         x.id = 1;
+//         ans.push_back(x);
+//         for (int i = 1; i < n; ++i)
+//         {
+//             x.in();
+//             x.id = i + 1;
+//             for (unsigned j = 0; j < ans.size(); ++j)
+//             {
+//                 if (cross(ans[j], x))
+//                 {
+//                     ans.erase(ans.begin() + j);
+//                 }
+//             }
+//             ans.push_back(x);
+//         }
+//         printf("Top sticks: ");
+//         for (unsigned i = 0; i < ans.size() - 1; ++i)
+//         {
+//             printf("%d, ", ans[i].id);
+//         }
+//         printf("%d.\n", ans[ans.size() - 1].id);
+//     }
+// }
 
+const int maxn = 1e5 + 10;
 
+int v[maxn];
+
+int main(int argc, char const *argv[])
+{
+    int n;
+    while (cin >> n && n)
+    {
+        queue<line> q;
+        for (int i = 0; i < n; ++i)
+        {
+            double a, b, c, d;
+            scanf("%lf%lf%lf%lf", &a, &b, &c, &d);
+            line L = line(a, b, c, d, i + 1);
+            int len = q.size();
+            for (int j = 0; j < len; ++j)
+            {
+                if (!cross(L, q.front()))
+                    q.push(q.front());
+                q.pop();
+            }
+            q.push(L);
+        }
+        printf("Top sticks: ");
+        int cnt = 0;
+        while (!q.empty()) {
+            v[cnt++] = q.front().id;
+            q.pop();
+        }
+        int i ;
+        for (i = 0 ; i < cnt - 1 ; i++)
+            printf("%d, ", v[i]);
+        printf("%d.\n", v[i]);
+    }
+    return 0;
+}
 
 
 
