@@ -218,33 +218,31 @@ line x;
 
 int main()
 {
-    while(~scanf("%d", &n)&&n)
+    while (~scanf("%d", &n) && n)
     {
         ans.clear();
         x.in();
-        x.id=1;
+        x.id = 1;
         ans.push_back(x);
-        for(int i=1; i<n; ++i)
+        for (int i = 1; i < n; ++i)
         {
             x.in();
-            x.id=i+1;
-            ans.push_back(x);
-            for(unsigned j=0; j<ans.size()-1; ++j)
+            x.id = i + 1;
+            for (unsigned j = 0; j < ans.size(); ++j)
             {
-                if(issegxseg(ans[j],x))
+                if (issegxseg(ans[j], x))
                 {
-                    ans.erase(ans.begin()+j);
+                    ans.erase(ans.begin() + j);
                 }
             }
+            ans.push_back(x);
         }
-        printf("Top sticks:");
-        for(unsigned i=0; i<ans.size(); ++i)
+        printf("Top sticks: ");
+        for (unsigned i = 0; i < ans.size() - 1; ++i)
         {
-            printf(" %d", ans[i].id);
-            if(i!=ans.size()-1) printf(",");
-            else printf(".");
+            printf("%d, ", ans[i].id);
         }
-        printf("\n");
+        printf("%d.\n", ans[ans.size() - 1].id);
     }
 }
 
