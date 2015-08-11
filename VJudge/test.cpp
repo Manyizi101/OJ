@@ -27,57 +27,67 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int N = 100005;
-const ll MOD = 1000000007;
+string g, b;
 
-int t, n, m, c;
-ll a[N];
-int op[N], on;
-char str[3];
-
-ll pow_mod(ll x, ll k)
+string gtob(string g)
 {
-    ll ans = 1;
-    while (k)
+    string b = "";
+    b += (0 ^ (g[0] - '0')) + '0';
+    for (unsigned i = 1; i < g.size(); ++i)
     {
-        if (k & 1) ans = ans * x % MOD;
-        x = x * x % MOD;
-        k >>= 1;
+        b += ((b[i - 1] - '0') ^ (g[i] - '0')) + '0';
     }
-    return ans;
+    return b;
 }
 
-ll solve(int c)
-{
-    ll mul = 1;
-    for (int i = on - 1; i >= 0; i--)
-    {
-        if (op[i] == 1)
-        {
-            if (c > (n + 1) / 2) c = (c - (n + 1) / 2) * 2;
-            else c = (c - 1) * 2 + 1;
-        }
-        else if (op[i] == 2) c = n - c + 1;
-        else mul = mul * 2 % (MOD - 1);
-    }
-    return pow_mod(a[c], mul);
-}
+const int maxn = 2 * 1e5 + 10;
+
+int t, n, a[maxn];
+ll ans = 0;;
+int cs = 0;
 
 int main()
 {
     scanf("%d", &t);
     while (t--)
     {
-        on = 0;
-        scanf("%d%d", &n, &m);
-        for (int i = 1; i <= n; i++) a[i] = i;
-        while (m--)
+        int flag = 0, one = -1;
+        ans = 0;
+        cin >> g;
+        n = g.size();
+        for (int i = 0; i < n; ++i)    scanf("%d", &a[i]);
+        for (int i = 0; i < n; ++i)
         {
-            scanf("%s%d", str, &c);
-            if (str[0] == 'O') op[on++] = c;
-            else
-                printf("%lld\n", solve(c));
+            if (g[i] == '?')
+            {
+                one = i;
+                break;
+            }
+            if (g[i] == '1')
+            {
+                flag = 1;
+                break;
+            }
         }
+        if (flag)
+            for (int i = 0; i < n; ++i)
+            {
+                if (g[i] == '?')   g[i] = '0';
+            }
+        else
+        {
+            g[one] = '1';
+            for (int i = one + 1; i < n; ++i)
+            {
+                if (g[i] == '?')   g[i] = '0';
+            }
+        }
+        b = gtob(g);
+        for (int i = 0; i < n; ++i)
+        {
+            if (b[i] == '1')   ans += a[i];
+        }
+        printf("Case #%d: ", ++cs);
+        printf("%I64d\n", ans);
     }
-    return 0;
 }
