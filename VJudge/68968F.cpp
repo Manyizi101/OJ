@@ -227,12 +227,13 @@ bool judge(line l1, line l2)
     if(ispointonline(l1,l2)||ispointonline(l2,l1))    return false;
     //cover
     if(parallel(l1,l2)&&(l1.ispointonseg(l2.s)||l1.ispointonseg(l2.t)))  return true;
-    //croess
+    //cross
     return !sameside(l1, l2.s, l2.t) && !sameside(l2, l1.s, l1.t);
 }
 
 int main()
-{    while (~scanf("%d", &n) && n)
+{
+    while (~scanf("%d", &n) && n)
     {
         queue<line> ans;
         for (int i = 0; i < n; ++i)
@@ -252,12 +253,19 @@ int main()
             ans.push(x);
         }
         printf("Top sticks: ");
-        for (unsigned i = 0; i < ans.size()-1; ++i)
+        while(!ans.empty())
         {
-            printf("%d, ", ans.front().id);
+            printf("%d", ans.front().id);
             ans.pop();
+            if(ans.size()==0)
+            {
+                printf(".\n");
+            }
+            else
+            {
+                printf(", ");
+            }
         }
-        printf("%d.\n", ans.front().id);
         ans.pop();
     }
 }
