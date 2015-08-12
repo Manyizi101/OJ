@@ -1,140 +1,99 @@
-/********************* Template ************************/
-#include <set>
-#include <map>
-#include <list>
-#include <cmath>
-#include <ctime>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <cstdio>
-#include <string>
-#include <vector>
-#include <cassert>
-#include <cstdlib>
-#include <cstring>
-#include <sstream>
-#include <fstream>
-#include <numeric>
-#include <iomanip>
-#include <iostream>
-#include <algorithm>
-#include <functional>
-using namespace std;
-
-#define EPS         1e-8
-#define MAXN        (int)1e5+5
-#define MOD         (int)1e9+7
-#define PI          acos(-1.0)
-#define INF         (1<<30)
-#define max(a,b)    ((a) > (b) ? (a) : (b))
-#define min(a,b)    ((a) < (b) ? (a) : (b))
-#define max3(a,b,c) (max(max(a,b),c))
-#define min3(a,b,c) (min(min(a,b),c))
-#define BUG         cout<<"BUG! "<<endl;
-#define L(t)        (t << 1)
-#define R(t)        (t << 1 | 1)
-#define Mid(a,b)    ((a + b) >> 1)
-#define lowbit(a)   (a & -a)
-#define FIN         freopen("in.txt","r",stdin)
-
-// typedef long long LL;
-// typedef unsigned long long ULL;
-// typedef __int64 LL;
-// typedef unisigned __int64 ULL;
-// int gcd(int a,int b){ return b?gcd(b,a%b):a; }
-// int lcm(int a,int b){ return a*b/gcd(a,b); }
-
-/*********************   F   ************************/
-struct line {
-    double sx, sy, ex, ey;
-    double k, b, A, B, C;
-    int id;
-    line(double _sx = 0, double _sy = 0, double _ex = 0, double _ey = 0, int _id = 0) {
-        sx = _sx; sy = _sy;
-        ex = _ex; ey = _ey;
-        id = _id;
-        k = (_sy - _ey) / (_sx - _ex);
-        b = _sy - _sx * k;
-        A = (-k);
-        B = 1;
-        C = (- _sx) * A - _sy;
-    }
-};
-struct point {
-    double x, y;
-    point(double _x, double _y) {
-        x = _x; y = _y;
-    }
-};
-bool cross_Judge(line a , line b) {
-    double a11 = a.ex - a.sx;
-    double a12 = a.ey - a.sy;
-    double a21 = b.sx - a.sx;
-    double a22 = b.sy - a.sy;
-    double a31 = b.ex - a.sx;
-    double a32 = b.ey - a.sy;
-    if ((a11 * a22 - a21 * a12) * (a11 * a32 - a31 * a12) < 0)
-        return true;
-    return false;
-}
-bool same(line a , line b) {
-    if (a.sx == b.sx && a.sy == b.sy && a.ex == b.ex && a.ey == b.ey) return true;
-    if (a.sx == b.ex && a.sy == b.ey && a.ex == b.sx && a.ey == b.sy) return true;
-    return false;
-}
-bool cover(line a , line b) {
-    if (a.k == b.k && a.b == b.b) {
-        if (a.sx < b.sx && a.sx > b.ex) return true;
-        if (a.sx > b.sx && a.sx < b.ex) return true;
-        if (a.ex < b.sx && a.ex > b.ex) return true;
-        if (a.ex > b.sx && a.ex < b.ex) return true;
-        if (b.sx < a.sx && b.sx > a.ex) return true;
-        if (b.sx > a.sx && b.sx < a.ex) return true;
-        if (b.ex < a.sx && b.ex > a.ex) return true;
-        if (b.ex > a.sx && b.ex < a.ex) return true;
-    }
-    return false;
-}
-bool cross(line a , line b) {
-    if (same(a, b)) return true;
-    if (cover(a, b)) return true;
-    if (min(a.sx, a.ex) > max(b.sx, b.ex)) return false;
-    if (min(b.sx, b.ex) > max(a.sx, a.ex)) return false;
-    if (min(a.sy, a.ey) > max(b.sy, b.ey)) return false;
-    if (min(b.sy, b.ey) > max(a.sy, a.ey)) return false;
-    return (cross_Judge(a, b) && cross_Judge(b, a));
-}
-int v[MAXN];
-int main()
+const int NV = 1005;
+struct Nodey
 {
-    //FIN;
-    int n ;
-    while (cin >> n && n) {
-        queue<line> q;
-        for (int i = 0 ; i < n ; i++) {
-            double a, b, c, d;
-            scanf("%lf%lf%lf%lf", &a, &b, &c, &d);
-            line L = line(a, b, c, d, i + 1);
-            int len = q.size();
-            for (int j = 0 ; j < len; j++) {
-                if (!cross(L, q.front()))
-                    q.push(q.front());
-                q.pop();
-            }
-            q.push(L);
+    int l, r;
+    int Max, Min;
+};
+int locy[NV], locx[NV];
+struct Nodex
+{
+    int l, r;
+    Nodey sty[NV * 4];
+    void build(int _l, int _r, int i = 1)
+    {
+        sty[i].l = _l;
+        sty[i].r = _r;
+        sty[i].Max = -inf;
+        sty[i].Min = inf;
+        if (_l == _r)
+        {
+            locy[_l] = i;
+            return;
         }
-        printf("Top sticks: ");
-        int cnt = 0;
-        while (!q.empty()) {
-            v[cnt++] = q.front().id;
-            q.pop();
-        }
-        int i ;
-        for (i = 0 ; i < cnt - 1 ; i++)
-            printf("%d, ", v[i]);
-        printf("%d.\n", v[i]);
+        int mid = (_l + _r) / 2;
+        build(_l, mid, i << 1);
+        build(mid + 1, _r, (i << 1) | 1);
     }
-    return 0;
+    int queryMin(int _l, int _r, int i = 1)
+    {
+        if (sty[i].l == _l && sty[i].r == _r)
+            return sty[i].Min;
+        int mid = (sty[i].l + sty[i].r) / 2;
+        if (_r <= mid)return queryMin(_l, _r, i << 1);
+        else if (_l > mid)return queryMin(_l, _r, (i << 1) | 1);
+        else return min(queryMin(_l, mid, i << 1), queryMin(mid + 1, _r, (i << 1) | 1));
+    }
+    int queryMax(int _l, int _r, int i = 1)
+    {
+        if (sty[i].l == _l && sty[i].r == _r)
+            return sty[i].Max;
+        int mid = (sty[i].l + sty[i].r) / 2;
+        if (_r <= mid)return queryMax(_l, _r, i << 1);
+        else if (_l > mid)return queryMax(_l, _r, (i << 1) | 1);
+        else return max(queryMax(_l, mid, i << 1), queryMax(mid + 1, _r, (i << 1) | 1));
+    }
+} stx[NV * 4];
+int n;
+void build(int l, int r, int i = 1)
+{
+    stx[i].l = l;
+    stx[i].r = r;
+    stx[i].build(1, n);
+    if (l == r)
+    {
+        locx[l] = i;
+        return;
+    }
+    int mid = (l + r) / 2;
+    build(l, mid, i << 1);
+    build(mid + 1, r, (i << 1) | 1);
+}
+void modify(int x, int y, int val)
+{
+    int tx = locx[x];
+    int ty = locy[y];
+    stx[tx].sty[ty].Min = stx[tx].sty[ty].Max = val;
+    for (int i = tx; i; i >>= 1)
+        for (int j = ty; j; j >>= 1)
+        {
+            if (i == tx && j == ty)continue;
+            if (j == ty)
+            {
+                stx[i].sty[j].Min = min(stx[i << 1].sty[j].Min, stx[(i << 1) | 1].sty[j].Min);
+                stx[i].sty[j].Max = max(stx[i << 1].sty[j].Max, stx[(i << 1) | 1].sty[j].Max);
+            }
+            else
+            {
+                stx[i].sty[j].Min = min(stx[i].sty[j << 1].Min, stx[i].sty[(j << 1) | 1].Min);
+                stx[i].sty[j].Max = max(stx[i].sty[j << 1].Max, stx[i].sty[(j << 1) | 1].Max);
+            }
+        }
+}
+int queryMin(int x1, int x2, int y1, int y2, int i = 1)
+{
+    if (stx[i].l == x1 && stx[i].r == x2)
+        return stx[i].queryMin(y1, y2);
+    int mid = (stx[i].l + stx[i].r) / 2;
+    if (x2 <= mid)return queryMin(x1, x2, y1, y2, i << 1);
+    else if (x1 > mid)return queryMin(x1, x2, y1, y2, (i << 1) | 1);
+    else return min(queryMin(x1, mid, y1, y2, i << 1), queryMin(mid + 1, x2, y1, y2, (i << 1) | 1));
+}
+int queryMax(int x1, int x2, int y1, int y2, int i = 1)
+{
+    if (stx[i].l == x1 && stx[i].r == x2)
+        return stx[i].queryMax(y1, y2);
+    int mid = (stx[i].l + stx[i].r) / 2;
+    if (x2 <= mid)return queryMax(x1, x2, y1, y2, i << 1);
+    else if (x1 > mid)return queryMax(x1, x2, y1, y2, (i << 1) | 1);
+    else return max(queryMax(x1, mid, y1, y2, i << 1), queryMax(mid + 1, x2, y1, y2, (i << 1) | 1));
 }
