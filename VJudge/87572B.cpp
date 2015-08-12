@@ -60,7 +60,21 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+const int maxn = 50+10;
+
+int n,m;
+int a[maxn][maxn];
+
 int main()
 {
-
+    while(~scanf("%d%d", &n,&m))
+    {
+        for(int i=1; i<=n; ++i)
+        {
+            for(int j=1; j<=m; ++j)
+            {
+                scanf("%d", a[i][j]);
+            }
+        }
+    }
 }
