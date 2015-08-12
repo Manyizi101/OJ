@@ -105,6 +105,7 @@ bool check(int A)
     }
     return false;
 }
+
 void solve()
 {
     int a, b, m;
