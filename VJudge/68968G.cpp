@@ -215,35 +215,41 @@ int n;
 line x[30+10];
 point st;
 int ans,Max;
+int num;
+point dir[40*40];
 
 int main()
 {
+    num=0;
     scanf("%d", &n);
-    for(int i=0; i<n; ++i)    x[i].in();
+    for(int i=0; i<n; ++i)  x[i].in();
     st.in();
+    for(int i=0; i<n; ++i)
+    {
+        for(int j=0; j<n; ++j)
+        {
+            if(i!=j)
+            {
+                if((x[i].s.x==x[j].s.x)&&(x[i].s.x==0||x[i].s.x==100))
+                    dir[num++]=(x[i].s.x,(x[i].s.y+x[j].s.y)/2);
+                if((x[i].s.y==x[j].s.y)&&(x[i].s.y==0||x[i].s.y==100))
+                    dir[num++]=((x[i].s.x+x[j].s.x)/2,x[i].s.y);
+            }
+        }
+    }
     ans=inf;
-    for(int i=0; i<n; ++i)
+    for(int i=0; i<num; ++i)
     {
         Max=0;
-        line tmp(x[i].s,st);
+        line tmp(dir[i],st);
         for(int j=0; j<n; ++j)
         {
             if(issegxseg(tmp,x[j]))  Max++;
         }
         ans=min(Max,ans);
     }
-    for(int i=0; i<n; ++i)
-    {
-        Max=0;
-        line tmp(x[i].t,st);
-        for(int j=0; j<n; ++j)
-        {
-            if(issegxseg(tmp,x[j]))  Max++;
-        }
-        ans=min(Max,ans);
-    }
-
-    cout<<"Number of doors = "<<ans<<endl;
+    if(n==0)    ans=1;
+    cout<<"Number of doors = "<<ans;
 }
 
 
