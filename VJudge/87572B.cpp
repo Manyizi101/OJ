@@ -65,6 +65,7 @@ const int maxn = 50+10;
 int n,m;
 int a[maxn][maxn];
 
+
 int main()
 {
     while(~scanf("%d%d", &n,&m))

@@ -1,10 +1,33 @@
-#include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <cmath>
 #include <cstring>
-const int MAXL = 10011, MAXN = 6;
+#include <cmath>
+#include <ctime>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
+#include <stack>
+#include <queue>
+#include <numeric>
+#include <iomanip>
+#include <bitset>
+#include <sstream>
+#include <fstream>
+#define debug puts("-----")
+
+typedef long long int ll;
+const double pi = acos(-1.0);
+const double eps = 1e-8;
+const int inf = 0x3f3f3f3f;
+const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
+
+const int MAXL = 100000+10, MAXN = 100000+10;
 struct SuffixArray
 {
     struct RadixElement
@@ -64,70 +87,7 @@ struct SuffixArray
     }
 } SA;
 
-int N, Ans, Bel[MAXL];
-char S[MAXL];
-
-void init()
-{
-    int i;
-    scanf("%d", &N);
-    SA.N = 0;
-    for (i = 1; i <= N; i++)
-    {
-        scanf("%s", S);
-        for (char *p = S; *p; p++)
-        {
-            SA.A[++SA.N] = *p - 'a' + 1;
-            Bel[SA.N] = i;
-        }
-        if (i < N)
-            SA.A[++SA.N] = 30 + i;
-    }
-}
-bool check(int A)
-{
-    int i, j, k;
-    bool ba[MAXN];
-    for (i = 1; i <= SA.N; i++)
-    {
-        if (SA.Height[i] >= A)
-        {
-            for (j = i; SA.Height[j] >= A && j <= SA.N; j++);
-            j--;
-            memset(ba, 0, sizeof(ba));
-            for (k = i - 1; k <= j; k++)
-                ba[Bel[SA.SA[k]]] = true;
-            for (k = 1; ba[k] && k <= N; k++);
-            if (k == N + 1)
-                return true;
-            i = j;
-        }
-    }
-    return false;
-}
-void solve()
-{
-    int a, b, m;
-    SA.CalcSA();
-    SA.CalcHeight();
-    a = 0; b = SA.N;
-    while (a + 1 < b)
-    {
-        m = (a + b) / 2;
-        if (check(m))
-            a = m;
-        else
-            b = m - 1;
-    }
-    if (check(b))
-        a = b;
-    Ans = a;
-}
-
 int main()
 {
-    init();
-    solve();
-    printf("%d", Ans);
-    return 0;
+
 }
