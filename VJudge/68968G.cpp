@@ -27,12 +27,12 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-//·µ»Ø×ø±êµÄÆ½·½
+//è¿”å›åæ ‡çš„å¹³æ–¹
 inline double sqr(const double &x)
 {
     return x * x;
 }
-//·µ»Ø×ø±êµÄÕı¸º
+//è¿”å›åæ ‡çš„æ­£è´Ÿ
 inline int sgn(const double &x)
 {
     return x < -eps ? -1 : x > eps;
@@ -70,32 +70,32 @@ struct point
     {
         return sgn(a.x - b.x) < 0 || (sgn(a.x - b.x) == 0 && sgn(a.y - b.y) < 0);
     }
-    //·µ»Øµãµ½Ô­µãµÄ¾àÀë
+    //è¿”å›ç‚¹åˆ°åŸç‚¹çš„è·ç¦»
     double norm()
     {
         return sqrt(sqr(x) + sqr(y));
     }
-    //·µ»ØÁ½¸öµãµÄÍâ»ı
+    //è¿”å›ä¸¤ä¸ªç‚¹çš„å¤–ç§¯
     friend double det(const point &a, const point &b)
     {
         return a.x * b.y - a.y * b.x;
     }
-    //·µ»ØÁ½¸öµãµÄÄÚ»ı
+    //è¿”å›ä¸¤ä¸ªç‚¹çš„å†…ç§¯
     friend double dot(const point &a, const point &b)
     {
         return a.x * b.x + a.y * b.y;
     }
-    //·µ»ØÁ½¸öµãÖ®¼äÏß¶ÎµÄ³¤¶È
+    //è¿”å›ä¸¤ä¸ªç‚¹ä¹‹é—´çº¿æ®µçš„é•¿åº¦
     friend double dist(const point &a, const point &b)
     {
         return (a - b).norm();
     }
-    //·µ»ØÁ½µã¹¹³ÉµÄÖ±ÏßµÄÑö½Ç
+    //è¿”å›ä¸¤ç‚¹æ„æˆçš„ç›´çº¿çš„ä»°è§’
     double arg()
     {
         return atan2(y, x);
     }
-    //ÄæÊ±ÕëĞı×ªangle»¡¶È
+    //é€†æ—¶é’ˆæ—‹è½¬angleå¼§åº¦
     point rotate(const double &angle)
     {
         return rotate(cos(angle), sin(angle));
@@ -114,7 +114,7 @@ struct point
     }
     void out()
     {
-        //Êä³öÄ¬ÈÏ²ÉÓÃÁ½Î»Ğ¡Êı£¬×¢ÒâĞŞ¸Ä
+        //è¾“å‡ºé»˜è®¤é‡‡ç”¨ä¸¤ä½å°æ•°ï¼Œæ³¨æ„ä¿®æ”¹
         printf("%.2f %.2f\n", x, y);
     }
 };
@@ -131,56 +131,56 @@ struct line
     {
         return vec().norm();
     }
-    //µãÔÚÖ±ÏßÉÏ(½áºÏÅĞ¶ÏÆ½ĞĞ£¬¿ÉÓÃÓÚÅĞ¶ÏÖ±ÏßÖØºÏ)
+    //ç‚¹åœ¨ç›´çº¿ä¸Š(ç»“åˆåˆ¤æ–­å¹³è¡Œï¼Œå¯ç”¨äºåˆ¤æ–­ç›´çº¿é‡åˆ)
     bool ispointonline(const point &p) const
     {
         return sgn(det(p - s, t - s)) == 0;
     }
-    //µãÔÚÏß¶ÎÉÏ(½áºÏÅĞ¶ÏµãÔÚÏß¶ÎÉÏ²»º¬¶Ëµã£¬¿ÉÒÔÓÃÓÚÅĞ¶ÏÊÇ·ñÎª¶¥µãÏàÁ¬½Ó)
+    //ç‚¹åœ¨çº¿æ®µä¸Š(ç»“åˆåˆ¤æ–­ç‚¹åœ¨çº¿æ®µä¸Šä¸å«ç«¯ç‚¹ï¼Œå¯ä»¥ç”¨äºåˆ¤æ–­æ˜¯å¦ä¸ºé¡¶ç‚¹ç›¸è¿æ¥)
     bool ispointonseg(const point &p) const
     {
         return ispointonline(p) && sgn(dot(p - s, p - t)) <= 0;
     }
-    //µãÔÚÏß¶ÎÉÏ²»º¬¶Ëµã
+    //ç‚¹åœ¨çº¿æ®µä¸Šä¸å«ç«¯ç‚¹
     bool ispointonsegex(const point &p)
     {
         return ispointonline(p) && sgn(dot(p - s, p - t)) < 0;
     }
-    //µãµ½Ö±ÏßµÄ´¹×ã
+    //ç‚¹åˆ°ç›´çº¿çš„å‚è¶³
     point pointprojline(const point &p)
     {
         return s + vec() * ((dot(p - s, vec()) / norm()) / (norm()));
     }
-    //µãµ½Ö±ÏßµÄ¾àÀë
+    //ç‚¹åˆ°ç›´çº¿çš„è·ç¦»
     double pointdistline(const point &p)
     {
         return fabs(det(p - s, vec()) / norm());
     }
-    //µãµ½Ïß¶ÎµÄ¾àÀë
+    //ç‚¹åˆ°çº¿æ®µçš„è·ç¦»
     double pointdistseg(const point &p)
     {
         if (sgn(dot(p - s, t - s)) < 0) return (p - s).norm();
         if (sgn(dot(p - t, s - t)) < 0) return (p - t).norm();
         return pointdistline(p);
     }
-    //ÅĞ¶ÏÁ½Ö±ÏßÊÇ·ñÆ½ĞĞ
+    //åˆ¤æ–­ä¸¤ç›´çº¿æ˜¯å¦å¹³è¡Œ
     friend bool parallel(const line &l1, const line &l2)
     {
         return !sgn(det(l1.vec(), l2.vec()));
     }
-    //ÅĞ¶ÏÁ½¸öµãÊÇ·ñÔÚÖ±ÏßµÄÍ¬Ò»²à
+    //åˆ¤æ–­ä¸¤ä¸ªç‚¹æ˜¯å¦åœ¨ç›´çº¿çš„åŒä¸€ä¾§
     friend bool sameside(const line &l, const point &a, const point &b)
     {
         return sgn(det(b - l.s, l.vec())) * sgn(det(a - l.s, l.vec())) > 0;
     }
-    //Á½Ö±ÏßµÄ½»µã
-    friend point linexline(const line l1, const line l2) //ÀûÓÃÏàËÆÈı½ÇĞÎ¶ÔÓ¦±ß³É±ÈÀı
+    //ä¸¤ç›´çº¿çš„äº¤ç‚¹
+    friend point linexline(const line l1, const line l2) //åˆ©ç”¨ç›¸ä¼¼ä¸‰è§’å½¢å¯¹åº”è¾¹æˆæ¯”ä¾‹
     {
         double s1 = det(l1.s - l2.s, l2.vec());
         double s2 = det(l1.t - l2.s, l2.vec());
         return (l1.t * s1 - l1.s * s2) / (s1 - s2);
     }
-    //ÅĞ¶ÏÏß¶Î½»
+    //åˆ¤æ–­çº¿æ®µäº¤
     friend bool issegxseg(const line &l1, const line &l2)
     {
         if (!sgn(det(l2.s - l1.s, l1.vec())) && !sgn(det(l2.t - l1.s, l1.vec())))
@@ -192,7 +192,7 @@ struct line
         }
         return !sameside(l1, l2.s, l2.t) && !sameside(l2, l1.s, l1.t);
     }
-    //Ö±ÏßÑØ·¨Ïß·½ÏòÒÆ¶¯d¾àÀë
+    //ç›´çº¿æ²¿æ³•çº¿æ–¹å‘ç§»åŠ¨dè·ç¦»
     friend line move(const line &l, const double &d)
     {
         point t = l.vec();
@@ -211,159 +211,82 @@ struct line
     }
 };
 
-bool cmp(point a, point b)
-{
-    if(a.x==b.x)    return a.y<b.y;
-    if(a.y==b.y)    return a.x<b.x;
-}
+const int maxn =40+10;
 
 int n;
-line x[30+10];
+bool vis[maxn];
 point st;
-int ans,Max;
-int num,len;
-point dir[40*40];
-point ray[40*40];
+vector<line> vec;
+vector<double> p[4];
 
-int main()
+void pp(point a)
 {
-    num=0;
-    scanf("%d", &n);
-    for(int i=0; i<n; ++i)  x[i].in();
-
-    //x==0
-    len=0;
-    ray[len++]=point(0,0);
-    ray[len++]=point(0,100);
-    for(int i=0; i<n; ++i)
-    {
-        if(x[i].s.x==0) ray[len++]=x[i].s;
-        if(x[i].t.x==0) ray[len++]=x[i].t;
-    }
-    sort(ray,ray+len,cmp);
-    for(int i=0; i<len-1; ++i)
-    {
-        dir[num++]=point(0,ray[i].y-ray[i-1].y);
-    }
-
-    //x==100
-    len=0;
-    ray[len++]=point(100,0);
-    ray[len++]=point(100,100);
-    for(int i=0; i<n; ++i)
-    {
-        if(x[i].s.x==100) ray[len++]=x[i].s;
-        if(x[i].t.x==100) ray[len++]=x[i].t;
-    }
-    sort(ray,ray+len,cmp);
-    for(int i=0; i<len-1; ++i)
-    {
-        dir[num++]=point(100,ray[i].y-ray[i-1].y);
-    }
-
-    //y==0
-    len=0;
-    ray[len++]=point(0,0);
-    ray[len++]=point(100,0);
-    for(int i=0; i<n; ++i)
-    {
-        if(x[i].s.y==0) ray[len++]=x[i].s;
-        if(x[i].t.y==0) ray[len++]=x[i].t;
-    }
-    sort(ray,ray+len,cmp);
-    for(int i=0; i<len-1; ++i)
-    {
-        dir[num++]=point(ray[i].x-ray[i-1].x,0);
-    }
-
-    //y==100
-    len=0;
-    ray[len++]=point(0,100);
-    ray[len++]=point(100,100);
-    for(int i=0; i<n; ++i)
-    {
-        if(x[i].s.y==100) ray[len++]=x[i].s;
-        if(x[i].t.y==100) ray[len++]=x[i].t;
-    }
-    sort(ray,ray+len,cmp);
-    for(int i=0; i<len-1; ++i)
-    {
-        dir[num++]=point(ray[i].x-ray[i-1].x,100);
-    }
-
-    st.in();
-    ans=inf;
-    for(int i=0; i<num; ++i)
-    {
-        Max=0;
-        line tmp(st,dir[i]);
-        for(int j=0; j<n; ++j)
-        {
-            if(issegxseg(tmp,x[j])&&!(x[j].ispointonseg(tmp.t.y)))  Max++;
-        }
-        ans=min(Max,ans);
-    }
-    if(n==0||n==1)    ans=1;
-    cout<<"Number of doors = "<<ans;
+    if(a.x==0)  p[0].push_back(a.y);
+    else if(a.x==100)   p[1].push_back(a.y);
+    else if(a.y==0) p[2].push_back(a.x);
+    else p[3].push_back(a.x);
 }
 
+/*
+double multi(point p0,point p1,point p2)
+{
+    return (p1.x-p0.x)*(p2.y-p0.y)-(p2.x-p0.x)*(p1.y-p0.y);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+bool is_inter(point s1,point e1,point s2,point e2)
+{
+    return (max(s1.x,e1.x)>=min(s2.x,e2.x))&&
+           (max(s2.x,e2.x)>=min(s1.x,e1.x))&&
+           (max(s1.y,e1.y)>=min(s2.y,e2.y))&&
+           (max(s2.y,e2.y)>=min(s1.y,e1.y))&&
+           (multi(s1,s2,e1)*multi(s1,e1,e2)>=0)&&
+           (multi(s2,s1,e2)*multi(s2,e2,e1)>=0);
+}
+**/
+int main()
+{
+    vec.clear();
+    memset(p,0,sizeof(p));
+    scanf("%d", &n);
+    line tmp;
+    for(int i=0; i<n; ++i)
+    {
+        tmp.in();
+        vec.push_back(tmp);
+        pp(tmp.s);
+        pp(tmp.t);
+    }
+    st.in();
+    int sum=0;
+    int Min=inf;
+    for(int i=0; i<4; ++i)
+    {
+        p[i].push_back(0);
+        p[i].push_back(100);
+        sort(p[i].begin(),p[i].end());
+        sum=0;
+        point it;
+        for(int j=1; j<p[i].size(); j++)
+        {
+            if(i<2)
+            {
+                it.x=(i==0)?0:100;
+                it.y=(p[i][j]+p[i][j-1])/2.0;
+            }
+            else
+            {
+                it.y=(i==2)?0:100;
+                it.x=(p[i][j]+p[i][j-1])/2.0;
+            }
+            sum=0;
+            for(int k=0; k<vec.size(); ++k)
+            {
+                if(issegxseg(line(st,it),vec[k]))   sum++;
+                //if(is_inter(st,it,vec[k].s,vec[k].t))   sum++;
+            }
+            Min = min(Min,sum);
+        }
+    }
+    printf("Number of doors = %d\n", Min+1);
+}
 
