@@ -211,32 +211,87 @@ struct line
     }
 };
 
+bool cmp(point a, point b)
+{
+    if(a.x==b.x)    return a.y<b.y;
+    if(a.y==b.y)    return a.x<b.x;
+}
+
 int n;
 line x[30+10];
 point st;
 int ans,Max;
-int num;
+int num,len;
 point dir[40*40];
+point ray[40*40];
 
 int main()
 {
     num=0;
     scanf("%d", &n);
     for(int i=0; i<n; ++i)  x[i].in();
-    st.in();
+
+    //x==0
+    len=0;
+    ray[len++]=point(0,0);
+    ray[len++]=point(0,100);
     for(int i=0; i<n; ++i)
     {
-        for(int j=0; j<n; ++j)
-        {
-            if(i!=j)
-            {
-                if((x[i].s.x==x[j].s.x)&&(x[i].s.x==0||x[i].s.x==100))
-                    dir[num++]=(x[i].s.x,(x[i].s.y+x[j].s.y)/2);
-                if((x[i].s.y==x[j].s.y)&&(x[i].s.y==0||x[i].s.y==100))
-                    dir[num++]=((x[i].s.x+x[j].s.x)/2,x[i].s.y);
-            }
-        }
+        if(x[i].s.x==0) ray[len++]=x[i].s;
+        if(x[i].t.x==0) ray[len++]=x[i].t;
     }
+    sort(ray,ray+len,cmp);
+    for(int i=0; i<len-1; ++i)
+    {
+        dir[num++]=point(0,ray[i].y-ray[i-1].y);
+    }
+
+    //x==100
+    len=0;
+    ray[len++]=point(100,0);
+    ray[len++]=point(100,100);
+    for(int i=0; i<n; ++i)
+    {
+        if(x[i].s.x==100) ray[len++]=x[i].s;
+        if(x[i].t.x==100) ray[len++]=x[i].t;
+    }
+    sort(ray,ray+len,cmp);
+    for(int i=0; i<len-1; ++i)
+    {
+        dir[num++]=point(100,ray[i].y-ray[i-1].y);
+    }
+
+    //y==0
+    len=0;
+    ray[len++]=point(0,0);
+    ray[len++]=point(100,0);
+    for(int i=0; i<n; ++i)
+    {
+        if(x[i].s.y==0) ray[len++]=x[i].s;
+        if(x[i].t.y==0) ray[len++]=x[i].t;
+    }
+    sort(ray,ray+len,cmp);
+    for(int i=0; i<len-1; ++i)
+    {
+        dir[num++]=point(ray[i].x-ray[i-1].x,0);
+    }
+
+    //y==100
+    len=0;
+    ray[len++]=point(0,100);
+    ray[len++]=point(100,100);
+    for(int i=0; i<n; ++i)
+    {
+        if(x[i].s.y==100) ray[len++]=x[i].s;
+        if(x[i].t.y==100) ray[len++]=x[i].t;
+    }
+    sort(ray,ray+len,cmp);
+    for(int i=0; i<len-1; ++i)
+    {
+        dir[num++]=point(ray[i].x-ray[i-1].x,100);
+    }
+
+    st.in();
     ans=inf;
     for(int i=0; i<num; ++i)
     {
