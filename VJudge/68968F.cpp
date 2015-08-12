@@ -213,13 +213,12 @@ struct line
 };
 
 int n;
-line x;
 
 bool ispointonline(line l1, line l2)
 {
-    if(l1.ispointonseg(l2.s)&&!(l1.ispointonsegex(l2.s)&&!(l1.ispointonseg(l2.t))))    return false;
-    if(l1.ispointonseg(l2.t)&&!(l1.ispointonsegex(l2.t)&&!(l1.ispointonseg(l2.s))))    return false;
-    return true;
+    if(l1.ispointonseg(l2.s)&&!(l1.ispointonsegex(l2.s)&&!(l1.ispointonseg(l2.t))))    return true;
+    if(l1.ispointonseg(l2.t)&&!(l1.ispointonsegex(l2.t)&&!(l1.ispointonseg(l2.s))))    return true;
+    return false;
 }
 
 bool judge(line l1, line l2)
@@ -239,6 +238,7 @@ int main()
         queue<line> ans;
         for (int i = 0; i < n; ++i)
         {
+            line x;
             x.in();
             x.id = i + 1;
             unsigned len = ans.size();
