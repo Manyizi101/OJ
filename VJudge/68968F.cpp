@@ -232,8 +232,7 @@ bool judge(line l1, line l2)
 }
 
 int main()
-{
-    while (~scanf("%d", &n) && n)
+{    while (~scanf("%d", &n) && n)
     {
         queue<line> ans;
         for (int i = 0; i < n; ++i)
