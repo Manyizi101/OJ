@@ -172,7 +172,7 @@ struct line
     //判断两个点是否在直线的同一侧
     friend bool sameside(const line &l, const point &a, const point &b)
     {
-        return sgn(det(b - l.s, l.vec())) * sgn(det(a - l.s, l.vec())) > 0;
+        return sgn(det(b - l.s, l.vec())) * sgn(det(a - l.s, l.vec())) >= 0;
     }
     //两直线的交点
     friend point linexline(const line l1, const line l2) //利用相似三角形对应边成比例
@@ -213,35 +213,52 @@ struct line
 };
 
 int n;
-vector<line> ans;
 line x;
+
+bool ispointonline(line l1, line l2)
+{
+    if(l1.ispointonseg(l2.s)&&!(l1.ispointonsegex(l2.s)&&!(l1.ispointonseg(l2.t))))    return false;
+    if(l1.ispointonseg(l2.t)&&!(l1.ispointonsegex(l2.t)&&!(l1.ispointonseg(l2.s))))    return false;
+    return true;
+}
+
+bool judge(line l1, line l2)
+{
+    //point on point
+    if(ispointonline(l1,l2)||ispointonline(l2,l1))    return false;
+    //cover
+    if(parallel(l1,l2)&&(l1.ispointonseg(l2.s)||l1.ispointonseg(l2.t)))  return true;
+    //croess
+    return !sameside(l1, l2.s, l2.t) && !sameside(l2, l1.s, l1.t);
+}
 
 int main()
 {
     while (~scanf("%d", &n) && n)
     {
-        ans.clear();
-        x.in();
-        x.id = 1;
-        ans.push_back(x);
-        for (int i = 1; i < n; ++i)
+        queue<line> ans;
+        for (int i = 0; i < n; ++i)
         {
             x.in();
             x.id = i + 1;
-            for (unsigned j = 0; j < ans.size(); ++j)
+            unsigned len = ans.size();
+            for (unsigned j = 0; j < len; ++j)
             {
-                if (issegxseg(ans[j], x))
+                if (!judge(x,ans.front()))
                 {
-                    ans.erase(ans.begin() + j);
+                    ans.push(ans.front());
                 }
+                ans.pop();
             }
-            ans.push_back(x);
+            ans.push(x);
         }
         printf("Top sticks: ");
-        for (unsigned i = 0; i < ans.size() - 1; ++i)
+        for (unsigned i = 0; i < ans.size()-1; ++i)
         {
-            printf("%d, ", ans[i].id);
+            printf("%d, ", ans.front().id);
+            ans.pop();
         }
-        printf("%d.\n", ans[ans.size() - 1].id);
+        printf("%d.\n", ans.front().id);
+        ans.pop();
     }
 }
