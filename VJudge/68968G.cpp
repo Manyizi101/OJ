@@ -296,14 +296,14 @@ int main()
     for(int i=0; i<num; ++i)
     {
         Max=0;
-        line tmp(dir[i],st);
+        line tmp(st,dir[i]);
         for(int j=0; j<n; ++j)
         {
-            if(issegxseg(tmp,x[j]))  Max++;
+            if(issegxseg(tmp,x[j])&&!(x[j].ispointonseg(tmp.t.y)))  Max++;
         }
         ans=min(Max,ans);
     }
-    if(n==0)    ans=1;
+    if(n==0||n==1)    ans=1;
     cout<<"Number of doors = "<<ans;
 }
 
