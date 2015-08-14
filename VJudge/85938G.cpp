@@ -32,23 +32,41 @@ const int maxn = 100+10;
 int np,nt,nf,cs;
 int p[maxn],t[maxn][2][maxn],len[maxn][2];
 
+bool judge(int cs)
+{
+    int need[maxn]= {0};
+    for(int i=1; i<=len[cs][0]; ++i)
+    {
+        need[t[cs][0][i]]++;
+    }
+    for(int i=1; i<=np; ++i)
+    {
+        //cout<<p[t[cs][0][i]]<<endl;
+        if(p[i]<need[i])    return false;
+    }
+    for(int i=1; i<=np; ++i)
+    {
+        p[i]-=need[i];
+    }
+    return true;
+}
+
 bool trans()
 {
     for(int cs=1; cs<=nt; ++cs)
     {
         //cout<<cs<<endl;
-        for(int i=1; i<=len[cs][0]; ++i)
+        if(judge(cs))
         {
-            //cout<<p[t[cs][0][i]]<<endl;
-            if(p[t[cs][0][i]]>0)
+            for(int i=1; i<=len[cs][1]; ++i)
             {
-                p[t[cs][0][i]]--;
-                return true;
+                p[t[cs][1][i]]++;
             }
+            return true;
         }
-        for(int i=1; i<=len[cs][1]; ++i)
+        else
         {
-            p[t[cs][1][i]]++;
+            continue;
         }
         /*
         for(int i=1;i<=np;++i)
@@ -64,7 +82,7 @@ int solve()
 {
     for(int i=1; i<=nf; ++i)
     {
-        if(!trans())    return i;
+        if(!trans())    return i-1;
     }
     return nf;
 }
@@ -104,7 +122,7 @@ int main()
         {
             printf("dead after %d transitions\n", flag);
         }
-        printf("Places with tokens: ");
+        printf("Places with tokens:");
         for(int i=1; i<=np; ++i)
         {
             if(p[i]>0)
