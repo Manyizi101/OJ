@@ -1,134 +1,54 @@
-#include <iostream>
-#include <string.h>
-#include <stdio.h>
-#define maxn 2000100
-#define Smaxn 26
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<algorithm>
 using namespace std;
-struct node
+
+#define root 1,n,1
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+
+const int N = 1e5 + 100;
+typedef pair<int, int > pii;
+int d[N << 2];
+int a[N];
+pii b[N];
+int gcd(int a, int b)
 {
-    node *par, *go[Smaxn];
-    int flag;
-    int num;
-    int val;
-}*root, *tail, que[maxn], *top[maxn];
-int tot;
-char str[maxn];
-void add(int c, int l)
-{
-    node *p = tail, *np = &que[tot++];
-    np->val = l;
-    while (p && p->go[c] == NULL)
-        p->go[c] = np, p = p->par;
-    if (p == NULL) np->par = root;
-    else
-    {
-        node *q = p->go[c];
-        if (p->val + 1 == q->val) np->par = q;
-        else
-        {
-            node *nq = &que[tot++];
-            *nq = *q;
-            nq->val = p->val + 1;
-            np->par = q->par = nq;
-            while (p && p->go[c] == q) p->go[c] = nq, p = p->par;
-        }
-    }
-    tail = np;
+    if (b == 0) return a;
+    else return gcd(b, a % b);
 }
-int c[maxn], len;
-void init()
+void pushup(int rt)
 {
-    len = 1;
-    tot = 0;
-    memset(que, 0, sizeof(que));
-    root = tail = &que[tot++];
+    d[rt] = gcd(d[rt << 1], d[rt << 1 | 1]);
 }
-char st[2000100];
-void solve(int n)
+void build(int l, int r, int rt)
 {
-    int i, j;
-    memset(c, 0, sizeof(c));
-    for (i = 0; i < tot; i++)
-        c[que[i].val]++;
-    for (i = 1; i < len; i++)
-        c[i] += c[i - 1];
-    for (i = 0; i < tot; i++)
-        top[--c[que[i].val]] = &que[i];
-    for (node *p = root;; p = p->go[str[p->val] - 'a'])
-    {
-        p->num = 1;
-        if (p->val == len - 1)break;
-    }
-    for (i = tot - 1; i >= 0; i--)
-    {
-        node *p = top[i];
-        if (p->par)
-        {
-            p->par->num += p->num;
-        }
-    }
-    int tmp = 0;
-    node *p = root;
-    for (i = 1; i <= n; i++)
-    {
-        long long ans = 0;
-        scanf("%s", st);
-        int l = strlen(st);
-        for (j = 0; j < l; j++)
-        {
-            int x = st[j] - 'a';
-            if (p->go[x])
-            {
-                tmp++;
-                p = p->go[x];
-            }
-            else
-            {
-                while (p && p->go[x] == NULL)
-                    p = p->par;
-                if (p)
-                {
-                    tmp = p->val + 1;
-                    p = p->go[x];
-                }
-                else
-                {
-                    tmp = 0;
-                    p = root;
-                }
-            }
-            if (j >= l - 1 && tmp >= l)
-            {
-                node *q = p;
-                while (1)
-                {
-                    if (l >= q->par->val + 1 && l <= q->val)
-                        break;
-                    q = q->par;
-                }
-                if (q->flag != i)
-                {
-                    ans += q->num;
-                    q->flag = i;
-                }
-            }
-        }
-        printf("%I64d\n", ans);
-    }
+    if (l == r) {d[rt] = a[l]; return;}
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    pushup(rt);
+}
+int query(int L, int R, int l, int r, int rt)
+{
+    if (L <= l && r <= R) return d[rt];
+    int m = (l + r) >> 1;
+    int x, y;
+    x = y = 0;
+    if (L <= m) x = query(L, R, lson);
+    if (R > m) y = query(L, R, rson);
+    return gcd(x, y);
 }
 
 int main()
 {
-    //freopen("dd.txt", "r", stdin);
-    scanf("%s", str);
-    init();
-    int i, l = strlen(str);
-    for (i = 0; i < l; i++)
-    {
-        add(str[i] - 'a', len++);
-    }
-    int n;
-    //scanf("%d", &n);
-    solve(1);
-    return 0;
+    int n, t;
+    int l, r;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i++) scanf("%d", &a[i]), b[i].first = a[i], b[i].second = i;
+    build(root);
+    while (~scanf("%d%d", &l, &r))
+        cout << query(l, r, root) << endl;
+
 }

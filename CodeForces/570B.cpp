@@ -27,7 +27,17 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+int n, m;
+int a;
+
 int main()
 {
+    while (~scanf("%d%d", &n, &m))
+    {
+        if (n - m > m - 1) a = m + 1;
+        else a = m - 1;
+        if (n == m && n == 1)  a = 1;
+        printf("%d\n", a);
+    }
     return 0;
 }
