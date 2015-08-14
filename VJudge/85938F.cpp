@@ -42,7 +42,7 @@ void dfs(int depth, int s, int e)
             if(line[i]==']')    --p;
             if(p==0&&line[i]==',')
             {
-                dfs(depth+1,s+1,i-1);
+                dfs(depth+1,s+1,i-1);  //递归搜索所有结点
                 dfs(depth+1,i+1,e-1);
             }
         }
@@ -52,10 +52,10 @@ void dfs(int depth, int s, int e)
         ll w=0;
         for(int i=s; i<=e; ++i)
         {
-            w=w*10+line[i]-'0';
+            w=w*10+line[i]-'0'; //结点值的大小
 
         }
-        ++sum,++base[w<<depth];
+        ++sum,++base[w<<depth]; //可以得出整个数的结点值和，用map存储
     }
 }
 
