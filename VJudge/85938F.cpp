@@ -53,8 +53,9 @@ void dfs(int depth, int s, int e)
         for(int i=s; i<=e; ++i)
         {
             w=w*10+line[i]-'0';
-            ++sum,++base[w<<depth];
+
         }
+        ++sum,++base[w<<depth];
     }
 }
 
