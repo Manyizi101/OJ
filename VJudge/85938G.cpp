@@ -27,6 +27,11 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+const int maxn = 100+10;
+
+int np,nt;
+int p[maxn],t[maxn][2][maxn],len[maxn][2];
+
 int main()
 {
 
