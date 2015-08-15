@@ -219,7 +219,9 @@ bool judge()
     if((a.s.y==a.t.y)||(b.s.y==b.t.y))  return false;
     if(!issegxseg(a,b)) return false;
     point axb = linexline(a,b);
-    double y = min((axb.x==a.s.x?a.t.y:a.s.y),(axb.x==b.s.x?b.t.y:b.s.y));
+    double ya = a.s.y>a.t.y?a.s.y:a.t.y;
+    double yb = b.s.y>b.t.y?b.s.y:b.t.y;
+    double y = min(ya,yb);
     if(axb.y>=y)    return false;
     return true;
 }
@@ -233,7 +235,9 @@ int main()
         if(judge())
         {
             point axb = linexline(a,b);
-            double y = min((axb.x==a.s.x?a.t.y:a.s.y),(axb.x==b.s.x?b.t.y:b.s.y));
+            double ya = a.s.y>a.t.y?a.s.y:a.t.y;
+            double yb = b.s.y>b.t.y?b.s.y:b.t.y;
+            double y = min(ya,yb);
             point bb = linexline(b,line(point(0,y),point(1,y)));
             point aa = linexline(a, line(point(0,y),point(1,y)));
             printf("%.2f\n", fabs(bb.x-aa.x)*fabs(axb.y-y)/2);
