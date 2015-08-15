@@ -35,25 +35,49 @@ bool judge()
 {
     for(int i=1; i<=n; ++i)
     {
-        if(b[i]!=0) return true;
+        if(a[i]!=0) return false;
     }
-    return false;
+    return true;
 }
+
+void next()
+{
+    for(int i=1; i<=n; ++i)
+    {
+        b[i]=abs(a[i]-a[i+1]);
+    }
+    for(int i=1; i<=n; ++i)
+    {
+        a[i]=b[i];
+    }
+    a[n+1]=a[1];
+}
+
+bool ans;
 
 int main()
 {
     scanf("%d",&t);
     while(t--)
     {
+        ans = false;
         scanf("%d", &n);
         for(int i=1; i<=n; ++i)   scanf("%d", &a[i]);
         a[0]=a[n];
-        a[n+1]=a[0];
-        for(int i=1; i<=n; ++i)
+        a[n+1]=a[1];
+        for(int k=1; k<=1000; ++k)
         {
-            b[i]=(a[i]+a[i+1])&1;
+            if(judge())
+            {
+                ans=true;
+                break;
+            }
+            else
+            {
+                next();
+            }
         }
-        if(judge()) printf("LOOP\n");
+        if(!ans) printf("LOOP\n");
         else printf("ZERO\n");
     }
 }
