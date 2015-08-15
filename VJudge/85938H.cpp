@@ -221,7 +221,8 @@ bool judge()
     {
         if(issegxseg(l,s[i]))   return true;
     }
-    if(l.s.x>=lu.x&&l.s.x<=rd.x&&l.s.y<=lu.y&&l.s.y>=rd.y)  return true;
+    double mx = (lu.x+rd.x)/2, my = (lu.y+rd.y)/2;
+    if(fabs(l.s.x-mx)<=fabs(lu.x-mx)&&fabs(l.s.y-my)<=fabs(lu.y-my))    return true;
     return false;
 }
 
