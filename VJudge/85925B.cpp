@@ -87,11 +87,11 @@ int main()
 **/
 const int maxn = 100;
 int t,n,a[maxn];
-int b[maxn],c[maxn]={0};
+int b[maxn],c[maxn]= {0};
 
 void next(int a[])
 {
-    for(int i=1;i<=n;++i)
+    for(int i=1; i<=n; ++i)
     {
         a[i]=abs(a[i]-a[i+1]);
     }
@@ -100,7 +100,7 @@ void next(int a[])
 
 bool equal(int a[], int b[])
 {
-    for(int i=1;i<=n;++i)
+    for(int i=1; i<=n; ++i)
     {
         if(a[i]!=b[i])  return false;
     }
@@ -120,7 +120,7 @@ int main()
         }
         a[n+1]=b[n+1]=a[1];
         bool loop =true;
-        for(int i=0;i<1010;++i)
+        for(int i=0; i<1010; ++i)
         {
             next(a);
             next(b);
