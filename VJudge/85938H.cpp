@@ -221,6 +221,7 @@ bool judge()
     {
         if(issegxseg(l,s[i]))   return true;
     }
+    if(l.s.x>=lu.x&&l.s.x<=rd.x&&l.s.y<=lu.y&&l.s.y>=rd.y)  return true;
     return false;
 }
 
