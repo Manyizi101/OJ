@@ -27,6 +27,8 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+/*
+
 const int maxn = 100;
 
 int t,n,a[maxn],b[maxn];
@@ -82,3 +84,64 @@ int main()
     }
 }
 
+**/
+const int maxn = 100;
+int t,n,a[maxn];
+int b[maxn],c[maxn]={0};
+
+void next(int a[])
+{
+    for(int i=1;i<=n;++i)
+    {
+        a[i]=abs(a[i]-a[i+1]);
+    }
+    a[n+1]=a[1];
+}
+
+bool equal(int a[], int b[])
+{
+    for(int i=1;i<=n;++i)
+    {
+        if(a[i]!=b[i])  return false;
+    }
+    return true;
+}
+
+int main()
+{
+    scanf("%d", &t);
+    while(t--)
+    {
+        scanf("%d", &n);
+        for(int i=1; i<=n; ++i)
+        {
+            scanf("%d", &a[i]);
+            b[i]=a[i];
+        }
+        a[n+1]=b[n+1]=a[1];
+        bool loop =true;
+        for(int i=0;i<1010;++i)
+        {
+            next(a);
+            next(b);
+            next(b);
+            if(equal(a,c))
+            {
+                loop = false;
+                break;
+            }
+            if(equal(a,b))
+            {
+                loop = true;
+                break;
+            }
+            if(equal(b,c))
+            {
+                loop = false;
+                break;
+            }
+        }
+        if(loop)    printf("LOOP\n");
+        else printf("ZERO\n");
+    }
+}
