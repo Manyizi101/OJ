@@ -222,7 +222,7 @@ bool judge()
     if(a.s.y<a.t.y) swap(a.s,a.t);
     if(b.s.y<b.t.y) swap(b.s,b.t);
     if(a.s.y>b.s.y) swap(a,b);
-    if(fabs(a.s.x-axb.x)<fabs(b.s.x-axb.x))  return false;
+    if(fabs(a.s.x-axb.x)<=fabs(b.s.x-axb.x))  return false;
     return true;
 }
 
