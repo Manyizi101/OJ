@@ -27,51 +27,34 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int maxn = 16;
+const int maxn = 100;
 
-int t, n;
-vector<int> a;
+int t,n,a[maxn],b[maxn];
 
-int judgel(vector<int> b)
+bool judge()
 {
-    for (int i = 0; i < n; ++i)
+    for(int i=1; i<=n; ++i)
     {
-        if (b[i] != a[i]) return 1;
+        if(b[i]!=0) return true;
     }
-    return 0;
-}
-
-int judgez(vector<int> b)
-{
-    for (int i = 0; i < n; ++i)
-    {
-        if (b[i] != 0) return 1;
-    }
-    return 0;
+    return false;
 }
 
 int main()
 {
-    scanf("%d", &t);
-    while (t--)
+    scanf("%d",&t);
+    while(t--)
     {
-        int tmp;
         scanf("%d", &n);
-        for (int i = 0; i < n; ++i)
+        for(int i=1; i<=n; ++i)   scanf("%d", &a[i]);
+        a[0]=a[n];
+        a[n+1]=a[0];
+        for(int i=1; i<=n; ++i)
         {
-            scanf("%d", &tmp);
-            a.push_back(tmp);
+            b[i]=(a[i]+a[i+1])&1;
         }
-        vector<int> b(a);
-        while (judgel(b))
-        {
-            for (int i = 0; i < n; ++i)
-            {
-                a[i % n] = abs(a[(i + 1) % n] - a[i % n]);
-            }
-        }
-        if (judgez(b) == 1) cout << "ZERO" << endl;
-        else cout << "LOOP" << endl;
+        if(judge()) printf("LOOP\n");
+        else printf("ZERO\n");
     }
-    return 0;
 }
+
