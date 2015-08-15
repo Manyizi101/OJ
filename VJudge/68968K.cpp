@@ -219,12 +219,10 @@ bool judge()
     if((a.s.y==a.t.y)||(b.s.y==b.t.y))  return false;
     if(!issegxseg(a,b)) return false;
     point axb = linexline(a,b);
-    point as  = a.s.y>a.t.y?point(a.s.x,a.s.y):point(a.t.x,a.t.y);
-    point bs  = b.s.y>b.t.y?point(b.s.x,b.s.y):point(b.t.x,b.t.y);
-    double y = min(as.y,bs.y);
-    if(axb.y>=y)    return false;
-    if(as.x>=bs.x&&as.y>=bs.y)  return false;
-    if(bs.x>=as.x&&bs.y>=as.y)  return false;
+    if(a.s.y<a.t.y) swap(a.s,a.t);
+    if(b.s.y<b.t.y) swap(b.s,b.t);
+    if(a.s.y>b.s.y) swap(a,b);
+    if(fabs(a.s.x-axb.x)<fabs(b.s.x-axb.x))  return false;
     return true;
 }
 
