@@ -223,7 +223,8 @@ bool judge()
     point bs  = b.s.y>b.t.y?point(b.s.x,b.s.y):point(b.t.x,b.t.y);
     double y = min(as.y,bs.y);
     if(axb.y>=y)    return false;
-    if(as.x>=bs.x&&as.y<=bs.y)  return false;
+    if(as.x>=bs.x&&as.y>=bs.y)  return false;
+    if(bs.x>=as.x&&bs.y>=as.y)  return false;
     return true;
 }
 
