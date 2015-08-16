@@ -28,63 +28,60 @@ const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
 const int maxn = 1000+10;
-int t,n;
-int ans;
-ll a[maxn],b[maxn];
-bool flag=false;
-ll dp[maxn];
 
-int lis(ll a[],int n)
-{
-    memset(dp, 0, sizeof(int)*n);
-    int len = 1;
-    dp[0] = a[0];
-    for (int i = 1; i < n; ++i)
-    {
-        int pos = lower_bound(dp, dp + len, a[i]) - dp;
-        dp[pos] = a[i];
-        len = max(len, pos + 1);
-    }
-    return len;
-}
+int t,n;
+ll a[maxn];
+ll cnt[maxn],dp[maxn];
 
 int main()
 {
     scanf("%d", &t);
     while(t--)
     {
-        memset(b,0,sizeof(b));
         scanf("%d", &n);
-        flag=false;
-        int len=0;
-        for(int i=1; i<=n; ++i)    scanf("%I64d", &a[i]);
-        a[0]=0;
-        for(int i=1; i<=n; ++i)
+        for(int i=0; i<n; ++i)    scanf("%I64d", &a[i]);
+        memset(dp, 0, sizeof(dp));
+        memset(cnt,0,sizeof(cnt));
+        ll Max;
+        for (int i = 0; i < n; ++i)
         {
-            if(a[i]!=a[i-1])
+            bool flag=false;
+            Max = 0;
+            for (int j = 0; j < i; ++j)
             {
-                b[len++]=a[i];
+                if (a[i] > a[j])
+                {
+                    Max = max(Max, dp[j]);
+                }
+                else if (a[i]==a[j])
+                {
+                    flag=true;
+                }
             }
+            dp[i] = Max + 1;
+            if(flag)
+                cnt[dp[i]]+=2;
             else
-            {
-                flag=true;
-                continue;
-            }
+                cnt[dp[i]]+=1;
         }
-        int ans = lis(b, len);
-        /*
-        if(flag)    printf("%d\n", ans);
-        else if(!flag&&ans>1)    printf("%d\n", ans-1);
-        else printf("1\n");
-        **/
-        if(flag)    printf("%d\n", ans);
-        else
+        ll tmp=0;
+        for(int i=n; i>=1; --i)
         {
-            if(ans>1)
-                printf("%d\n",ans-1);
-            else
-                printf("1\n");
+            cout<<cnt[i]<<" ";
+            if(cnt[i]>=1)
+            {
+                tmp = i;
+            }
+            /*
+            else if(cnt[i]==1)
+            {
+                tmp = i-1;
+            }
+            **/
+            Max = max(tmp,Max);
         }
+        cout<<endl;
+        printf("%I64d\n", Max);
     }
 }
 
