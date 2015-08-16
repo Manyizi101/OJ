@@ -28,6 +28,8 @@ const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 
 using namespace std;
 
+//四分树模板
+
 const int NW = 1, NE = 2, SW=3, SE =4;
 const int WHITE = 0, BLACK = 1;
 const int NONE = -1;
@@ -58,7 +60,7 @@ inline void calG()
     for(int i=1; i<=n; ++i)
         for(int j=n; j>0; --j)    G[i][j]=G_t[i][j-1] -'0';
 }
-inline void calsum()
+inline void calsum() //计算包括(i,j)的左上角的和
 {
     for(int i=1; i<=n; ++i)
         for(int j=1; j<=n; ++j)   sum[i][j] = G[i][j] + sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1];
@@ -66,6 +68,7 @@ inline void calsum()
 
 bool same(const int &i1, const int &j1,const  int &i2, const int &j2)
 {
+    //判断指定范围色块颜色是否相同，依据是sum的值
     int d = sum[i2][j2]-sum[i1-1][j2]-sum[i2][j1-1]+sum[i1-1][j1-1];
     return d==0||d==(i2-i1+1)*(j2-j1+1);
 }
@@ -95,6 +98,7 @@ inline void init(const bool &set0=false)
 
 inline void build(const int &i1, const int &j1,const int i2,  const int &j2,const int &pt)
 {
+    //根据图来建树
     if(same(i1,j1,i2,j2))   node[pt]=G[i1][j1];
     else
     {
