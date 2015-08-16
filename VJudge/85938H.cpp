@@ -25,222 +25,192 @@ const double pi = acos(-1.0);
 const double eps = 1e-8;
 const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
-using namespace std;
 
-//返回坐标的平方
-inline double sqr(const double &x)
+using std::sort;
+using std::vector;
+
+//using namespace std;
+
+const int NW = 1, NE = 2, SW=3, SE =4;
+const int WHITE = 0, BLACK = 1;
+const int NONE = -1;
+
+const int T_MAXSIZE = 2*1e7;
+const int T_NEXTSIZE = 4;
+
+int node[T_MAXSIZE];
+int next[T_MAXSIZE][T_NEXTSIZE];
+int size = 0;
+
+inline void init_node()
 {
-    return x * x;
+    size = 0;
 }
-//返回坐标的正负
-inline int sgn(const double &x)
+inline int newnode()
 {
-    return x < -eps ? -1 : x > eps;
+    return size++;
 }
-
-struct point
-{
-    double x, y;
-    point(const double &x = 0, const double &y = 0): x(x), y(y) {}
-    friend point operator + (const point &a, const point &b)
-    {
-        return point(a.x + b.x, a.y + b.y);
-    }
-    friend point operator - (const point &a, const point &b)
-    {
-        return point(a.x - b.x, a.y - b.y);
-    }
-    friend point operator * (const point &a, const double &b)
-    {
-        return point(a.x * b, a.y * b);
-    }
-    friend point operator * (const double &a, const point &b)
-    {
-        return point(a * b.x, a * b.y);
-    }
-    friend point operator / (const point &a, const double &b)
-    {
-        return point(a.x / b, a.y / b);
-    }
-    friend bool operator == (const point &a, const point &b)
-    {
-        return !sgn(a.x - b.x) && !sgn(a.y - b.y);
-    }
-    friend bool operator < (const point &a, const point &b)
-    {
-        return sgn(a.x - b.x) < 0 || (sgn(a.x - b.x) == 0 && sgn(a.y - b.y) < 0);
-    }
-    //返回点到原点的距离
-    double norm()
-    {
-        return sqrt(sqr(x) + sqr(y));
-    }
-    //返回两个点的外积
-    friend double det(const point &a, const point &b)
-    {
-        return a.x * b.y - a.y * b.x;
-    }
-    //返回两个点的内积
-    friend double dot(const point &a, const point &b)
-    {
-        return a.x * b.x + a.y * b.y;
-    }
-    //返回两个点之间线段的长度
-    friend double dist(const point &a, const point &b)
-    {
-        return (a - b).norm();
-    }
-    //返回两点构成的直线的仰角
-    double arg()
-    {
-        return atan2(y, x);
-    }
-    //逆时针旋转angle弧度
-    point rotate(const double &angle)
-    {
-        return rotate(cos(angle), sin(angle));
-    }
-    point rotate(const point &p, const double &angle)
-    {
-        return (*this - p).rotate(angle) + p;
-    }
-    point rotate(const double &cosa, const double &sina)
-    {
-        return point(x * cosa - y * sina, x * sina + y * cosa);
-    }
-    int in()
-    {
-        return scanf("%lf %lf", &x, &y);
-    }
-    void out()
-    {
-        //输出默认采用两位小数，注意修改
-        printf("%.2f %.2f\n", x, y);
-    }
-};
-
-struct line
-{
-    point s, t;
-    line(const point &s = point(), const point &t = point()): s(s), t(t) {}
-    point vec() const
-    {
-        return t - s;
-    }
-    double norm() const
-    {
-        return vec().norm();
-    }
-    //点在直线上(结合判断平行，可用于判断直线重合)
-    bool ispointonline(const point &p) const
-    {
-        return sgn(det(p - s, t - s)) == 0;
-    }
-    //点在线段上(结合判断点在线段上不含端点，可以用于判断是否为顶点相连接)
-    bool ispointonseg(const point &p) const
-    {
-        return ispointonline(p) && sgn(dot(p - s, p - t)) <= 0;
-    }
-    //点在线段上不含端点
-    bool ispointonsegex(const point &p)
-    {
-        return ispointonline(p) && sgn(dot(p - s, p - t)) < 0;
-    }
-    //点到直线的垂足
-    point pointprojline(const point &p)
-    {
-        return s + vec() * ((dot(p - s, vec()) / norm()) / (norm()));
-    }
-    //点到直线的距离
-    double pointdistline(const point &p)
-    {
-        return fabs(det(p - s, vec()) / norm());
-    }
-    //点到线段的距离
-    double pointdistseg(const point &p)
-    {
-        if (sgn(dot(p - s, t - s)) < 0) return (p - s).norm();
-        if (sgn(dot(p - t, s - t)) < 0) return (p - t).norm();
-        return pointdistline(p);
-    }
-    //判断两直线是否平行
-    friend bool parallel(const line &l1, const line &l2)
-    {
-        return !sgn(det(l1.vec(), l2.vec()));
-    }
-    //判断两个点是否在直线的同一侧
-    friend bool sameside(const line &l, const point &a, const point &b)
-    {
-        return sgn(det(b - l.s, l.vec())) * sgn(det(a - l.s, l.vec())) > 0;
-    }
-    //两直线的交点
-    friend point linexline(const line l1, const line l2) //利用相似三角形对应边成比例
-    {
-        double s1 = det(l1.s - l2.s, l2.vec());
-        double s2 = det(l1.t - l2.s, l2.vec());
-        return (l1.t * s1 - l1.s * s2) / (s1 - s2);
-    }
-    //判断线段交
-    friend bool issegxseg(const line &l1, const line &l2)
-    {
-        if (!sgn(det(l2.s - l1.s, l1.vec())) && !sgn(det(l2.t - l1.s, l1.vec())))
-        {
-            return l1.ispointonseg(l2.s) ||
-                   l1.ispointonseg(l2.t) ||
-                   l2.ispointonseg(l1.s) ||
-                   l2.ispointonseg(l1.t);
-        }
-        return !sameside(l1, l2.s, l2.t) && !sameside(l2, l1.s, l1.t);
-    }
-    //直线沿法线方向移动d距离
-    friend line move(const line &l, const double &d)
-    {
-        point t = l.vec();
-        t = t / t.norm();
-        t = t.rotate(pi / 2);
-        return line(l.s + t * d, l.t + t * d);
-    }
-    int in()
-    {
-        s.in();
-        return t.in();
-    }
-    void out()
-    {
-        s.out(), t.out();
-    }
-};
 
 int n;
-line s[4],l;
-point lu,rd;
+char G_t[100][100];
+int G[100][100],sum[100][100];
 
-bool judge()
+inline void init_G()    {}
+inline void calG()
 {
-    for(int i=0; i<4; ++i)
+    for(int i=1; i<=n; ++i)
+        for(int j=n; j>0; --j)    G[i][j]=G_t[i][j-1] -'0';
+}
+inline void calsum()
+{
+    for(int i=1; i<=n; ++i)
+        for(int j=1; j<=n; ++j)   sum[i][j] = G[i][j] + sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1];
+}
+
+bool same(const int &i1, const int &j1,const  int &i2, const int &j2)
+{
+    int d = sum[i2][j2]-sum[i1-1][j2]-sum[i2][j1-1]+sum[i1-1][j1-1];
+    return d==0||d==(i2-i1+1)*(j2-j1+1);
+}
+
+int S[10000],S_t[10000],S_size;
+vector<vector<int> > S_5;
+
+inline void init_S()  {S_size = 0;}
+inline void push_back(const int &d)
+{
+    S[S_size]=d;
+}
+
+inline void init(const bool &set0=false)
+{
+    init_node(),init_G(),init_S();
+    if(set0)
     {
-        if(issegxseg(l,s[i]))   return true;
+        n*=-1;
+        memset(G,0,sizeof(G));
+        S_5.clear();
     }
-    double mx = (lu.x+rd.x)/2, my = (lu.y+rd.y)/2;
-    if(fabs(l.s.x-mx)<=fabs(lu.x-mx)&&fabs(l.s.y-my)<=fabs(lu.y-my))    return true;
-    return false;
+}
+
+inline void build(const int &i1, const int &j1,const int i2,  const int &j2,const int &pt)
+{
+    if(same(i1,j1,i2,j2))   node[pt]=G[i1][j1];
+    else
+    {
+        node[pt]=-1;
+        int i_mid = (i1+i2)/2,j_mid = (j1+j2)/2;
+        build(i1,j1,i_mid,j_mid,next[pt][0]=newnode());
+        build(i1,j_mid+1,i_mid,j2,next[pt][1]=newnode());
+        build(i_mid+1,j1,i2,j_mid,next[pt][2]=newnode());
+        build(i_mid+1,j_mid+1,i2,j2,next[pt][3]=newnode());
+    }
+}
+
+inline void dfs(const int &pt, const int &depth, const int &num)
+{
+    S_t[depth] = num;
+    if(node[pt]==BLACK)
+    {
+        int d = 0;
+        for(int i=depth;i>0;--i)    d= d*5+S_t[i];
+        push_back(d);
+    }
+    else if(node[pt]==NONE)
+    {
+        dfs(next[pt][0],depth+1,NW);
+        dfs(next[pt][1],depth+1,NE);
+        dfs(next[pt][2],depth+1,SW);
+        dfs(next[pt][3],depth+1,SE);
+    }
+}
+
+inline void mode_G()
+{
+    init();
+    for(int i=1;i<=n;++i)   scanf("%s", G_t[i]);
+    calG(),calsum();
+
+    build(1,1,n,n,newnode());
+    dfs(0,0,0);
+    sort(S,S+S_size);
+
+    if(S_size)
+    {
+        bool first = true;
+        for(int i=0;i<S_size;++i)
+        {
+            if(!(i%12)&&i!=0)
+            {
+                printf("\n");
+                first = true;
+            }
+            if(first)   first = false;
+            else printf(" ");
+            printf("%d", S[i]);
+        }
+        printf("\n");
+    }
+    printf("Total number of black nodes = %d\n",S_size);
+}
+
+inline void paint(const int &i1, const int &j1, const int &i2, const int &j2)
+{
+    for(int i=i1;i<=i2;++i)
+        for(int j=j1;j<=j2;++j) G[i][j]=1;
+}
+
+inline void mode_S()
+{
+    init(true);
+
+    int d;
+    while(~scanf("%d", &d)&&d!=-1)  push_back(d);
+
+    for(int i=0;i!=S_size;++i)
+    {
+        S_5.push_back(vector<int> ());
+        while(S[i]>0)
+        {
+            S_5[i].push_back(S[i]%5);
+            S[i]/=5;
+        }
+    }
+
+    sort(S_5.begin(),S_5.end());
+
+    for(int i=0;i!=S_size;++i)
+    {
+        int i1=1,j1=1,i2=n,j2=n;
+
+        for(int j=0;j!=S_5[i].size();++j)
+        {
+            int i_mid = (i1+i2)/2,j_mid = (j1+j2)/2;
+            if(S_5[i][j]==1)    i2 = i_mid, j2=j_mid;
+            if(S_5[i][j]==2)    i2 = i_mid, j1=j_mid +1;
+            if(S_5[i][j]==3)    i1=i_mid +1, j2=j_mid;
+            if(S_5[i][j]==4)    i1=i_mid+1,j2=j_mid +1;
+        }
+
+        paint(i1,j1,i2,j2);
+    }
+
+    for(int i=1;i<=n;++i)
+    {
+        for(int j=1;j<=n;++j)   printf("%c", G[i][j]?'*':'.');
+        printf("\n");
+    }
 }
 
 int main()
 {
-    scanf("%d", &n);
-    while(n--)
+    int T=0;
+    while(~scanf("%d", &n)&&n)
     {
-        l.in();
-        lu.in();
-        rd.in();
-        s[0]=line(lu,point(lu.x,rd.y));
-        s[1]=line(lu,point(rd.x,lu.y));
-        s[2]=line(rd,point(rd.x,lu.y));
-        s[3]=line(rd,point(lu.x,rd.y));
-        if(judge()) printf("T\n");
-        else printf("F\n");
+        if(T)   printf("\n");
+        printf("Image %d\n", ++T);
+        if(n>0) mode_G();
+        else mode_S();
     }
-    return 0;
 }
 
