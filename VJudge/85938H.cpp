@@ -26,10 +26,7 @@ const double eps = 1e-8;
 const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 
-using std::sort;
-using std::vector;
-
-//using namespace std;
+using namespace std;
 
 const int NW = 1, NE = 2, SW=3, SE =4;
 const int WHITE = 0, BLACK = 1;
@@ -39,7 +36,7 @@ const int T_MAXSIZE = 2*1e7;
 const int T_NEXTSIZE = 4;
 
 int node[T_MAXSIZE];
-int next[T_MAXSIZE][T_NEXTSIZE];
+int gonext[T_MAXSIZE][T_NEXTSIZE];
 int size = 0;
 
 inline void init_node()
@@ -103,10 +100,10 @@ inline void build(const int &i1, const int &j1,const int i2,  const int &j2,cons
     {
         node[pt]=-1;
         int i_mid = (i1+i2)/2,j_mid = (j1+j2)/2;
-        build(i1,j1,i_mid,j_mid,next[pt][0]=newnode());
-        build(i1,j_mid+1,i_mid,j2,next[pt][1]=newnode());
-        build(i_mid+1,j1,i2,j_mid,next[pt][2]=newnode());
-        build(i_mid+1,j_mid+1,i2,j2,next[pt][3]=newnode());
+        build(i1,j1,i_mid,j_mid,gonext[pt][0]=newnode());
+        build(i1,j_mid+1,i_mid,j2,gonext[pt][1]=newnode());
+        build(i_mid+1,j1,i2,j_mid,gonext[pt][2]=newnode());
+        build(i_mid+1,j_mid+1,i2,j2,gonext[pt][3]=newnode());
     }
 }
 
@@ -121,10 +118,10 @@ inline void dfs(const int &pt, const int &depth, const int &num)
     }
     else if(node[pt]==NONE)
     {
-        dfs(next[pt][0],depth+1,NW);
-        dfs(next[pt][1],depth+1,NE);
-        dfs(next[pt][2],depth+1,SW);
-        dfs(next[pt][3],depth+1,SE);
+        dfs(gonext[pt][0],depth+1,NW);
+        dfs(gonext[pt][1],depth+1,NE);
+        dfs(gonext[pt][2],depth+1,SW);
+        dfs(gonext[pt][3],depth+1,SE);
     }
 }
 
