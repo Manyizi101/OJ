@@ -27,70 +27,77 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int maxn = 205;
-double a[maxn][maxn]={0},ans[maxn]={0};
-bool l[maxn];
-int n;
+const int maxn = 65;
+const int N = 1010;
+ll a[N];
+int b[maxn][maxn];
 
-inline int solve(double a[][maxn],bool l[],double ans[],const int& n)
+int rnk(int a[][maxn], int n, int m)
 {
-    int res=0,r=0;
-    for(int i=0;i<n;++i)    l[i]=0;
-    for(int i=0;i<n;++i)
+    int ret=0;
+    for(int i=0, pivot = 0; i<n&&pivot<m; ++pivot)
     {
-        for(int j=r;j<n;++j)
+        int pos = -1;
+        for(int j=i; j<n; ++j)
         {
-            if(fabs(a[j][i])>eps)
+            if(a[j][pivot]==1)
             {
-                for(int k=i;k<=n;++k)
-                {
-                    swap(a[j][k],a[r][k]);
-
-                }
+                pos=j;
                 break;
             }
-            if(fabs(a[r][i]<eps))
-            {
-                res++;
-                continue;
-            }
-            for(int j=0;j<n;++j)
-            {
-                if(j!=r&&fabs(a[j][i])>eps)
-                {
-                    double tmp = a[j][i]/a[r][i];
-                    for(int k=i;k<=n;++k)
-                    {
-                        a[j][k]-=tmp*a[r][k];
-                    }
-                }
-            }
-            l[i]= true, r++;
         }
-        for(int i=r;i<n;++i)
+        if(pos == -1)   continue;
+        if(pos != i)
         {
-            if(fabs(a[i][n])>eps)   return -1;
-        }
-        for(int i=0;i<n;++i)
-        {
-            if(l[i])
+            for(int j = pivot; j<m; ++j)
             {
-                for(int j=0;j<n;++j)
+                swap(a[i][j],a[pos][j]);
+            }
+        }
+        ++ret;
+        for(int j=0; j<n; ++j)
+        {
+            if(a[j][pivot]&&j!=i)
+            {
+                for(int k=pivot; k<m; ++k)
                 {
-                    if(fabs(a[j][i])>eps)
-                    {
-                        ans[i]=a[j][n]/a[j][i];
-                    }
+                    a[j][k]^=a[i][k];
                 }
             }
         }
+        i++;
     }
-    return res;
+    return ret;
 }
 
 
 int main()
 {
-
+    int t,n;
+    scanf("%d", &t);
+    while(t--)
+    {
+        ll sum = 0;
+        scanf("%d",&n);
+        for(int i=0; i<n; ++i)
+        {
+            scanf("%I64d", &a[i]);
+            sum^=a[i];
+        }
+        if(n>maxn||sum==0)
+        {
+            puts("Yes");
+            continue;
+        }
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<maxn; ++j)
+            {
+                b[i][j]=a[i]>>j&1;
+            }
+        }
+        if(rnk(b,n,maxn)<n) puts("Yes");
+        else    puts("No");
+    }
 }
 
