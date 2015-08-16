@@ -30,30 +30,61 @@ using namespace std;
 const int maxn = 1000+10;
 int t,n;
 int ans;
-ll a[maxn];
+ll a[maxn],b[maxn];
+bool flag=false;
+ll dp[maxn];
+
+int lis(ll a[],int n)
+{
+    memset(dp, 0, sizeof(int)*n);
+    int len = 1;
+    dp[0] = a[0];
+    for (int i = 1; i < n; ++i)
+    {
+        int pos = lower_bound(dp, dp + len, a[i]) - dp;
+        dp[pos] = a[i];
+        len = max(len, pos + 1);
+    }
+    return len;
+}
 
 int main()
 {
     scanf("%d", &t);
     while(t--)
     {
+        memset(b,0,sizeof(b));
         scanf("%d", &n);
+        flag=false;
+        int len=0;
         for(int i=1; i<=n; ++i)    scanf("%I64d", &a[i]);
-        int tmp=0;
         a[0]=0;
         for(int i=1; i<=n; ++i)
         {
-            if(a[i]-a[i-1]>0)
+            if(a[i]!=a[i-1])
             {
-                tmp++;
+                b[len++]=a[i];
             }
             else
             {
-                tmp=0;
+                flag=true;
+                continue;
             }
-            ans=max(tmp,ans);
         }
-        printf("%d\n", ans-1);
+        int ans = lis(b, len);
+        /*
+        if(flag)    printf("%d\n", ans);
+        else if(!flag&&ans>1)    printf("%d\n", ans-1);
+        else printf("1\n");
+        **/
+        if(flag)    printf("%d\n", ans);
+        else
+        {
+            if(ans>1)
+                printf("%d\n",ans-1);
+            else
+                printf("1\n");
+        }
     }
 }
 
