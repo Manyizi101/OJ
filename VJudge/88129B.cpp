@@ -30,58 +30,34 @@ using namespace std;
 const int maxn = 1000+10;
 
 int t,n;
-ll a[maxn];
-ll cnt[maxn],dp[maxn];
+int a[maxn],d[maxn], c[maxn], cas, ans;
 
 int main()
 {
-    scanf("%d", &t);
-    while(t--)
+    scanf("%d", &cas);
+    while (cas--)
     {
         scanf("%d", &n);
-        for(int i=0; i<n; ++i)    scanf("%I64d", &a[i]);
-        memset(dp, 0, sizeof(dp));
-        memset(cnt,0,sizeof(cnt));
-        ll Max;
-        for (int i = 0; i < n; ++i)
+        int sum = ans = 0;
+        for (int i = 1; i <= n; ++i)
         {
-            bool flag=false;
-            Max = 0;
-            for (int j = 0; j < i; ++j)
+            scanf("%d", &a[i]);
+            d[i] = 1, c[i] = 1;
+            for (int j = 1; j < i; ++j)
             {
-                if (a[i] > a[j])
+                if (a[j] >= a[i]) continue;
+                if (d[j] + 1 > d[i])
                 {
-                    Max = max(Max, dp[j]);
+                    d[i] = d[j] + 1;
+                    c[i] = c[j];
                 }
-                else if (a[i]==a[j])
-                {
-                    flag=true;
-                }
+                else if (d[j] + 1 == d[i])    c[i] = 2;
             }
-            dp[i] = Max + 1;
-            if(flag)
-                cnt[dp[i]]+=2;
-            else
-                cnt[dp[i]]+=1;
+            if(d[i] > ans) ans = d[i];
         }
-        ll tmp=0;
-        for(int i=n; i>=1; --i)
-        {
-            cout<<cnt[i]<<" ";
-            if(cnt[i]>=1)
-            {
-                tmp = i;
-            }
-            /*
-            else if(cnt[i]==1)
-            {
-                tmp = i-1;
-            }
-            **/
-            Max = max(tmp,Max);
-        }
-        cout<<endl;
-        printf("%I64d\n", Max);
+        for (int i = 1; i <= n; ++i)
+            if (d[i] == ans)  sum += c[i];
+        printf("%d\n", sum > 1 ? ans : ans - 1);
     }
+    return 0;
 }
-
