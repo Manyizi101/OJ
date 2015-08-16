@@ -76,10 +76,13 @@ bool same(const int &i1, const int &j1,const  int &i2, const int &j2)
 int S[10000],S_t[10000],S_size;
 vector<vector<int> > S_5;
 
-inline void init_S()  {S_size = 0;}
+inline void init_S()
+{
+    S_size = 0;
+}
 inline void push_back(const int &d)
 {
-    S[S_size]=d;
+    S[S_size++]=d;
 }
 
 inline void init(const bool &set0=false)
@@ -113,7 +116,7 @@ inline void dfs(const int &pt, const int &depth, const int &num)
     if(node[pt]==BLACK)
     {
         int d = 0;
-        for(int i=depth;i>0;--i)    d= d*5+S_t[i];
+        for(int i=depth; i>0; --i)    d= d*5+S_t[i];
         push_back(d);
     }
     else if(node[pt]==NONE)
@@ -128,7 +131,7 @@ inline void dfs(const int &pt, const int &depth, const int &num)
 inline void mode_G()
 {
     init();
-    for(int i=1;i<=n;++i)   scanf("%s", G_t[i]);
+    for(int i=1; i<=n; ++i)   scanf("%s", G_t[i]);
     calG(),calsum();
 
     build(1,1,n,n,newnode());
@@ -138,7 +141,7 @@ inline void mode_G()
     if(S_size)
     {
         bool first = true;
-        for(int i=0;i<S_size;++i)
+        for(int i=0; i<S_size; ++i)
         {
             if(!(i%12)&&i!=0)
             {
@@ -156,8 +159,8 @@ inline void mode_G()
 
 inline void paint(const int &i1, const int &j1, const int &i2, const int &j2)
 {
-    for(int i=i1;i<=i2;++i)
-        for(int j=j1;j<=j2;++j) G[i][j]=1;
+    for(int i=i1; i<=i2; ++i)
+        for(int j=j1; j<=j2; ++j) G[i][j]=1;
 }
 
 inline void mode_S()
@@ -167,7 +170,7 @@ inline void mode_S()
     int d;
     while(~scanf("%d", &d)&&d!=-1)  push_back(d);
 
-    for(int i=0;i!=S_size;++i)
+    for(int i=0; i!=S_size; ++i)
     {
         S_5.push_back(vector<int> ());
         while(S[i]>0)
@@ -179,25 +182,25 @@ inline void mode_S()
 
     sort(S_5.begin(),S_5.end());
 
-    for(int i=0;i!=S_size;++i)
+    for(int i=0; i!=S_size; ++i)
     {
         int i1=1,j1=1,i2=n,j2=n;
 
-        for(int j=0;j!=S_5[i].size();++j)
+        for(int j=0; j!=S_5[i].size(); ++j)
         {
             int i_mid = (i1+i2)/2,j_mid = (j1+j2)/2;
             if(S_5[i][j]==1)    i2 = i_mid, j2=j_mid;
             if(S_5[i][j]==2)    i2 = i_mid, j1=j_mid +1;
             if(S_5[i][j]==3)    i1=i_mid +1, j2=j_mid;
-            if(S_5[i][j]==4)    i1=i_mid+1,j2=j_mid +1;
+            if(S_5[i][j]==4)    i1=i_mid+1,j1=j_mid +1;
         }
 
         paint(i1,j1,i2,j2);
     }
 
-    for(int i=1;i<=n;++i)
+    for(int i=1; i<=n; ++i)
     {
-        for(int j=1;j<=n;++j)   printf("%c", G[i][j]?'*':'.');
+        for(int j=1; j<=n; ++j)   printf("%c", G[i][j]?'*':'.');
         printf("\n");
     }
 }
