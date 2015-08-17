@@ -29,35 +29,71 @@ using namespace std;
 
 const int maxn = 1010;
 int t,n,k;
-int a[maxn];
-int m,v;
-ll ans;
+int a[maxn*maxn];
+int b[maxn][maxn];
+int len=0;
+int m[maxn];
+ll ans1,ans2;
 
 int main()
 {
     scanf("%d", &t);
     while(t--)
     {
-        ans=0;
-        memset(a,0,sizeof(a));
+        ans1=ans2=0;
+        len=0;
         scanf("%d%d", &n, &k);
         for(int i=0; i<n; ++i)
         {
-            scanf("%d", &m);
-            for(int j=0; j<m; ++j)
+            scanf("%d", &m[i]);
+            for(int j=0; j<m[i]; ++j)
             {
-                scanf("%d", &v);
-                if(v>=k) a[i]++;
+                scanf("%d", &b[i][j]);
+                a[len++]=b[i][j];
             }
+            sort(b[i],b[i]+m[i]);
         }
-        for(int i=0; i<n-1; ++i)
+        sort(a,a+len);
+        for(int i=1; i<len; ++i)
         {
-            for(int j=i+1; j<n; ++j)
+            if(a[i-1]>k) ans1+=len-i;
+            else
             {
-                ans+=a[i]*a[j];
+                if(k-a[i-1]<a[i])
+                {
+                    ans1+=len-i;
+                }
+                else
+                {
+                    int pos=lower_bound(a+i,a+len,k-a[i-1])-a;
+                    ans1+=len-pos;
+                }
             }
         }
-        printf("%I64d\n", ans);
+        for(int j=0; j<n; ++j)
+        {
+            if(m[j]==1) continue;
+            for(int i=1; i<m[j]; ++i)
+            {
+                if(b[j][i-1]>k)
+                {
+                    ans2+=m[j]-i;
+                }
+                else
+                {
+                    if(k-b[j][i-1]<b[j][i])
+                    {
+                        ans2+=m[j]-i;
+                    }
+                    else
+                    {
+                        int pos=lower_bound(b[j]+i,b[j]+m[j],k-b[j][i-1])-b[j];
+                        ans2+=m[j]-pos;
+                    }
+                }
+            }
+        }
+        printf("%I64d\n", ans1-ans2);
     }
 }
 
