@@ -27,72 +27,138 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+const int maxn = 20;
 struct Point
 {
     double x,y;
 };
 
-inline int sgn(const double &x)
+double xmult (Point p1,Point p2, Point p0)
 {
-    return x < -eps ? -1 : x > eps;
+    return (p1.x-p0.x)*(p2.y-p0.y)-(p1.y-p0.y)*(p2.x-p0.x);
 }
 
-double dot (double x1,double y1, double x2,double y2)
+double xmult(Point p1, Point p2)
 {
-    return x1*y2-x2*y1;
+    return p1.x*p2.y-p1.y*p2.x;
 }
 
-double cross(Point a ,Point b,Point c)
+double dist(Point p1, Point p2)
 {
-    return dot(b.x-a.x,b.y-a.y,c.x-a.x,c.y-a.y);
+    return sqrt((p1.x-p2.x)*(p1.x*p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
 }
 
-double lineseg(Point a, Point b, Point c, Point d)
+bool cross(Point p1, Point p2, Point p3, Point p4)
 {
-    return (sgn(cross(a,b,c))^sgn(cross(a,b,d))==-2)&&(sgn(cross(c,d,a))^sgn(cross(c,d,b))==-2);
+    if(xmult(p3,p2,p1)*xmult(p2,p4,p1)>=0)  return true;
+    return false;
 }
 
-double mydist(Point a, Point b)
+struct Wall
 {
-    return sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
-}
+    double x,y[4];
+} wall[maxn];
 
-double g[200][200];
-int s,t;
+struct point
+{
+    double x,y,dis;
+    int num;
+};
+
+double mindis = inf;
+
 int n;
-Point line[200][2];
-Point pts[200];
+void bfs()
+{
+    int i;
+    double d;
+    point s,e;
+    Point p1,p2,p3,p4;
+    queue<point> q;
+    s.x = 0;
+    s.y = 5;
+    s.num = 0;
+    s.dis = 0;
+    p2.x = 10;
+    p2.y=5;
+    q.push(s);
+    while(!q.empty())
+    {
+        s=q.front();
+        q.pop();
+        p1.y=s.y;
+        for(i = s.num; i<n; ++i)
+        {
+            p3.x = wall[i].x;
+            p3.y = 0;
+            p4.x = wall[i].x;
+            p4.y = wall[i].y[0];
+            if(cross(p1,p2,p3,p4))
+            {
+                e.x = p4.x;
+                e.y = p4.y;
+                e.num = i+1;
+                e.dis = s.dis+dist(p1,p4);
+                q.push(s);
+                e.y = wall[i].y[1];
+                e.num = i+1;
+                e.dis = s.dis + dist(p1,p4);
+                q.push(e);
+                break;
+            }
+            p3.y = wall[i].y[1];
+            p4.y = wall[i].y[2];
+            if(cross(p1,p2,p3,p4))
+            {
+                e.x = p3.x;
+                e.y = p3.y;
+                e.num = i+1;
+                e.dis = s. dis+ dist(p1,p3);
+                q.push(e);
+                e.y = p4.y;
+                e.num = i+1;
+                e.dis = s.dis + dist(p1,p4);
+                q.push(e);
+                break;
+            }
+            p3.y = wall[i].y[3];
+            p4.y = 10;
+            if(cross(p1,p2,p3,p4))
+            {
+                e.x = p3.x;
+                e.y = p3.y;
+                e.num = i+1;
+                e.dis = s.dis+dist(p1,p3);
+                q.push(e);
+                e.y = wall[i].y[2];
+                e.num = i+1;
+                e.dis = s.dis+dist(p1,p3);
+                q.push(e);
+                break;
+            }
+        }
+        if(i >= n)
+        {
+            d =s.dis + dist(p1,p2);
+            if(d<mindis)    mindis = d;
+        }
+    }
+}
 
 int main()
 {
-    double x,y1,y2,y3,y4;
-    wile(cin>>n)
+    int i;
+    while(scanf("%d", &n))
     {
-        if(n==-1)   break;
-        s=0,t=4*n+1;
-        pts[0].x=0;
-        pts[0].y=5;
-        pts[t].x=10;
-        pts[t].y=5;
-
-        for(int i=0;i<n;++i)
+        if(n<0) break;
+        mindis = inf;
+        for(i =0; i<n; ++i)
         {
-            cin>>x>>y1>>y2>>y3>>y4;
-
-            line[i*3][0].x=x;
-            line[i*3][0].y=0;
-            line[i*3][1].x=x;
-            line[i*3][1].y=y1;
+            scanf("%lf%lf%lf%lf%lf",&wall[i].x, &wall[i].y[0], &wall[i].y[1], &wall[i].y[2], &wall[i].y[3]);
         }
+        bfs();
+        printf("%.2f\n",mindis);
     }
     return 0;
 }
-
-
-
-
-
-
-
-
 
