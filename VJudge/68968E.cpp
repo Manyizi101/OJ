@@ -45,7 +45,7 @@ double xmult(Point p1, Point p2)
 
 double dist(Point p1, Point p2)
 {
-    return sqrt((p1.x-p2.x)*(p1.x*p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
+    return sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
 }
 
 bool cross(Point p1, Point p2, Point p3, Point p4)
@@ -86,6 +86,7 @@ void bfs()
     {
         s=q.front();
         q.pop();
+        p1.x=s.x;
         p1.y=s.y;
         for(i = s.num; i<n; ++i)
         {
@@ -99,7 +100,7 @@ void bfs()
                 e.y = p4.y;
                 e.num = i+1;
                 e.dis = s.dis+dist(p1,p4);
-                q.push(s);
+                q.push(e);
                 e.y = wall[i].y[1];
                 e.num = i+1;
                 e.dis = s.dis + dist(p1,p4);
@@ -113,7 +114,7 @@ void bfs()
                 e.x = p3.x;
                 e.y = p3.y;
                 e.num = i+1;
-                e.dis = s. dis+ dist(p1,p3);
+                e.dis = s.dis+ dist(p1,p3);
                 q.push(e);
                 e.y = p4.y;
                 e.num = i+1;
