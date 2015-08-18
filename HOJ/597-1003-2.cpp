@@ -9,7 +9,8 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int size = 10010;
+const int maxn = 1010;
+const int size = 1000;
 int n;
 int father[size];
 int rk[size];
@@ -88,12 +89,30 @@ int kruskal(int n) //n为边的数量
     return sum;
 }
 
+ll euler[maxn];
+ll ans[maxn]= {0};
+void Init()
+{
+    euler[1]=1;
+    for(int i=2; i<maxn; i++)
+        euler[i]=i;
+    for(int i=2; i<maxn; i++)
+        if(euler[i]==i)
+            for(int j=i; j<maxn; j+=i)
+                euler[j]=euler[j]/i*(i-1);
+    for(int i=1; i<=maxn; ++i)
+    {
+        ans[i]+=ans[i-1]-euler[i]+i;
+    }
+}
+
+
 int main()
 {
-    while(~scanf("%d", &n))
+    freopen("2.out","w",stdout);
+    Init();
+    for(n=1; n<=100; ++n)
     {
-        char x, y;
-        int m, weight;
         int cnt = 0;
         for(int i = 1; i < n ; i ++)
         {
@@ -113,8 +132,7 @@ int main()
                 cnt ++;
             }
         }
-
         sort(edge, edge + cnt, cmp);
-        cout << kruskal(cnt) << endl;
+        cout << ans[n]-kruskal(cnt) << endl;
     }
 }

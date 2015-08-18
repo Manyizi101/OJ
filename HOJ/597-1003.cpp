@@ -50,8 +50,9 @@ int n;
 
 int main()
 {
+    freopen("1.out","w",stdout);
     Init();
-    while(~scanf("%d", &n))
+    for(int n=1;n<=100;++n)
     {
         printf("%I64d\n", ans[n]);
     }
