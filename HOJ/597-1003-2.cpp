@@ -1,24 +1,6 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <ctime>
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <deque>
-#include <list>
-#include <set>
-#include <map>
-#include <stack>
-#include <queue>
-#include <numeric>
-#include <iomanip>
-#include <bitset>
-#include <sstream>
-#include <fstream>
-#define debug puts("-----")
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
 
 typedef long long int ll;
 const double pi = acos(-1.0);
@@ -27,76 +9,112 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-map<pair<int, int>,int> mp;
-const int maxn = 1e5+10;
+const int size = 10010;
+int n;
+int father[size];
+int rk[size];
 
-int visit[maxn],dist[maxn];
-
-int prim(int cur, int n)
+//把每条边成为一个结构体，包括起点、终点和权值
+struct node
 {
-    int index;
-    int sum = 0;
-    memset(visit, false, sizeof(visit));
-    visit[cur] = true;
-    for(int i = 1; i <= n; i ++)
+    int val;
+    int start;
+    int end;
+} edge[size * size / 2];
+
+//把每个元素初始化为一个集合
+void make_set()
+{
+    for(int i = 0; i < n; i ++)
     {
-        //dist[i] = graph[cur][i];
-        if(mp[make_pair(cur,i)]>1)
-            dist[i] = mp[make_pair(cur,i)];
-        else
-            dist[i]=1;
+        father[i] = i;
+        rk[i] = 1;
     }
+    return ;
+}
 
-    for(int i = 2; i <= n; i ++)
+//查找一个元素所在的集合,即找到祖先
+int find_set(int x)
+{
+    if(x != father[x])
     {
+        father[x] = find_set(father[x]);
+    }
+    return father[x];
+}
 
-        int mincost = inf;
-        for(int j = 1; j <= n; j ++)
+//合并x,y所在的两个集合：利用Find_Set找到其中两个
+//集合的祖先，将一个集合的祖先指向另一个集合的祖先。
+void Union(int x, int y)
+{
+    x = find_set(x);
+    y = find_set(y);
+    if(x == y)
+    {
+        return ;
+    }
+    if(rk[x] < rk[y])
+    {
+        father[x] = find_set(y);
+    }
+    else
+    {
+        if(rk[x] == rk[y])
         {
-            if(!visit[j] && dist[j] < mincost)
-            {
-                mincost = dist[j];
-                index = j;
-            }
+            rk[x] ++;
         }
+        father[y] = find_set(x);
+    }
+    return ;
+}
 
-        visit[index] = true;
-        sum += mincost;
+bool cmp(node a, node b)
+{
+    return a.val > b.val;
+}
 
-        for(int j = 1; j <= n; j ++)
+int kruskal(int n) //n为边的数量
+{
+    int sum = 0;
+    make_set();
+    for(int i = 0; i < n; i ++)    //从权最小的边开始加进图中
+    {
+        if(find_set(edge[i].start) != find_set(edge[i].end))
         {
-            /*
-            if(!visit[j] && dist[j] > graph[index][j])
-            {
-                dist[j] = graph[index][j];
-            }
-            **/
-            if(!visit[j]&&dist[j]>(mp[make_pair(index,j)]>1?mp[make_pair(index,j)]:1))
-            {
-                dist[j] = (mp[make_pair(index,j)]>1?mp[make_pair(index,j)]:1);
-            }
+            Union(edge[i].start, edge[i].end);
+            sum += edge[i].val;
         }
     }
     return sum;
 }
 
-int n;
-
 int main()
 {
     while(~scanf("%d", &n))
     {
-        for(int i=1; i<=n; ++i)
+        char x, y;
+        int m, weight;
+        int cnt = 0;
+        for(int i = 1; i < n ; i ++)
         {
-            for(int j=1; j<=n; ++j)
+            for(int j = i+1; j <= n; j ++)
             {
+                //scanf("%c %d", &y, &weight);
+                //printf("%c %d ", y, weight);
+                edge[cnt].start = i;
+                edge[cnt].end = j;
+                /*
                 if(__gcd(i,j)>1)
-                {
-                    mp[make_pair(i,j)]=__gcd(i,j);
-                }
+                    edge[cnt].val = __gcd(i,j);
+                else
+                    continue;
+                **/
+                edge[cnt].val = __gcd(i,j);
+                cnt ++;
             }
         }
-        printf("%d\n", prim(1,n));
+
+        sort(edge, edge + cnt, cmp);
+        cout << kruskal(cnt) << endl;
     }
 }
-
