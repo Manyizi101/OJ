@@ -59,15 +59,8 @@ int main()
             if(a[i-1]>k) ans1+=len-i;
             else
             {
-                if(k-a[i-1]<a[i])
-                {
-                    ans1+=len-i;
-                }
-                else
-                {
-                    int pos=lower_bound(a+i,a+len,k-a[i-1])-a;
-                    ans1+=len-pos;
-                }
+                int pos=upper_bound(a+i,a+len,k-a[i-1])-a;
+                ans1+=len-pos;
             }
         }
         for(int j=0; j<n; ++j)
@@ -81,15 +74,8 @@ int main()
                 }
                 else
                 {
-                    if(k-b[j][i-1]<b[j][i])
-                    {
-                        ans2+=m[j]-i;
-                    }
-                    else
-                    {
-                        int pos=lower_bound(b[j]+i,b[j]+m[j],k-b[j][i-1])-b[j];
-                        ans2+=m[j]-pos;
-                    }
+                    int pos=upper_bound(b[j]+i,b[j]+m[j],k-b[j][i-1])-b[j];
+                    ans2+=m[j]-pos;
                 }
             }
         }
