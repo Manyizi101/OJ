@@ -65,15 +65,16 @@ ll inv(ll a)
     return quickpow(a,mod-2);
 }
 
-int a[maxn]= {};
+int a[maxn];
 int b[maxn];
+
 void init()
 {
     int num;
-    for(ll rk=3; rk<100; rk++)
+    for(ll rk=3; rk<maxn; rk++)
     {
         memset(b,0,sizeof(b));
-        fac[rk]=1;
+        fac[rk]=fac[rk-1];
         num=rk;
         const int x = sqrt(rk);
         for(int i=1; prime[i]<=x; ++i)
@@ -82,29 +83,24 @@ void init()
             {
                 b[prime[i]]++;
                 num/=prime[i];
-                if(b[prime[i]]>a[prime[i]])
+                if(a[prime[i]]<b[prime[i]])
                 {
+                    fac[rk]=fac[rk]*prime[i]%mod;
                     a[prime[i]]=b[prime[i]];
-                    fac[rk]=fac[rk]*quickpow(prime[i],a[prime[i]])%mod;
-                }
-                else
-                {
-                    fac[rk]=fac[rk]*quickpow(prime[i],b[prime[i]])%mod;
                 }
                 i--;
-                cout<<num<<endl;
             }
         }
         if(num!=1)
         {
+            fac[rk]*=num;
             b[num]++;
-            if(b[num]>a[num])
+            if(a[num]<b[num])
             {
-                a[num]=b[num];
                 fac[rk]=fac[rk]*num%mod;
+                a[num]=b[num];
             }
         }
-        //cout<<fac[rk]<<endl;
     }
 }
 
@@ -112,9 +108,16 @@ int main()
 {
     fac[1]=1;
     fac[2]=2;
+    a[1]=1;
     a[2]=1;
     getprime();
-    init();
+    int ans=0;
+    for(int i=1;i<=maxn;++i)
+    {
+        if(ispri[i])    ans++;
+    }
+    cout<<ans<<endl;
+    //init();
     scanf("%I64d", &t);
     while(t--)
     {

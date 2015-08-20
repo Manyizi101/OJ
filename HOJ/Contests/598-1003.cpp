@@ -1,11 +1,3 @@
-/*
-* this code is made by qcyclone
-* Problem: 1732
-* Verdict: Accepted
-* Submission Date: 2015-05-15 17:08:50
-* Time: 3988MS
-* Memory: 14240KB
-*/
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -21,20 +13,21 @@
 typedef long long ll;
 using namespace std;
 #define eps 1e-8
-#define MAXN 100000000
+#define MAXN 10000007
+const int mod = 1e9+7;
 char Is[MAXN>>3];
 struct add
 {
-    int val,co;
+    ll val,co;
     bool operator<(const add&u) const
     {
         return val<u.val;
     }
-}ad[11111];
+} ad[11111];
 struct  node
 {
     ll val,id,res;
-}Q[11111];
+} Q[11111];
 bool cmp1(node a,node b)
 {
     return  a.val<b.val;
@@ -62,9 +55,9 @@ void prime(int x)
     memset(Is,0,sizeof(Is));
     set_prime(0);
     set_prime(1);
-    for(int i=2;i*i<x;i++)
+    for(int i=2; i*i<x; i++)
     {
-        if(!get_prime(i))   continue;  //不是质数
+        if(!get_prime(i))   continue;
         ll j=i*i;
         while(j<MAXN)
         {
@@ -80,29 +73,57 @@ void prime(int x)
         }
     }
 }
-int main(){
+
+ll quickpow(ll a, ll b)
+{
+    if(b<0) return 0;
+    ll ret = 1;
+    a %= mod;
+    for(; b; b>>=1,a=(a*a)%mod)
+        if(b&1)
+            ret = (ret*a)%mod;
+    return ret;
+}
+
+ll inv(ll a)
+{
+    return quickpow(a,mod-2);
+}
+
+int main()
+{
     prime(MAXN);
     sort(ad,ad+adcnt);
     int T;
     scanf("%d",&T);
-    for(int i=0;i<T;i++){
-        scanf("%d",&Q[i].val);
+    for(int i=0; i<T; i++)
+    {
+        scanf("%I64d",&Q[i].val);
+        if(Q[i].val==1)
+        {
+            printf("1\n");
+            i--;
+            T--;
+        }
+        Q[i].val+=1;
         Q[i].id=i;
     }
     sort(Q,Q+T,cmp1);
     int now=0,qi=0;
-    unsigned int ans=1;
-    for(int i=2;i<MAXN;i++){
-         if(get_prime(i))
-            ans=(ans*i);
+    ll ans=1;
+    for(int i=2; i<MAXN; i++)
+    {
+        if(get_prime(i))
+            ans=(ans*i%mod);
         if(now<adcnt && ad[now].val==i)
-            ans=(ans*ad[now++].co);
-        while(qi<T && Q[qi].val==i){
+            ans=(ans*ad[now++].co%mod);
+        while(qi<T && Q[qi].val==i)
+        {
             Q[qi++].res=ans;
         }
     }
     sort(Q,Q+T,cmp2);
-    for(int i=0;i<T;i++)
-        printf("%u\n",Q[i].res);
+    for(int i=0; i<T; i++)
+            printf("%I64d\n",Q[i].res*inv(Q[i].val)%mod);
     return 0;
 }
