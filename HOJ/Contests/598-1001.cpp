@@ -11,7 +11,7 @@
 #include <list>
 #include <set>
 #include <map>
-#include <stack>`
+#include <stack>
 #include <queue>
 #include <numeric>
 #include <iomanip>
@@ -31,6 +31,23 @@ const ll mod = 1000000007;
 const int maxn  =  1e6+10;
 ll t,n;
 ll fac[maxn];
+int ispri[maxn] = {}, prime[maxn],pcnt = 0;
+
+void getprime()
+{
+    ispri[0]=ispri[1]=1;
+    for(ll i =2; i<maxn; ++i)
+    {
+        if(ispri[i]==0)
+        {
+            prime[++pcnt]=i;
+            for(ll j=i*i; j<maxn; j+=i)
+            {
+                ispri[j]=1;
+            }
+        }
+    }
+}
 
 ll quickpow(ll a, ll b)
 {
@@ -48,20 +65,55 @@ ll inv(ll a)
     return quickpow(a,mod-2);
 }
 
-ll init()
+int a[maxn]= {};
+int b[maxn];
+void init()
 {
-    fac[1]=1;
-    for(ll i=2; i<=maxn; ++i)
+    int num;
+    for(ll rk=3; rk<100; rk++)
     {
-        //fac[i]=(fac[i-1]*(i*(inv(__gcd(fac[i-1],i))%mod))%mod)%mod;
-        fac[i]=fac[i-1]*i/__gcd(fac[i-1],i);
+        memset(b,0,sizeof(b));
+        fac[rk]=1;
+        num=rk;
+        const int x = sqrt(rk);
+        for(int i=1; prime[i]<=x; ++i)
+        {
+            if(num%prime[i]==0)
+            {
+                b[prime[i]]++;
+                num/=prime[i];
+                if(b[prime[i]]>a[prime[i]])
+                {
+                    a[prime[i]]=b[prime[i]];
+                    fac[rk]=fac[rk]*quickpow(prime[i],a[prime[i]])%mod;
+                }
+                else
+                {
+                    fac[rk]=fac[rk]*quickpow(prime[i],b[prime[i]])%mod;
+                }
+                i--;
+                cout<<num<<endl;
+            }
+        }
+        if(num!=1)
+        {
+            b[num]++;
+            if(b[num]>a[num])
+            {
+                a[num]=b[num];
+                fac[rk]=fac[rk]*num%mod;
+            }
+        }
+        //cout<<fac[rk]<<endl;
     }
 }
 
-
-
 int main()
 {
+    fac[1]=1;
+    fac[2]=2;
+    a[2]=1;
+    getprime();
     init();
     scanf("%I64d", &t);
     while(t--)
