@@ -22,7 +22,7 @@
 
 typedef long long int ll;
 const double pi = acos(-1.0);
-const double eps = 1e-8;
+const double eps = 1e-3;
 const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
@@ -216,7 +216,7 @@ line a,b;
 
 bool judge()
 {
-    if((a.s.y==a.t.y)||(b.s.y==b.t.y))  return false;
+    if((fabs(a.s.y-a.t.y)<eps)||(fabs(b.s.y-b.t.y)<eps))  return false;
     if(!issegxseg(a,b)) return false;
     point axb = linexline(a,b);
     if(a.s.y<a.t.y) swap(a.s,a.t);
