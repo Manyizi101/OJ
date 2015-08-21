@@ -19,195 +19,253 @@
 #include <sstream>
 #include <fstream>
 #define debug puts("-----")
-
-typedef long long int ll;
-const double pi = acos(-1.0);
-const double eps = 1e-3;
-const int inf = 0x3f3f3f3f;
-const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-//返回坐标的平方
-inline double sqr(const double &x)
+const double eps=1e-8;
+const double pi=acos(-1.0);
+const double inf=1e20;
+const int maxp=1111;
+
+int dblcmp(double d)
 {
-    return x * x;
+    if (fabs(d)<eps)return 0;
+    return d>eps?1:-1;
 }
-//返回坐标的正负
-inline int sgn(const double &x)
+
+inline double sqr(double x)
 {
-    return x < -eps ? -1 : x > eps;
+    return x*x;
 }
 
 struct point
 {
-    double x, y;
-    point(const double &x = 0, const double &y = 0): x(x), y(y) {}
-    friend point operator + (const point &a, const point &b)
+    double x,y;
+    point() {}
+    point(double _x,double _y):
+        x(_x),y(_y) {};
+    void input()
     {
-        return point(a.x + b.x, a.y + b.y);
+        scanf("%lf%lf",&x,&y);
     }
-    friend point operator - (const point &a, const point &b)
+    void output()
     {
-        return point(a.x - b.x, a.y - b.y);
+        printf("%.2f %.2f\n",x,y);
     }
-    friend point operator * (const point &a, const double &b)
+    bool operator==(point a)const
     {
-        return point(a.x * b, a.y * b);
+        return dblcmp(a.x-x)==0&&dblcmp(a.y-y)==0;
     }
-    friend point operator * (const double &a, const point &b)
+    bool operator<(point a)const
     {
-        return point(a * b.x, a * b.y);
+        return dblcmp(a.x-x)==0?dblcmp(y-a.y)<0:x<a.x;
     }
-    friend point operator / (const point &a, const double &b)
+    double len()
     {
-        return point(a.x / b, a.y / b);
+        return hypot(x,y);
     }
-    friend bool operator == (const point &a, const point &b)
+    double len2()
     {
-        return !sgn(a.x - b.x) && !sgn(a.y - b.y);
+        return x*x+y*y;
     }
-    friend bool operator < (const point &a, const point &b)
+    double distance(point p)
     {
-        return sgn(a.x - b.x) < 0 || (sgn(a.x - b.x) == 0 && sgn(a.y - b.y) < 0);
+        return hypot(x-p.x,y-p.y);
     }
-    //返回点到原点的距离
-    double norm()
+    point add(point p)
     {
-        return sqrt(sqr(x) + sqr(y));
+        return point(x+p.x,y+p.y);
     }
-    //返回两个点的外积
-    friend double det(const point &a, const point &b)
+    point sub(point p)
     {
-        return a.x * b.y - a.y * b.x;
+        return point(x-p.x,y-p.y);
     }
-    //返回两个点的内积
-    friend double dot(const point &a, const point &b)
+    point mul(double b)
     {
-        return a.x * b.x + a.y * b.y;
+        return point(x*b,y*b);
     }
-    //返回两个点之间线段的长度
-    friend double dist(const point &a, const point &b)
+    point div(double b)
     {
-        return (a - b).norm();
+        return point(x/b,y/b);
     }
-    //返回两点构成的直线的仰角
-    double arg()
+    double dot(point p)
     {
-        return atan2(y, x);
+        return x*p.x+y*p.y;
     }
-    //逆时针旋转angle弧度
-    point rotate(const double &angle)
+    double det(point p)
     {
-        return rotate(cos(angle), sin(angle));
+        return x*p.y-y*p.x;
     }
-    point rotate(const point &p, const double &angle)
+    double rad(point a,point b)
     {
-        return (*this - p).rotate(angle) + p;
+        point p=*this;
+        return fabs(atan2(fabs(a.sub(p).det(b.sub(p))),a.sub(p).dot(b.sub(p))));
     }
-    point rotate(const double &cosa, const double &sina)
+    point trunc(double r)
     {
-        return point(x * cosa - y * sina, x * sina + y * cosa);
+        double l=len();
+        if (!dblcmp(l))return *this;
+        r/=l;
+        return point(x*r,y*r);
     }
-    int in()
+    point rotleft()
     {
-        return scanf("%lf %lf", &x, &y);
+        return point(-y,x);
     }
-    void out()
+    point rotright()
     {
-        //输出默认采用两位小数，注意修改
-        printf("%.2f %.2f\n", x, y);
+        return point(y,-x);
+    }
+    point rotate(point p,double angle)//绕点p逆时针旋转angle角度
+    {
+        point v=this->sub(p);
+        double c=cos(angle),s=sin(angle);
+        return point(p.x+v.x*c-v.y*s,p.y+v.x*s+v.y*c);
     }
 };
 
 struct line
 {
-    point s, t;
-    line(const point &s = point(), const point &t = point()): s(s), t(t) {}
-    point vec() const
+    point a,b;
+    line() {}
+    line(point _a,point _b)
     {
-        return t - s;
+        a=_a;
+        b=_b;
     }
-    double norm() const
+    bool operator==(line v)
     {
-        return vec().norm();
+        return (a==v.a)&&(b==v.b);
     }
-    //点在直线上(结合判断平行，可用于判断直线重合)
-    bool ispointonline(const point &p) const
+    //倾斜角angle
+    line(point p,double angle)
     {
-        return sgn(det(p - s, t - s)) == 0;
-    }
-    //点在线段上(结合判断点在线段上不含端点，可以用于判断是否为顶点相连接)
-    bool ispointonseg(const point &p) const
-    {
-        return ispointonline(p) && sgn(dot(p - s, p - t)) <= 0;
-    }
-    //点在线段上不含端点
-    bool ispointonsegex(const point &p)
-    {
-        return ispointonline(p) && sgn(dot(p - s, p - t)) < 0;
-    }
-    //点到直线的垂足
-    point pointprojline(const point &p)
-    {
-        return s + vec() * ((dot(p - s, vec()) / norm()) / (norm()));
-    }
-    //点到直线的距离
-    double pointdistline(const point &p)
-    {
-        return fabs(det(p - s, vec()) / norm());
-    }
-    //点到线段的距离
-    double pointdistseg(const point &p)
-    {
-        if (sgn(dot(p - s, t - s)) < 0) return (p - s).norm();
-        if (sgn(dot(p - t, s - t)) < 0) return (p - t).norm();
-        return pointdistline(p);
-    }
-    //判断两直线是否平行
-    friend bool parallel(const line &l1, const line &l2)
-    {
-        return !sgn(det(l1.vec(), l2.vec()));
-    }
-    //判断两个点是否在直线的同一侧
-    friend bool sameside(const line &l, const point &a, const point &b)
-    {
-        return sgn(det(b - l.s, l.vec())) * sgn(det(a - l.s, l.vec())) > 0;
-    }
-    //两直线的交点
-    friend point linexline(const line l1, const line l2) //利用相似三角形对应边成比例
-    {
-        double s1 = det(l1.s - l2.s, l2.vec());
-        double s2 = det(l1.t - l2.s, l2.vec());
-        return (l1.t * s1 - l1.s * s2) / (s1 - s2);
-    }
-    //判断线段交
-    friend bool issegxseg(const line &l1, const line &l2)
-    {
-        if (!sgn(det(l2.s - l1.s, l1.vec())) && !sgn(det(l2.t - l1.s, l1.vec())))
+        a=p;
+        if (dblcmp(angle-pi/2)==0)
         {
-            return l1.ispointonseg(l2.s) ||
-                   l1.ispointonseg(l2.t) ||
-                   l2.ispointonseg(l1.s) ||
-                   l2.ispointonseg(l1.t);
+            b=a.add(point(0,1));
         }
-        return !sameside(l1, l2.s, l2.t) && !sameside(l2, l1.s, l1.t);
+        else
+        {
+            b=a.add(point(1,tan(angle)));
+        }
     }
-    //直线沿法线方向移动d距离
-    friend line move(const line &l, const double &d)
+    //ax+by+c=0
+    line(double _a,double _b,double _c)
     {
-        point t = l.vec();
-        t = t / t.norm();
-        t = t.rotate(pi / 2);
-        return line(l.s + t * d, l.t + t * d);
+        if (dblcmp(_a)==0)
+        {
+            a=point(0,-_c/_b);
+            b=point(1,-_c/_b);
+        }
+        else if (dblcmp(_b)==0)
+        {
+            a=point(-_c/_a,0);
+            b=point(-_c/_a,1);
+        }
+        else
+        {
+            a=point(0,-_c/_b);
+            b=point(1,(-_c-_a)/_b);
+        }
     }
-    int in()
+    void input()
     {
-        s.in();
-        return t.in();
+        a.input();
+        b.input();
     }
-    void out()
+    void adjust()
     {
-        s.out(), t.out();
+        if (b<a) swap(a,b);
+    }
+    double length()
+    {
+        return a.distance(b);
+    }
+    double angle()//直线倾斜角 0<=angle<180
+    {
+        double k=atan2(b.y-a.y,b.x-a.x);
+        if (dblcmp(k)<0)k+=pi;
+        if (dblcmp(k-pi)==0)k-=pi;
+        return k;
+    }
+    //点和线段关系
+    //1 在逆时针
+    //2 在顺时针
+    //3 平行
+    int relation(point p)
+    {
+        int c=dblcmp(p.sub(a).det(b.sub(a)));
+        if (c<0)return 1;
+        if (c>0)return 2;
+        return 3;
+    }
+    bool pointonseg(point p)
+    {
+        return dblcmp(p.sub(a).det(b.sub(a)))==0&&dblcmp(p.sub(a).dot(p.sub(b)))<=0;
+    }
+    bool parallel(line v)
+    {
+        return dblcmp(b.sub(a).det(v.b.sub(v.a)))==0;
+    }
+    //2 规范相交
+    //1 非规范相交
+    //0 不相交
+    int segcrossseg(line v)
+    {
+        int d1=dblcmp(b.sub(a).det(v.a.sub(a)));
+        int d2=dblcmp(b.sub(a).det(v.b.sub(a)));
+        int d3=dblcmp(v.b.sub(v.a).det(a.sub(v.a)));
+        int d4=dblcmp(v.b.sub(v.a).det(b.sub(v.a)));
+        if ((d1^d2)==-2&&(d3^d4)==-2)return 2;
+        return (d1==0&&dblcmp(v.a.sub(a).dot(v.a.sub(b)))<=0||
+                d2==0&&dblcmp(v.b.sub(a).dot(v.b.sub(b)))<=0||
+                d3==0&&dblcmp(a.sub(v.a).dot(a.sub(v.b)))<=0||
+                d4==0&&dblcmp(b.sub(v.a).dot(b.sub(v.b)))<=0);
+    }
+    int linecrossseg(line v)//*this seg v line
+    {
+        int d1=dblcmp(b.sub(a).det(v.a.sub(a)));
+        int d2=dblcmp(b.sub(a).det(v.b.sub(a)));
+        if ((d1^d2)==-2)return 2;
+        return (d1==0||d2==0);
+    }
+    //0 平行
+    //1 重合
+    //2 相交
+    int linecrossline(line v)
+    {
+        if ((*this).parallel(v))
+        {
+            return v.relation(a)==3;
+        }
+        return 2;
+    }
+    point crosspoint(line v)
+    {
+        double a1=v.b.sub(v.a).det(a.sub(v.a));
+        double a2=v.b.sub(v.a).det(b.sub(v.a));
+        return point((a.x*a2-b.x*a1)/(a2-a1),(a.y*a2-b.y*a1)/(a2-a1));
+    }
+    double dispointtoline(point p)
+    {
+        return fabs(p.sub(a).det(b.sub(a)))/length();
+    }
+    double dispointtoseg(point p)
+    {
+        if (dblcmp(p.sub(b).dot(a.sub(b)))<0||dblcmp(p.sub(a).dot(b.sub(a)))<0)
+        {
+            return min(p.distance(a),p.distance(b));
+        }
+        return dispointtoline(p);
+    }
+    point lineprog(point p)
+    {
+        return a.add(b.sub(a).mul(b.sub(a).dot(p.sub(a))/b.sub(a).len2()));
+    }
+    point symmetrypoint(point p)
+    {
+        point q=lineprog(p);
+        return point(2*q.x-p.x,2*q.y-p.y);
     }
 };
 
@@ -216,13 +274,9 @@ line a,b;
 
 bool judge()
 {
-    if((fabs(a.s.y-a.t.y)<eps)||(fabs(b.s.y-b.t.y)<eps))  return false;
-    if(!issegxseg(a,b)) return false;
-    point axb = linexline(a,b);
-    if(a.s.y<a.t.y) swap(a.s,a.t);
-    if(b.s.y<b.t.y) swap(b.s,b.t);
-    if(a.s.y<b.s.y) swap(a,b);
-    if(issegxseg(line(b.s,point(b.s.x,b.s.y+eps)),a)) return false;
+    if((!dblcmp(a.angle()))||(!dblcmp(b.angle())))  return false;
+    if(!a.segcrossseg(b))    return false;
+    if(a.linecrossseg(line(b.a,point(b.a.x,b.a.y+0.1))))    return false;
     return true;
 }
 
@@ -231,14 +285,18 @@ int main()
     scanf("%d", &t);
     while(t--)
     {
-        a.in(),b.in();
+        a.input();
+        b.input();
+        if(a.a.y<a.b.y) swap(a.a,a.b);
+        if(b.a.y<b.b.y) swap(b.a,b.b);
+        if(a.a.y<b.a.y) swap(a,b);
         if(judge())
         {
-            point axb = linexline(a,b);
-            double y = b.s.y;
-            point bb = b.s;
-            point aa = linexline(a,line(point(0-eps,y),point(0+eps,y)));
-            printf("%.2f\n", fabs(bb.x-aa.x)*fabs(axb.y-y)/2);
+            point axb = a.crosspoint(b);
+            double yy = b.a.y;
+            point aa = a.crosspoint(line(b.a,point(b.a.x+eps,b.a.y)));
+            double ans = fabs(b.a.x-aa.x)*fabs(yy-axb.y)*0.5;
+            printf("%.2f\n",ans);
         }
         else
         {
@@ -246,4 +304,3 @@ int main()
         }
     }
 }
-
