@@ -221,8 +221,8 @@ bool judge()
     point axb = linexline(a,b);
     if(a.s.y<a.t.y) swap(a.s,a.t);
     if(b.s.y<b.t.y) swap(b.s,b.t);
-    if(a.s.y>b.s.y) swap(a,b);
-    if(fabs(a.s.x-axb.x)<=fabs(b.s.x-axb.x))  return false;
+    if(a.s.y<b.s.y) swap(a,b);
+    if(issegxseg(line(b.s,point(b.s.x,b.s.y+eps)),a)) return false;
     return true;
 }
 
@@ -235,11 +235,9 @@ int main()
         if(judge())
         {
             point axb = linexline(a,b);
-            double ya = a.s.y>a.t.y?a.s.y:a.t.y;
-            double yb = b.s.y>b.t.y?b.s.y:b.t.y;
-            double y = min(ya,yb);
-            point bb = linexline(b,line(point(0,y),point(1,y)));
-            point aa = linexline(a, line(point(0,y),point(1,y)));
+            double y = b.s.y;
+            point bb = b.s;
+            point aa = linexline(a,line(point(0-eps,y),point(0+eps,y)));
             printf("%.2f\n", fabs(bb.x-aa.x)*fabs(axb.y-y)/2);
         }
         else
