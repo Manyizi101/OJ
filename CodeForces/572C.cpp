@@ -27,63 +27,31 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-struct cmps
-{
-    bool operator() (const int P1, const int P2)
-    {
-        return P1 > P2;
-    }
-};
+int a,b,c,l;
+ll ans;
 
-struct cmpb
+bool judge(int a, int b, int c)
 {
-    bool operator() (const int P1, const int P2)
-    {
-        return P1 < P2;
-    }
-};
-
-int n,s;
-char d;
-int p,q;
+    if(a+b>c&&a+c>b&&b+c>a) return true;
+    else return false;
+}
 
 int main()
 {
-    map<int, int, cmpb> mps;
-    map<int, int, cmps> mpb;
-    while(~scanf("%d%d", &n,&s))
+    while(~scanf("%d%d%d%d", &a,&b,&c,&l))
     {
-        mps.clear();
-        mpb.clear();
-        for(int i=0; i<n; ++i)
+        ans=0;
+        for(int i = a ; i<=a+l; ++i)
         {
-            getchar();
-            scanf("%c %d %d", &d, &p, &q);
-            if(d=='S')  mps[p]+=q;
-            else if(d=='B') mpb[p]+=q;
+            for(int j = b; i+j<=a+b+l; ++j)
+            {
+                int z = a+b+c+l-i-j;
+                for(int k = c; k<=z; ++k)
+                {
+                    if(judge(i,j,k))    ans++;
+                }
+            }
         }
-        auto it = mps.begin();
-        int tmp = s;
-        stack<pair<int ,int > > st;
-        while(it!=mps.end()&&tmp)
-        {
-            st.push(make_pair((*it).first,(*it).second));
-            tmp--;
-            ++it;
-        }
-        while(!st.empty())
-        {
-            auto x = st.top();
-            st.pop();
-            cout<<'S' <<" "<<x.first<<" "<<x.second<<endl;
-        }
-        it = mpb.begin();
-        tmp = s;
-        while(it!=mpb.end()&&tmp)
-        {
-            cout<<'B'<<" "<<(*it).first<<" "<<(*it).second<<endl;
-            tmp--;
-            ++it;
-        }
+        printf("%I64d\n", ans);
     }
 }
