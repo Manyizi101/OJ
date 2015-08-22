@@ -27,7 +27,18 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+const int maxn = 1e5+10;
+int na,nb,m,k;
+int a[maxn],b[maxn];
+
 int main()
 {
-
+    while(~scanf("%d%d", &na,&nb))
+    {
+        scanf("%d%d", &k,&m);
+        for(int i=1;i<=na;++i)  scanf("%d", &a[i]);
+        for(int i=1;i<=nb;++i)  scanf("%d", &b[i]);
+        if(a[k]<b[nb-m+1])   printf("YES\n");
+        else printf("NO\n");
+    }
 }
