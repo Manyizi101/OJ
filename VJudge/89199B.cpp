@@ -31,17 +31,16 @@ const int maxn = 1e5+10;
 
 struct node
 {
-    int x,y;
-} l[maxn];
+    int x,m;
+} l[2*maxn];
 
-int t,n;
+int t,n,ans,tmp;
 
 bool cmp(node a, node b)
 {
-    if(a.x==a.x)    return a.y<a.y;
-    else    return a.x<a.x;
+    if(a.x==b.x)    return a.m<b.m;
+    else    return a.x<b.x;
 }
-int ans[maxn];
 
 int main()
 {
@@ -51,19 +50,18 @@ int main()
         scanf("%d", &n);
         for(int i=0; i<n; ++i)
         {
-            scanf("%d%d", &l[i].x, &l[i].y);
+            scanf("%d%d", &l[i*2].x, &l[i*2+1].x);
+            l[i*2+1].x++;
+            l[i*2].m=1;
+            l[i*2+1].m=-1;
         }
-        sort(l,l+n,cmp);
-        memset(ans,0,sizeof(ans));
-        for(int i=0;i<n-1;++i)
+        sort(l,l+n*2,cmp);
+        ans=tmp=0;
+        for(int i=0; i<2*n; ++i)
         {
-            for(int j=i+1;j<n;++j)
-            {
-                if(l[j].x<=l[i].y)  ans[i]++;
-                else break;
-            }
+            tmp+=l[i].m;
+            ans=max(tmp,ans);
         }
-        sort(ans,ans+n);
-        printf("%d\n", ans[n-1]+1);
+        printf("%d\n", ans);
     }
 }
