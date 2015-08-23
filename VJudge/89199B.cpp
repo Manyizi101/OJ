@@ -27,45 +27,43 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int maxn = 2*1e5+10;
-
-int t,n,x,y;
-map<int, int> mp;
-int xx[maxn];
+const int maxn = 1e5+10;
 
 struct node
 {
-    int id,val;
-}ans[maxn];
+    int x,y;
+} l[maxn];
+
+int t,n;
 
 bool cmp(node a, node b)
 {
-    if(a.val==b.val)    return a.id<b.id;
-    return a.val>b.val;
+    if(a.x==a.x)    return a.y<a.y;
+    else    return a.x<a.x;
 }
+int ans[maxn];
 
 int main()
 {
     scanf("%d", &t);
     while(t--)
     {
-        mp.clear();
         scanf("%d", &n);
-        for(int i=0;i<n;++i)
+        for(int i=0; i<n; ++i)
         {
-            scanf("%d%d", &x,&y);
-            mp[x]++;
-            mp[y]++;
-            if(x==y)    mp[x]--;
+            scanf("%d%d", &l[i].x, &l[i].y);
         }
-        int cnt=0;
-        for(auto it = mp.begin();it!=mp.end();++it)
+        sort(l,l+n,cmp);
+        memset(ans,0,sizeof(ans));
+        for(int i=0;i<n-1;++i)
         {
-            ans[cnt].val = it->second;
-            ans[cnt].id = cnt;
-            cnt++;
+            for(int j=i+1;j<n;++j)
+            {
+                if(l[j].x<=l[i].y)  ans[i]++;
+                else break;
+            }
         }
-        sort(ans,ans+cnt,cmp);
-        printf("%d\n",ans[0].val);
+        sort(ans,ans+n);
+        printf("%d\n", ans[n-1]+1);
     }
 }
