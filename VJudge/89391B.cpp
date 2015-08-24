@@ -32,35 +32,42 @@ const int maxn = 10000000+10;
 
 
 int n;
-ll fac[maxn];
-ll ans[maxn];
+double ans=0;
+double g[maxn];
 
+ll qPow(ll a, ll b)
+{
+    if(b<0) return 0;
+    ll ret = 1;
+    a %= mod;
+    for(; b; b>>=1,a=(a*a)%mod)
+        if(b&1)
+            ret = (ret*a)%mod;
+    return ret;
+}
 
 void init()
 {
-    fac[0]=fac[1]=1;
-    for(int i=2;i<maxn;++i)
-    {
-        fac[i]=i*fac[i-1]%mod;
-    }
-}
+    for(int i=2; i<=maxn; ++i)
+        g[i]+=g[i-1]+log10(i);
 
-ll dp(int n)
-{
-    if(ans[n]>0)  return ans[n];
-    if(n==1)    return ans[1]=1;
-    else if(n==2)   return ans[2]=2;
-    else return ans[n]=(fac[n])%mod*(dp(n-1)%mod)%mod;
 }
 
 int main()
 {
-    memset(ans,0,sizeof(ans));
-    ans[1]=1;
-    ans[2]=2;
+    memset(g,0,sizeof(g));
+    g[1]=0;
     init();
     while(~scanf("%d", &n))
     {
-        cout<<dp(n)<<endl;
+        ans=0;
+        for(int i=1; i<=n; ++i)
+        {
+            ans+=g[i];
+        }
+        ll p = (ll)ans;
+        double e = ans-p;
+
+        printf("%I64d\n", (ll)(qPow(10,p)*pow(10,e)+eps+mod)%mod);
     }
 }
