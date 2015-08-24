@@ -27,7 +27,7 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const ll mod = 1000000007;
+const ll mod =  1000000007;
 const int maxn = 10000000+10;
 
 
@@ -43,7 +43,7 @@ ll qPow(ll a, ll b)
     for(; b; b>>=1,a=(a*a)%mod)
         if(b&1)
             ret = (ret*a)%mod;
-    return ret;
+    return ret%mod;
 }
 
 void init()
@@ -67,7 +67,6 @@ int main()
         }
         ll p = (ll)ans;
         double e = ans-p;
-
-        printf("%I64d\n", (ll)(qPow(10,p)*pow(10,e)+eps+mod)%mod);
+        printf("%I64d\n", (ll)(qPow(10,p)*pow(10,e)));
     }
 }
