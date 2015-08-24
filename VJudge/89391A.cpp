@@ -27,31 +27,16 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-int dp[105]= {0};
+int n;
 
-void init()
-{
-    for(int i=0; i<100; i++)
-        dp[i]=inf;
-    dp[0]=0;
-    for(int i=1; i<100; i++)
-    {
-        int a0=i%10;
-        int a1=i/10%10;
-        dp[i]=dp[i-a0];
-        dp[i]=min(dp[i],dp[i-a1]);
-        dp[i]++;
-    }
-}
-
-ll n,ans;
 int main()
 {
-    init();
-    while(~scanf("%lld", &n))
+    while(~scanf("%d", &n))
     {
-        ans=18*(n/100);
-        if(n%100!=0) ans+=dp[n%100];
-        printf("%lld\n", ans);
+        if(n-15>0)  printf("%d ", n-15);
+        if(n-7>0)   printf("%d ",n-7);
+        if(n-4>0)   printf("%d ", n-4);
+        if(n-2>0)   printf("%d ",n-2);
+        if(n-1>0)   printf("%d\n",n-1);
     }
 }

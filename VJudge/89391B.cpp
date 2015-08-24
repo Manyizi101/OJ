@@ -27,31 +27,40 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-int dp[105]= {0};
+const ll mod = 1000000007;
+const int maxn = 10000000+10;
+
+
+int n;
+ll fac[maxn];
+ll ans[maxn];
+
 
 void init()
 {
-    for(int i=0; i<100; i++)
-        dp[i]=inf;
-    dp[0]=0;
-    for(int i=1; i<100; i++)
+    fac[0]=fac[1]=1;
+    for(int i=2;i<maxn;++i)
     {
-        int a0=i%10;
-        int a1=i/10%10;
-        dp[i]=dp[i-a0];
-        dp[i]=min(dp[i],dp[i-a1]);
-        dp[i]++;
+        fac[i]=i*fac[i-1]%mod;
     }
 }
 
-ll n,ans;
+ll dp(int n)
+{
+    if(ans[n]>0)  return ans[n];
+    if(n==1)    return ans[1]=1;
+    else if(n==2)   return ans[2]=2;
+    else return ans[n]=(fac[n])%mod*(dp(n-1)%mod)%mod;
+}
+
 int main()
 {
+    memset(ans,0,sizeof(ans));
+    ans[1]=1;
+    ans[2]=2;
     init();
-    while(~scanf("%lld", &n))
+    while(~scanf("%d", &n))
     {
-        ans=18*(n/100);
-        if(n%100!=0) ans+=dp[n%100];
-        printf("%lld\n", ans);
+        cout<<dp(n)<<endl;
     }
 }
