@@ -50,13 +50,9 @@ int main()
             {
                 a[i/(n-1)][i%(n-1)]=brush[(i/n)%3];
             }
-            for(int i=n*(n/2); i<n*(n/2+1); ++i)
+            for(int i=n*(n/2); i<n*(n-1); ++i)
             {
-                a[i/(n-1)][i%(n-1)]=brush[(i/n)%3];
-            }
-            for(int i=n*(n/2+1); i<n*(n-1); ++i)
-            {
-                if(((i/(n-1))&1))
+                if(!((i/(n-1))&1))
                     a[i/(n-1)][i%(n-1)]=brush[(i/n)%3];
                 else
                     a[i/(n-1)][n-2-(i%(n-1))]=brush[(i/n)%3];
