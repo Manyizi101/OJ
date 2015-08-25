@@ -1,57 +1,37 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <ctime>
 #include <iostream>
+#include <cstdio>
+#include <cstring>
 #include <algorithm>
-#include <string>
 #include <vector>
-#include <deque>
-#include <list>
-#include <set>
+#include <cassert>
 #include <map>
-#include <stack>
-#include <queue>
-#include <numeric>
-#include <iomanip>
-#include <bitset>
-#include <sstream>
-#include <fstream>
-#define debug puts("-----")
-
-typedef long long int ll;
-const double pi = acos(-1.0);
-const double eps = 1e-8;
-const int inf = 0x3f3f3f3f;
-const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
-
-int dp[105]= {0};
-
-void init()
-{
-    for(int i=0; i<100; i++)
-        dp[i]=inf;
-    dp[0]=0;
-    for(int i=1; i<100; i++)
-    {
-        int a0=i%10;
-        int a1=i/10%10;
-        dp[i]=dp[i-a0];
-        dp[i]=min(dp[i],dp[i-a1]);
-        dp[i]++;
-    }
+typedef long long ll;
+const int N = 300005;
+map< pair<ll , ll> , pair<ll , ll> > f;
+pair<ll , ll> dfs(ll x , ll y) {
+    if (x == 0)
+        return make_pair(x || y , -y);
+    if (x < 10)
+        return make_pair(1ll , x - max(x , y));
+    if (f.count({x , y}))
+        return f[{x , y}];
+    ll ans = 0 , p = 1;
+    while (p <= x / 10)
+        p *= 10;
+    pair<ll , ll> r = dfs(x % p , max(y , x / p));
+    pair<ll , ll> b = dfs(x / p * p + r.second , y);
+    ans = r.first + b.first;
+    return f[{x , y}] = make_pair(ans , b.second);
 }
 
-ll n,ans;
-int main()
-{
-    init();
-    while(~scanf("%lld", &n))
-    {
-        ans=18*(n/100);
-        if(n%100!=0) ans+=dp[n%100];
-        printf("%lld\n", ans);
-    }
+void work() {
+    ll n;
+    cin >> n;
+    cout << dfs(n , 0).first << endl;
+}
+
+int main() {
+    work();
+    return 0;
 }
