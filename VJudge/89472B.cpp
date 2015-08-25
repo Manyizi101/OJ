@@ -45,20 +45,31 @@ int main()
             for(int i=0; i<n; ++i)
             {
                 a[i][n-1]='R';
+                a[i][n]='\0';
             }
-            for(int i=0; i<n*(n/2); ++i)
+            int cnt=0;
+            for(int i=0; i<n/2+1; ++i)
             {
-                a[i/(n-1)][i%(n-1)]=brush[(i/n)%3];
+                for(int j=0; j<n-1; ++j)
+                {
+                    a[i][j]=brush[(cnt/n)%3];
+                    cnt++;
+                }
             }
-            for(int i=n*(n/2); i<n*(n-1); ++i)
+            int k=1;
+            for(int i=n/2+1; i<n; ++i)
             {
-                if(!((i/(n-1))&1))
-                    a[i/(n-1)][i%(n-1)]=brush[(i/n)%3];
-                else
-                    a[i/(n-1)][n-2-(i%(n-1))]=brush[(i/n)%3];
+                k=!k;
+                for(int j=0; j<n-1; ++j)
+                {
+                    if(k)
+                        a[i][j]=brush[(cnt/n)%3];
+                    else
+                        a[i][n-2-j]=brush[(cnt/n)%3];
+                    cnt++;
+                }
             }
-            swap(a[2][0],a[0][n-2]);
-            //for(int i=0; i<n; ++i)    puts(a[i]);
+            swap(a[0][n-2],a[2][0]);
             for(int i=0; i<n; ++i)
             {
                 for(int j=0; j<n; ++j)    cout<<a[i][j];
