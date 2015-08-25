@@ -11,7 +11,7 @@ struct Tree
     int l;
     int r;
     int sum;
-}tree[N * 4];
+}tree[N * 4 *2];
 
 void build(int root,int l,int r)///root为节点 此处为根节点 1 l，r为线段的左端点和右端点
 {
@@ -54,32 +54,53 @@ int query(int root,int L,int R)///求和逐层递归就好
 }
 int main()
 {
-    int ca,cas = 1,n,Q,a,b;
+    int ca,n,a,b,m;
+    int sum=0,flag;
     char str[10];
+    char tmp[N];
     scanf("%d",&ca);
     while(ca--)
     {
-        scanf("%d",&n);
-        for(int i = 1;i <= n;i ++)
-            scanf("%d",&num[i]);
-        build(1,1,N);
-        printf("Case %d:\n",cas++);
-        while(scanf("%s",str),strcmp(str,"End"))
+        sum=0;
+        scanf("%s",tmp);
+        int n = strlen(tmp);
+        for(int i = 1;i <= n;i++)
         {
+            num[i]=tmp[i-1]-'0';
+            if(i&1) sum+=num[i];
+            else sum-=num[i];
+        }
+        for(int i=n+1;i<=2*n;i++)
+        {
+            num[i]=num[i-n];
+        }
+        sum*=2;
+        build(1,1,2*N);
+        scanf("%d",&m);
+        while(m--)
+        {
+            scanf("%s",str);
             scanf("%d%d",&a,&b);
-            if(strcmp(str,"Query") == 0)
+            if(strcmp(str,"2") == 0)
             {
                 if(a > b) swap(a , b);
-                printf("%d\n",query(1,a,b));
+                int len = b-a;
+                int x = len/(2*n);
+                b = b - x*2*n;
+                int k = a/n;
+                a -= k*n;
+                b -= k*n;
+                if(b<a) b+=n;
+                int ans =query(1,a,b);
+                if(((a+k*n)&1)!=(a&1))  ans=-ans;
+                ans+=x*sum;
+                printf("%d\n",ans);
             }
-            else if(strcmp(str,"Add") == 0)
+            else if(strcmp(str,"1") == 0)
             {
-                num[a] = num[a] + b;
-                update(1,a,num[a]);
-            }
-            else if(strcmp(str,"Sub") == 0)
-            {
-                num[a] = num[a] - b;
+                if(a&1) sum=sum-num[a]+b;
+                else sum=sum+num[a]-b;
+                num[a] = b;
                 update(1,a,num[a]);
             }
         }
