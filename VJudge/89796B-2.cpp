@@ -28,8 +28,8 @@ const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
 /*=========================================
-    çŸ©é˜µè¿ç®—
-    å¤æ‚åº¦ï¼šO(N^3)
+    ¾ØÕóÔËËã
+    ¸´ÔÓ¶È£ºO(N^3)
 =========================================*/
 const int maxn = 10;
 const int maxm = 10;
@@ -89,7 +89,7 @@ int main ()
         ans.n=ans.m=3;
         for(int i=0; i<3; ++i)
         {
-            ans.a[i][i]=1;
+            ans.a[i][i]=1.0;
         }
         for(int i=0; i<n; ++i)
         {
@@ -98,15 +98,15 @@ int main ()
             x[i].clear();
             x[i].n=x[i].m=3;
             x[i].a[0][0]=x[i].a[1][1]=cos(tp);
-            x[i].a[0][1]=sin(tp);
-            x[i].a[1][0]=-sin(tp);
+            x[i].a[0][1]=-sin(tp);
+            x[i].a[1][0]=sin(tp);
             x[i].a[0][2]=tx;
             x[i].a[1][2]=ty;
             x[i].a[2][2]=1;
         }
         for(int i=0; i<n; ++i)
         {
-            ans = ans*x[i];
+            ans = x[i]*ans;
         }
         printf("%lf %lf %lf", ans.a[0][2],ans.a[1][2],acos(ans.a[0][0]));
     }
