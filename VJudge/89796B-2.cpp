@@ -1,114 +1,108 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <ctime>
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <deque>
-#include <list>
-#include <set>
-#include <map>
-#include <stack>
-#include <queue>
-#include <numeric>
-#include <iomanip>
-#include <bitset>
-#include <sstream>
-#include <fstream>
-#define debug puts("-----")
-
-typedef long long int ll;
-const double pi = acos(-1.0);
-const double eps = 1e-8;
-const int inf = 0x3f3f3f3f;
-const ll INF = 0x3f3f3f3f3f3f3f3fLL;
+#include<cstdio>
+#include<cmath>
 using namespace std;
 
-/*=========================================
-    ��������
-    ���Ӷȣ�O(N^3)
-=========================================*/
-const int maxn = 10;
-const int maxm = 10;
-struct Matrix
-{
-    int n, m;
-    double a[maxn][maxm];
-    void clear()
-    {
-        n = m = 0;
-        memset(a, 0, sizeof(a));
-    }
-    Matrix operator + (const Matrix &b) const
-    {
-        Matrix tmp;
-        tmp.n = n;
-        tmp.m = m;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++)
-                tmp.a[i][j] = a[i][j] + b.a[i][j];
-        return tmp;
-    }
-    Matrix operator - (const Matrix &b) const
-    {
-        Matrix tmp;
-        tmp.n = n;
-        tmp.m = m;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++)
-                tmp.a[i][j] = a[i][j] - b.a[i][j];
-        return tmp;
-    }
-    Matrix operator * (const Matrix &b) const
-    {
-        Matrix tmp;
-        tmp.clear();
-        tmp.n = n;
-        tmp.m = b.m;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < b.m; j++)
-                for (int k = 0; k < m; k++)
-                    tmp.a[i][j] += a[i][k] * b.a[k][j];
-        return tmp;
-    }
+#define PI acos(-1.0)
+
+struct Point {
+    double x, y;
+    Point(double x = 0, double y = 0) : x(x), y(y) {}
 };
 
-Matrix x[12],ans;
-int t,n;
+int n;
+Point p[15];  //旋转点
+double rad[15]; //旋转角度
 
-int main ()
+typedef Point Vector;
+
+Vector operator + (Vector A, Vector B) { return Vector(A.x + B.x, A.y + B.y); }
+Vector operator - (Point A, Point B) { return Vector(A.x - B.x, A.y - B.y); }
+Vector operator * (Vector A, double p) { return Vector(A.x * p, A.y * p); }
+Vector operator / (Vector A, double p) { return Vector(A.x / p, A.y / p); }
+
+bool operator < (const Point& a, const Point& b) {
+    return a.x < b.x || (a.x == b.x && a.y < b.y);
+}
+
+const double eps = 1e-10;
+int dcmp(double x) {
+    if(fabs(x) < eps) return 0;
+    else return x < 0 ? -1 : 1;
+}
+
+bool operator == (const Point& a, const Point& b) {
+    return dcmp(a.x - b.x) == 0 && dcmp(a.y - b.y) == 0;
+}
+
+double Dot(Vector A, Vector B) { return A.x * B.x + A.y * B.y; }  //点积
+double Length(Vector A) { return sqrt(Dot(A, A)); } //求向量的模
+double Angle(Vector A, Vector B) { return acos(Dot(A, B) / Length(A) / Length(B)); } //求两个向量的夹角
+double Cross(Vector A, Vector B) { return A.x * B.y - A.y * B.x; } //叉乘
+
+Vector Rotate(Vector A, double rad) {  //向量旋转
+    return Vector(A.x * cos(rad) - A.y * sin(rad), A.x * sin(rad) + A.y * cos(rad));
+}
+
+Vector Normal(Vector A) {  //求A向量的法向量
+    double L = Length(A);
+    return Vector(-A.y / L, A.x / L);
+}
+
+Point GetLineIntersection(Point P, Vector v, Point Q, Vector w) {  //求直线交点
+    Vector u = P - Q;
+    double t = Cross(w, u) / Cross(v, w);
+    return P + v * t;
+}
+
+Vector Rotate_Point(Vector A) {
+    for(int i = 0; i < n; i++) {
+        A = p[i] + Rotate(A - p[i], rad[i]);  //转化为向量旋转
+    }
+    return A;
+}
+
+Vector Get_Mid_Point(Point A, Point B) {  //求中点
+    return Vector((A.x + B.x) / 2, (A.y + B.y) / 2);
+}
+
+void Get_Ans() {
+    Point f1[2], f2[2], mid[2], vec[2];
+    f1[0].x = -1;
+    f1[0].y = -1;
+    f1[1].x = -10;
+    f1[1].y = -50;
+    for(int i = 0; i < 2; i++) {
+        f2[i] = Rotate_Point(f1[i]);
+        mid[i] = Get_Mid_Point(f1[i], f2[i]);
+        vec[i] = Normal(f1[i] - f2[i]);
+    }
+
+    Point ans = GetLineIntersection(mid[0], vec[0], mid[1], vec[1]);
+    double ansp = Angle(f1[0] - ans, f2[0] - ans);
+
+    if(Cross(f1[0] - ans, f2[0] - ans) < 0)
+        ansp = 2 * PI - ansp;
+    if(dcmp(ans.x) == 0) ans.x = 0;
+    if(dcmp(ans.y) == 0) ans.y = 0;
+
+    printf("%.10lf %.10lf %.10lf\n", ans.x, ans.y, ansp);
+}
+
+int main()
 {
-    scanf("%d", &t);
-    while(t--)
-    {
+    int T;
+    scanf("%d", &T);
+    while(T--) {
         scanf("%d", &n);
-        ans.clear();
-        ans.n=ans.m=3;
-        for(int i=0; i<3; ++i)
-        {
-            ans.a[i][i]=1.0;
+        for(int i = 0; i < n; i++) {
+            scanf("%lf%lf%lf", &p[i].x, &p[i].y, &rad[i]);
+            if(dcmp(rad[i] - 2 * PI) == 0 || dcmp(rad[i]) == 0) {
+                rad[i] = 0;
+                n--;
+                i--;
+            }
         }
-        for(int i=0; i<n; ++i)
-        {
-            double tx,ty,tp;
-            scanf("%lf%lf%lf",&tx,&ty,&tp);
-            x[i].clear();
-            x[i].n=x[i].m=3;
-            x[i].a[0][0]=x[i].a[1][1]=cos(tp);
-            x[i].a[0][1]=-sin(tp);
-            x[i].a[1][0]=sin(tp);
-            x[i].a[0][2]=tx;
-            x[i].a[1][2]=ty;
-            x[i].a[2][2]=1;
-        }
-        for(int i=0; i<n; ++i)
-        {
-            ans = x[i]*ans;
-        }
-        printf("%lf %lf %lf", ans.a[0][2],ans.a[1][2],acos(ans.a[0][0]));
+        Get_Ans();
     }
     return 0;
 }
