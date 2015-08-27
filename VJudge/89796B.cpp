@@ -187,6 +187,7 @@ int main ()
         cal[1][1]=b.y-1;
         cal[1][2]=0.5*(b.x*b.x+b.y*b.y-2);
         solve(cal,l,ans,2);
+        while(sum>=2*acos(-1.0))   sum-=2*acos(-1.0);
         printf("%.8f %.8f %.8f\n",ans[0],ans[1], sum);
     }
     return 0;
