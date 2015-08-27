@@ -33,30 +33,36 @@ const int mod = 1e9+7;
 int t,n;
 ll a[maxn];
 
-ll qPow(ll a, ll b)
+ll gao(int nn)
 {
-    if(b<0) return 0;
-    if(b==0)    return 1;
-    ll ret = 1;
-    a %= mod;
-    for(; b; b>>=1,a=(a*a)%mod)
-        if(b&1)
-            ret = (ret*a)%mod;
-    return ret;
+    ll dp[maxn];
+    memset(dp,0,sizeof(dp));
+    dp[0]=1;
+    for(int i=0;i<n;++i)
+    {
+        for(int j=nn;j>=0;--j)
+        {
+            for(int k=1;k<=a[i]&&k<=j;++k)
+            {
+                dp[j]=(dp[j]+dp[j-k])%mod;
+            }
+        }
+    }
+    return dp[nn];
 }
 
 int main()
 {
-scanf("%d", &t);
-while(t--)
-{
-    ll Min = inf;
-    scanf("%d",&n);
-    for(int i=0;i<n;++i)
+    scanf("%d", &t);
+    while(t--)
     {
-        scanf("%I64d", &a[i]);
-        Min = min(a[i],Min);
+        ll sum=0;
+        scanf("%d", &n);
+        for(int i=0;i<n;++i)
+        {
+            scanf("%I64d", &a[i]);
+            sum += a[i];
+        }
+        printf("%I64d\n", gao(sum/2));
     }
-    printf("%I64d\n", qPow(Min+1,n-1));
-}
 }
