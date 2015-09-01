@@ -106,11 +106,11 @@ int main()
     while(~scanf("%lf%lf%lf%lf%lf%lf", &aa, &bb,&cc,&dd,&ee,&ff))
     {
         double a,b,c,d;
+        dd/=2,ee/=2,ff/=2;
         a = 1.0;
-        b = -(aa*aa+bb*bb+cc*cc);
-        c = (dd*dd+ee*ee+ff*ff)/4.0+aa*bb+bb*cc+aa*cc;
-        d = -(aa*bb*cc+dd*ee*ff/4.0+aa*dd*dd/4.0+cc*ff*ff/4.0+bb*ee*ee/4.0);
+        b = -(aa+bb+cc);
+        c = aa*bb+bb*cc+cc*aa-dd*dd-ee*ee-ff*ff;
+        d = -(aa*bb*cc+2*dd*ee*ff-aa*ee*ee-bb*ff*ff-cc*dd*dd);
         double ans = cal(a,b,c,d);
-        cout<<(aa-ff/2+ee/2)<<endl;
     }
 }
