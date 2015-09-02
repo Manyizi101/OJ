@@ -7,6 +7,8 @@ int main(int argc, char const *argv[])
 {
     //freopen( "1.in","r",stdin );
     //freopen( "3.out","w",stdout );
+    int a;
+    scanf("%d", &a);
     srand( time( NULL ) );
     int t, n = 10 ;
     while ( n-- )
