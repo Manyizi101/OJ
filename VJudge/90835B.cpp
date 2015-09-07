@@ -55,7 +55,7 @@ int main()
         }
         while(1)
         {
-            for(int i=Mx; i>=1; --i)
+            for(int i=Mx; i>1; --i)
             {
                 if(n%fib[i]==0)
                 {
