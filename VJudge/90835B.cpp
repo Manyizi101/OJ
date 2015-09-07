@@ -33,7 +33,7 @@ ll n,fib[50];
 void init()
 {
     fib[1]=1;
-    fib[2]=2;
+    fib[2]=1;
     for(int i=3; i<=45; ++i)
     {
         fib[i]=fib[i-1]+fib[i-2];
@@ -47,13 +47,13 @@ int main()
     while(t--)
     {
         scanf("%I64d", &n);
-        int Mx = 43;
+        int Mx = 45;
         if(n==0)
         {
             printf("Yes\n");
             continue;
         }
-        while(n!=1)
+        while(1)
         {
             for(int i=Mx; i>=1; --i)
             {
