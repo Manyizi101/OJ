@@ -42,6 +42,8 @@ void init()
 
 int main()
 {
+    //freopen("90835A.in", "r", stdin);
+    //freopen("90835A.out", "w", stdout);
     init();
     scanf("%d", &t);
     while(t--)
@@ -61,6 +63,7 @@ int main()
                 {
                     n/=fib[i];
                     Mx = i;
+                    cout<<n<<endl;
                     break;
                 }
             }
