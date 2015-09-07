@@ -69,4 +69,5 @@ int main()
         if(n==1)    printf("Yes\n");
         else printf("No\n");
     }
+    return 0;
 }
