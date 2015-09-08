@@ -48,7 +48,7 @@ int main()
         cur=pre=ans=0;
         while(cur<m)
         {
-            int rnk = lower_bound(a,a+n,max(cur,pre+l)+l)-a;
+            int rnk = lower_bound(a,a+n,cur+l)-a;
             if(a[rnk]==cur+l)
             {
                 pre = cur;
