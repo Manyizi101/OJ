@@ -57,7 +57,8 @@ int main()
         for(int i=0; i<n; ++i)
         {
             scanf("%d", &t);
-            a[10000-(100-t)*(100-t)].num++;
+            int x = 10000-(100-t)*(100-t);
+            a[x].num++;
         }
         sort(a+1,a+10001,cmp);
         if(n==1)    printf("Bad Mushroom\n");
@@ -71,7 +72,7 @@ int main()
                     ans[cnt++]=a[i].id;
                 }
             }
-            for(int i=0;i<cnt;++i)
+            for(int i=0; i<cnt; ++i)
             {
                 printf("%d ",ans[i]);
             }
