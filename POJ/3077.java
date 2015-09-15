@@ -4,16 +4,16 @@ import java.util.*;
 public class Main {
 
     public static void main(String args[]) {
-        int n, s, i;
+        int n;
+        BigInteger s;
         Scanner cin = new Scanner( System.in );
         n = cin.nextInt();
         while ( n-- != 0 ) {
-            s = cin.nextInt();
-            for ( i = 10; i <= 100000000; i *= 10 )
-                if ( s >= i ) {
-                    s = (s + i / 2) / i * i;
-                }
-            System.out.println( s );
+            s = cin.nextBigInteger();
+            BigInteger eight = BigInteger.valueof(8);
+            BigInteger seven = BigInteger.valueof(7);
+            BigInteger one = BigInteger.valueof(1);
+            System.out.println( s.multiply(s).multiply(eight).subtract(seven.multiply(s)).add(one) );
         }
         return;
     }
