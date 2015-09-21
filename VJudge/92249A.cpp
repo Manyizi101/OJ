@@ -27,30 +27,24 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int maxn = 1000+10;
+const int maxn = 100+10;
 
 int n,B;
-char a[maxn][1010];
-int b[maxn];
+char a[maxn][210];
+int b[210];
 
 int main()
 {
     while(~scanf("%d%d", &n,&B))
     {
+        memset(a,0,sizeof(a));
         int len=0;
         for(int i=0; i<n; ++i)
         {
             scanf("%s", a[i]);
-            char tmp[1010];
             int tlen = strlen(a[i]);
-            for(int j=tlen-1; j>=0; --j)
-            {
-                tmp[tlen-j-1]=a[i][j];
-            }
-            for(int j=0; j<tlen; ++j)
-            {
-                a[i][j]=tmp[j];
-            }
+            for(int j=0; j<=(tlen-1)/2; ++j)
+                swap(a[i][j],a[i][tlen-j-1]);
             len=max(len,(int)strlen(a[i]));
         }
         memset(b,0,sizeof(b));
@@ -59,7 +53,7 @@ int main()
             b[i]=0;
             for(int j=0; j<n; ++j)
             {
-                //if(i>=(int)strlen(a[j]))  continue;
+                if(i>=(int)strlen(a[j]))  continue;
                 if(a[j][i]>='0'&&a[j][i]<='9')
                 {
                     b[i]+=a[j][i]-'0';
@@ -69,15 +63,22 @@ int main()
                     b[i]+=a[j][i]-'a'+10;
                 }
             }
+            b[i]%=B;
         }
-        int flag=0;
+        int flag=len-1;
         for(flag=len-1; flag>=0; --flag)
         {
-            if(b[flag]%B!=0)   break;
+            if(b[flag]!=0)   break;
         }
         if(b[flag]==0) printf("0");
         else
-            for(; flag>=0; --flag)    printf("%d", b[flag]%B);
+            for(; flag>=0; --flag)
+            {
+                if(b[flag]<=9&&b[flag]>=0)
+                    printf("%d", b[flag]);
+                else
+                    printf("%c",b[flag]-10+'a');
+            }
         printf("\n");
     }
 
