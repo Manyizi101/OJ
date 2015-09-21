@@ -59,7 +59,7 @@ int main()
             b[i]=0;
             for(int j=0; j<n; ++j)
             {
-                if(i>=(int)strlen(a[j]))  continue;
+                //if(i>=(int)strlen(a[j]))  continue;
                 if(a[j][i]>='0'&&a[j][i]<='9')
                 {
                     b[i]+=a[j][i]-'0';
