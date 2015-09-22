@@ -38,12 +38,27 @@ double cal(int a, int b, int c)
     return sqrt(p*(p-a)*(p-b)*(p-c));
 }
 
+bool cmp(int a,int b)
+{
+    return a>b;
+}
+
 int main()
 {
-while(~scanf("%d", &n))
-{
-    for(int i=0;i<n;++i)    scanf("%d", &a[i]);
-    sort(a,a+n);
-    cout<<cal(3,3,4)<<endl<<cal(3,4,4)<<endl;;
-}
+    while(~scanf("%d", &n) && n)
+    {
+        double sum=0;
+        for(int i=0; i<n; ++i)    scanf("%d", &a[i]);
+        sort(a,a+n,cmp);
+        for(int i=0; i<n-2; ++i)
+        {
+            if(a[i]>=a[i+1]+a[i+2]) continue;
+            else
+            {
+                sum+=cal(a[i],a[i+1],a[i+2]);
+                i+=2;
+            }
+        }
+        printf("%.2f\n", sum);
+    }
 }
