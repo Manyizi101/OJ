@@ -1,61 +1,86 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <ctime>
 #include <iostream>
+#include <sstream>
+#include <ios>
+#include <iomanip>
+#include <functional>
 #include <algorithm>
-#include <string>
 #include <vector>
-#include <deque>
+#include <string>
 #include <list>
+#include <queue>
+#include <deque>
+#include <stack>
 #include <set>
 #include <map>
-#include <stack>
-#include <queue>
-#include <numeric>
-#include <iomanip>
-#include <bitset>
-#include <sstream>
-#include <fstream>
-#define debug puts("-----")
-
-typedef long long int ll;
-const double pi = acos(-1.0);
-const double eps = 1e-8;
-const int inf = 0x3f3f3f3f;
-const ll INF = 0x3f3f3f3f3f3f3f3fLL;
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <climits>
+#include <cctype>
 using namespace std;
-
-const int maxn = 10010;
-
-int n,m;
-int a[maxn][maxn];
-
+#define XINF INT_MAX
+#define INF 0x3FFFFFFF
+#define MP(X,Y) make_pair(X,Y)
+#define PB(X) push_back(X)
+#define REP(X,N) for(int X=0;X<N;X++)
+#define REP2(X,L,R) for(int X=L;X<=R;X++)
+#define DEP(X,R,L) for(int X=R;X>=L;X--)
+#define CLR(A,X) memset(A,X,sizeof(A))
+#define IT iterator
+typedef long long ll;
+typedef pair<int,int> PII;
+typedef vector<PII> VII;
+typedef vector<int> VI;
+const int maxn=100010;
+ll dp[maxn];
+ll num[maxn];
+const int mod=1000000007;
+ll inv(int x)
+{
+    int n=mod-2;
+    ll temp=x;
+    ll ret=1;
+    while(n)
+    {
+        if(n&1)ret=ret*temp%mod;
+        temp=temp*temp%mod;
+        n>>=1;
+    }
+    return ret;
+}
 int main()
 {
-    fread(&n,sizeof(n),1,stdin);
-    fread(&m,sizeof(m),1,stdin);
-    for(int i=0; i<n; ++i)
-        for(int j=0; j<m; ++j)
-            fread(&a[i][j],sizeof(a[i][j]),1,stdin);
-    int x,y;
-    while(fread(&x,sizeof(x),1,stdin)!=0)
+    ios::sync_with_stdio(false);
+    ll inv_2,inv_3;
+    inv_2=inv(2);
+    inv_3=inv(3);
+    dp[0]=num[0]=1;
+    dp[1]=num[1]=1;
+    for(int i=2;i<maxn;i++)
     {
-        fread(&y,sizeof(y),1,stdin);
-        int ans=0;
-        int l=0,r=m-1;
-        for(int i=n-1; i>=0; --i)
+        dp[i]=(num[i-1]*dp[i-2]%mod+(num[i-1]+1)*num[i-1]%mod*inv_2%mod)%mod;
+        dp[i-1]+=dp[i-2];
+        dp[i-1]%=mod;
+        num[i]=dp[i];
+    }
+    int n;
+    while(cin>>n&&n)
+    {
+        ll ans;
+        if(n==1)ans=1;
+        else if(n==2)ans=1;
+        else if(n&1)
         {
-            while(a[i][l]<x&&l<m)   l++;
-            ans-=l;
+            ans=num[n/2]*(num[n/2]+1)%mod*inv_2%mod*dp[n/2-1]%mod;
+            ans+=num[n/2]*(num[n/2]+1)%mod*(num[n/2]+2)%mod*inv_2%mod*inv_3%mod;
+            ans%=mod;
         }
-        for(int i=0; i<n; ++i)
+        else
         {
-            while(a[i][r]>y&&r>=0)  r--;
-            ans+=r+1;
+            ans=(num[n/2]*(num[n/2]+1))%mod*inv_2%mod;
         }
-        printf("%d\n",ans);
+        cout<<ans<<endl;
     }
     return 0;
 }
