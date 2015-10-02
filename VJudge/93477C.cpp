@@ -27,14 +27,32 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+const int maxn = 30;
+
+int t;
+ll ans[maxn],cnt;
+int l1,r1,l2,r2;
+int cs=0;
+
 int main()
 {
-    for(int i=1;i<=10;++i)
+    scanf("%d", &t);
+    while(t--)
     {
-        for(int j=1;j<=10;++j)
+        cnt=0;
+        scanf("%d%d%d%d", &l1,&r1,&l2,&r2);
+        for(int i=max(r1-7,l1); i<=r1; ++i)
         {
-            cout<<(i^j)<<" ";
+            ans[cnt]=inf;
+            for(int j=l2; j<=min(l2+7,r2); ++j)
+            {
+                ll tmp=(i^j);
+                ans[cnt]=min(tmp,ans[cnt]);
+            }
+            cnt++;
         }
-        cout<<endl;
+        sort(ans,ans+cnt);
+        printf("Case #%d: ", ++cs);
+        printf("%I64d\n", ans[cnt-1]);
     }
 }
