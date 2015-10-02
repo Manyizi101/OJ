@@ -27,14 +27,50 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+
+const int maxn = 100005;
+
+int t,n;
+int tmp,gao[maxn];
+
+void pdec(int n)
+{
+    gao[n]++;
+    gao[1]++;
+    for (int i = 2; i*i <= n; i++)
+    {
+        if(n%i==0)
+        {
+            gao[n/i]++;
+            gao[i]++;
+        }
+    }
+}
+
+int cs=0;
+
 int main()
 {
-    for(int i=1;i<=10;++i)
+    scanf("%d", &t);
+    while(t--)
     {
-        for(int j=1;j<=10;++j)
+        int Max = 0;
+        memset(gao,0,sizeof(gao));
+        scanf("%d", &n);
+        for(int i=0; i<n; ++i)
         {
-            cout<<(i^j)<<" ";
+            scanf("%d", &tmp);
+            Max =max(tmp,Max);
+            pdec(tmp);
         }
-        cout<<endl;
+        printf("Case #%d: ", ++cs);
+        for(int i=Max; i>=1; --i)
+        {
+            if(gao[i]>=2)
+            {
+                printf("%d\n", i);
+                break;
+            }
+        }
     }
 }
