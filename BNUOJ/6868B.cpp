@@ -38,7 +38,7 @@ char intTochar(int x)
 int main(int argc, char const *argv[])
 {
 
-    while(~scanf("%d",&n))
+    while(~scanf("%d",&n))s
     {
         printf("2 %d %d\n",n,n);
         for(i=1; i<=n; i++)
