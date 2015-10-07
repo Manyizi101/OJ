@@ -30,18 +30,21 @@ using namespace std;
 const int maxn = 1e5+10;
 
 int t,n;
-bitset<maxn> a;
+bitset<maxn> a,b;
 int x,y;
+int Max=0;
 
 int main()
 {
     scanf("%d", &t);
     while(t--) {
         a.reset();
+        Max = 0;
         scanf("%d", &n);
         for(int i=0; i<n; ++i) {
             scanf("%d%d", &x,&y);
             a[x]=(y&1);
+            Max = max(Max, x);
         }
         cout<<a.to_ulong()-2*(a>>1).to_ulong()<<endl;
     }
