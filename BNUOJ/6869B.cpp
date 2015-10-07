@@ -32,9 +32,9 @@ int main()
     scanf("%d",&T);
     while(T--) {
         memset(dp,0,sizeof(dp));
-        unsigned long long  ans = 0;
+        long long  ans = 0;
         scanf("%d",&n);
-        double tot = n*(n+1)/2;
+        long long tot = 1LL*n*(n+1)/2;
         for(int i = 0; i < n ; i++) scanf("%d",&a[i]);
         printf("Case #%d: ",cs++);
         for(int i = 0 ; i<n; i++) {
