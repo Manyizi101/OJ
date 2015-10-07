@@ -29,7 +29,7 @@
 #define mp make_pair
 #define pb push_back
 using namespace std;
-const double eps = 1e-3;
+const double eps = 1e-10;
 const double pi = acos(-1.0);
 const double inf = 1e20;
 const int maxp = 1e6+10;
@@ -1531,44 +1531,41 @@ int main()
     input();
     for(int i=0; i<nxian; ++i) {
         for(int j=0; j<nxian; ++j) {
-            if(i!=j)
-                if(!zhi[i].parallel(zhi[j])) {
-                    point tmp = zhi[i].crosspoint(zhi[j]);
-                    if(zhi[i].id==1&&zhi[j].id==1)  ans.insert(tmp);
-                    else if(zhi[i].id==2&&zhi[j].id==1&&zhi[i].pointonray(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==3&&zhi[j].id==1&&zhi[i].pointonseg(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==2&&zhi[j].id==2&&zhi[i].pointonray(tmp)&&zhi[j].pointonray(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==3&&zhi[j].id==2&&zhi[i].pointonseg(tmp)&&zhi[j].pointonray(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==3&&zhi[j].id==3&&zhi[i].pointonseg(tmp)&&zhi[j].pointonseg(tmp)) ans.insert(tmp);
-                } else {
-                    if(zhi[i].id==2&&zhi[j].id==2) {
-                        if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b) ans.insert(zhi[i].a);
-                    } else if(zhi[i].id==3&&zhi[j].id==2) {
-                        if(zhi[i].a==zhi[j].a) {
-                            if((zhi[i].b-zhi[i].a)*(zhi[j].b-zhi[i].a)<=0)  ans.insert(zhi[i].a);
-                        }
-                        if(zhi[i].b==zhi[j].a) {
-                            if((zhi[i].a-zhi[i].b)*(zhi[j].b-zhi[i].b)<=0)  ans.insert(zhi[i].b);
-                        }
-                    } else if(zhi[i].id==3&&zhi[j].id==3) {
-                        if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b&&(zhi[i].b-zhi[i].a)*(zhi[j].b-zhi[i].a)<=0) ans.insert(zhi[i].a);
-                        else if(zhi[i].b==zhi[j].b&&zhi[i].a!=zhi[j].a&&(zhi[i].a-zhi[i].b)*(zhi[j].a-zhi[i].b)<=0) ans.insert(zhi[i].b);
-                        else if(zhi[i].a==zhi[j].b&&zhi[i].b!=zhi[j].a&&(zhi[i].b-zhi[i].a)*(zhi[j].a-zhi[i].a)<=0) ans.insert(zhi[i].a);
-                        else if(zhi[i].b==zhi[j].a&&zhi[i].a!=zhi[j].b&&(zhi[i].a-zhi[i].b)*(zhi[j].b-zhi[i].b)<=0) ans.insert(zhi[i].b);
+            if(!zhi[i].parallel(zhi[j])) {
+                point tmp = zhi[i].crosspoint(zhi[j]);
+                if(zhi[i].id==1&&zhi[j].id==1)  ans.insert(tmp);
+                else if(zhi[i].id==2&&zhi[j].id==1&&zhi[i].pointonray(tmp)) ans.insert(tmp);
+                else if(zhi[i].id==3&&zhi[j].id==1&&zhi[i].pointonseg(tmp)) ans.insert(tmp);
+                else if(zhi[i].id==2&&zhi[j].id==2&&zhi[i].pointonray(tmp)&&zhi[j].pointonray(tmp)) ans.insert(tmp);
+                else if(zhi[i].id==3&&zhi[j].id==2&&zhi[i].pointonseg(tmp)&&zhi[j].pointonray(tmp)) ans.insert(tmp);
+                else if(zhi[i].id==3&&zhi[j].id==3&&zhi[i].pointonseg(tmp)&&zhi[j].pointonseg(tmp)) ans.insert(tmp);
+            } else {
+                if(zhi[i].id==2&&zhi[j].id==2) {
+                    if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b) ans.insert(zhi[i].a);
+                } else if(zhi[i].id==3&&zhi[j].id==2) {
+                    if(zhi[i].a==zhi[j].a) {
+                        if((zhi[i].b-zhi[i].a)*(zhi[j].b-zhi[i].a)<=0)  ans.insert(zhi[i].a);
                     }
+                    if(zhi[i].b==zhi[j].a) {
+                        if((zhi[i].a-zhi[i].b)*(zhi[j].b-zhi[i].b)<=0)  ans.insert(zhi[i].b);
+                    }
+                } else if(zhi[i].id==3&&zhi[j].id==3) {
+                    if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b) ans.insert(zhi[i].a);
+                    if(zhi[i].b==zhi[j].b&&zhi[i].a!=zhi[j].a) ans.insert(zhi[i].b);
+                    if(zhi[i].a==zhi[j].b&&zhi[i].b!=zhi[j].a) ans.insert(zhi[i].a);
+                    if(zhi[i].b==zhi[j].a&&zhi[i].a!=zhi[j].b) ans.insert(zhi[i].b);
                 }
+            }
         }
     }
-    for(int i=0; i<nc; ++i) {
-        for(int j=0; j<nxian; ++j) {
+    for(int i=0; i<nxian; ++i) {
+        for(int j=0; j<nc; ++j) {
             if(c[i].relationline(zhi[j])!=0) {
                 point tmp1,tmp2;
                 int flag=c[i].pointcrossline(zhi[j],tmp1,tmp2);
                 if(zhi[j].id==1&&flag==1)   ans.insert(tmp1);
-                else if(zhi[j].id==1&&flag==2) {
-                    ans.insert(tmp1);
-                    ans.insert(tmp2);
-                } else if(zhi[j].id==2&&flag==1) {
+                else if(zhi[j].id==1&&flag==2)  ans.insert(tmp1),ans.insert(tmp2);
+                else if(zhi[j].id==2&&flag==1) {
                     if(zhi[j].pointonray(tmp1)) ans.insert(tmp1);
                 } else if(zhi[j].id==2&&flag==2) {
                     if(zhi[j].pointonray(tmp1)) ans.insert(tmp1);
@@ -1582,25 +1579,7 @@ int main()
             }
         }
     }
-    for(int i=0; i<nc; ++i) {
-        for(int j=0; j<nc; ++j) {
-            if(i!=j) {
-                int flag =c[i].relationcircle(c[j]);
-                if(flag>=2&&flag<=4) {
-                    point tmp1, tmp2;
-                    int cnt = c[i].pointcrosscircle(c[j],tmp1, tmp2);
-                    if(cnt==2) ans.insert(tmp1),ans.insert(tmp2);
-                    else ans.insert(tmp1);
-                }
-            }
-        }
-    }
-    cout<<ans.size()<<endl;
-    /*
-    for(auto it = ans.begin(); it!=ans.end(); ++it) {
-        cout<<(*it).x<<" "<<(*it).y<<endl;
-    }
-    */
+    printf("%d\n", (int)ans.size());
     return 0;
 }
 
