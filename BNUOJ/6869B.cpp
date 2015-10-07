@@ -23,24 +23,24 @@ using namespace std;
 typedef long long LL;
 const double INF = 1e40;
 const double eps  =1e-8;
-const int N = 501050;
-LL dp[4][50][30];
-LL a[N];
+const int N = 50105;
+int dp[2][50][3];
+int a[N];
 int main()
 {
     int T,n,cs = 1;
     scanf("%d",&T);
     while(T--) {
         memset(dp,0,sizeof(dp));
-        LL ans = 0;
+        unsigned long long  ans = 0;
         scanf("%d",&n);
-        LL tot = n*(n+1)/2;
-        for(int i = 0; i < n ; i++) scanf("%lld",&a[i]);
+        double tot = n*(n+1)/2;
+        for(int i = 0; i < n ; i++) scanf("%d",&a[i]);
         printf("Case #%d: ",cs++);
         for(int i = 0 ; i<n; i++) {
-            for(int j = 0; j<35; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
-            for(int j = 0; j<35; j++) {
-                if(a[i] & (1LL<<j)) {
+            for(int j = 0; j<33; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
+            for(int j = 0; j<33; j++) {
+                if(a[i] & (1<<j)) {
                     dp[i%2][j][0] = dp[(i+1)%2][j][0];
                     dp[i%2][j][1] = dp[(i+1)%2][j][1] + 1;
                 } else {
@@ -48,15 +48,15 @@ int main()
                     dp[i%2][j][1] = 0;
                 }
             }
-            for(int j = 0; j<35; j++) ans += dp[i%2][j][1]*(1LL<<j);
+            for(int j = 0; j<33; j++) ans += dp[i%2][j][1]*(1<<j);
         }
         printf("%.6f ",ans*1.0/tot);
         memset(dp,0,sizeof(dp));
         ans = 0;
         for(int i = 0 ; i<n; i++) { ///or
-            for(int j = 0; j<35; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
-            for(int j = 0; j<35; j++) {
-                if(a[i] & (1LL<<j)) {
+            for(int j = 0; j<33; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
+            for(int j = 0; j<33; j++) {
+                if(a[i] & (1<<j)) {
                     dp[i%2][j][0] = 0;
                     dp[i%2][j][1] = dp[(i+1)%2][j][1] + dp[(i+1)%2][j][0] + 1;
                 } else {
@@ -64,7 +64,7 @@ int main()
                     dp[i%2][j][1] = dp[(i+1)%2][j][1];
                 }
             }
-            for(int j = 0; j<35; j++) ans += dp[i%2][j][1]*(1LL<<j);
+            for(int j = 0; j<33; j++) ans += dp[i%2][j][1]*(1<<j);
         }
 
         printf("%.6f ",ans*1.0/tot);
@@ -72,9 +72,9 @@ int main()
         ans = 0;
         memset(dp,0,sizeof(dp));
         for(int i = 0 ; i<n; i++) {
-            for(int j = 0; j<35; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
-            for(int j = 0; j<35; j++) {
-                if(a[i] & (1LL<<j)) { /// dangqianwei 1
+            for(int j = 0; j<33; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
+            for(int j = 0; j<33; j++) {
+                if(a[i] & (1<<j)) { /// dangqianwei 1
                     dp[i%2][j][0] = dp[(i+1)%2][j][1];
                     dp[i%2][j][1] = dp[(i+1)%2][j][0] + 1;
                 } else {
@@ -82,8 +82,9 @@ int main()
                     dp[i%2][j][1] = dp[(i+1)%2][j][1] ;
                 }
             }
-            for(int j = 0; j<35; j++) ans += dp[i%2][j][1]*(1LL<<j);
+            for(int j = 0; j<33; j++) ans += dp[i%2][j][1]*(1<<j);
         }
         printf("%.6f\n",ans*1.0/tot);
     }
+    return 0;
 }
