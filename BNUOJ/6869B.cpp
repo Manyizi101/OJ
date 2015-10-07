@@ -19,36 +19,71 @@
 #include <sstream>
 #include <fstream>
 #define debug puts("-----")
-
-typedef long long int ll;
-const double pi = acos(-1.0);
-const double eps = 1e-8;
-const int inf = 0x3f3f3f3f;
-const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
-
+typedef long long LL;
+const double INF = 1e40;
+const double eps  =1e-8;
+const int N = 501050;
+LL dp[4][50][30];
+LL a[N];
 int main()
 {
- std::bitset<4> foo (1);
-  std::bitset<4> bar (2);
+    int T,n,cs = 1;
+    scanf("%d",&T);
+    while(T--) {
+        memset(dp,0,sizeof(dp));
+        LL ans = 0;
+        scanf("%d",&n);
+        LL tot = n*(n+1)/2;
+        for(int i = 0; i < n ; i++) scanf("%lld",&a[i]);
+        printf("Case #%d: ",cs++);
+        for(int i = 0 ; i<n; i++) {
+            for(int j = 0; j<35; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
+            for(int j = 0; j<35; j++) {
+                if(a[i] & (1LL<<j)) {
+                    dp[i%2][j][0] = dp[(i+1)%2][j][0];
+                    dp[i%2][j][1] = dp[(i+1)%2][j][1] + 1;
+                } else {
+                    dp[i%2][j][0] = dp[(i+1)%2][j][0] + dp[(i+1)%2][j][1] + 1;
+                    dp[i%2][j][1] = 0;
+                }
+            }
+            for(int j = 0; j<35; j++) ans += dp[i%2][j][1]*(1LL<<j);
+        }
+        printf("%.6f ",ans*1.0/tot);
+        memset(dp,0,sizeof(dp));
+        ans = 0;
+        for(int i = 0 ; i<n; i++) { ///or
+            for(int j = 0; j<35; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
+            for(int j = 0; j<35; j++) {
+                if(a[i] & (1LL<<j)) {
+                    dp[i%2][j][0] = 0;
+                    dp[i%2][j][1] = dp[(i+1)%2][j][1] + dp[(i+1)%2][j][0] + 1;
+                } else {
+                    dp[i%2][j][0] = dp[(i+1)%2][j][0] + 1;
+                    dp[i%2][j][1] = dp[(i+1)%2][j][1];
+                }
+            }
+            for(int j = 0; j<35; j++) ans += dp[i%2][j][1]*(1LL<<j);
+        }
 
-  std::cout << (foo^=bar) << '\n';       // 1010 (XOR,assign)
-  std::cout << (foo&=bar) << '\n';       // 0010 (AND,assign)
-  std::cout << (foo|=bar) << '\n';       // 0011 (OR,assign)
-
-  std::cout << (foo<<=2) << '\n';        // 1100 (SHL,assign)
-  std::cout << (foo>>=1) << '\n';        // 0110 (SHR,assign)
-
-  std::cout << (~bar) << '\n';           // 1100 (NOT)
-  std::cout << (bar<<1) << '\n';         // 0110 (SHL)
-  std::cout << (bar>>1) << '\n';         // 0001 (SHR)
-
-  std::cout << (foo==bar) << '\n';       // false (0110==0011)
-  std::cout << (foo!=bar) << '\n';       // true  (0110!=0011)
-
-  std::cout << (foo&bar) << '\n';        // 0010
-  std::cout << (foo|bar) << '\n';        // 0111
-  std::cout << (foo^bar) << '\n';        // 0101
-
-  return 0;
+        printf("%.6f ",ans*1.0/tot);
+        ///xor
+        ans = 0;
+        memset(dp,0,sizeof(dp));
+        for(int i = 0 ; i<n; i++) {
+            for(int j = 0; j<35; j++) dp[i%2][j][0] = dp[i%2][j][1] = 0;
+            for(int j = 0; j<35; j++) {
+                if(a[i] & (1LL<<j)) { /// dangqianwei 1
+                    dp[i%2][j][0] = dp[(i+1)%2][j][1];
+                    dp[i%2][j][1] = dp[(i+1)%2][j][0] + 1;
+                } else {
+                    dp[i%2][j][0] = dp[(i+1)%2][j][0] + 1;
+                    dp[i%2][j][1] = dp[(i+1)%2][j][1] ;
+                }
+            }
+            for(int j = 0; j<35; j++) ans += dp[i%2][j][1]*(1LL<<j);
+        }
+        printf("%.6f\n",ans*1.0/tot);
+    }
 }
