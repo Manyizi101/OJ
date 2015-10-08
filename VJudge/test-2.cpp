@@ -29,7 +29,7 @@
 #define mp make_pair
 #define pb push_back
 using namespace std;
-const double eps = 1e-4;
+const double eps = 1e-8;
 const double pi = acos(-1.0);
 const double inf = 1e20;
 const int maxp = 1e6+10;
@@ -1199,7 +1199,7 @@ struct halfplanes {
         n = m;
     }
 
-    bool halfplaneinsert()
+    bool halfplanepush_back()
     {
         int i;
         for (i = 0; i < n; i++)hp[i].calcangle();
@@ -1524,7 +1524,7 @@ void input()
     }
 }
 
-set<point> ans;
+vector<point> ans;
 
 int main()
 {
@@ -1534,27 +1534,27 @@ int main()
             if(i!=j)
                 if(!zhi[i].parallel(zhi[j])) {
                     point tmp = zhi[i].crosspoint(zhi[j]);
-                    if(zhi[i].id==1&&zhi[j].id==1)  ans.insert(tmp);
-                    else if(zhi[i].id==2&&zhi[j].id==1&&zhi[i].pointonray(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==3&&zhi[j].id==1&&zhi[i].pointonseg(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==2&&zhi[j].id==2&&zhi[i].pointonray(tmp)&&zhi[j].pointonray(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==3&&zhi[j].id==2&&zhi[i].pointonseg(tmp)&&zhi[j].pointonray(tmp)) ans.insert(tmp);
-                    else if(zhi[i].id==3&&zhi[j].id==3&&zhi[i].pointonseg(tmp)&&zhi[j].pointonseg(tmp)) ans.insert(tmp);
+                    if(zhi[i].id==1&&zhi[j].id==1)  ans.push_back(tmp);
+                    else if(zhi[i].id==2&&zhi[j].id==1&&zhi[i].pointonray(tmp)) ans.push_back(tmp);
+                    else if(zhi[i].id==3&&zhi[j].id==1&&zhi[i].pointonseg(tmp)) ans.push_back(tmp);
+                    else if(zhi[i].id==2&&zhi[j].id==2&&zhi[i].pointonray(tmp)&&zhi[j].pointonray(tmp)) ans.push_back(tmp);
+                    else if(zhi[i].id==3&&zhi[j].id==2&&zhi[i].pointonseg(tmp)&&zhi[j].pointonray(tmp)) ans.push_back(tmp);
+                    else if(zhi[i].id==3&&zhi[j].id==3&&zhi[i].pointonseg(tmp)&&zhi[j].pointonseg(tmp)) ans.push_back(tmp);
                 } else {
                     if(zhi[i].id==2&&zhi[j].id==2) {
-                        if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b) ans.insert(zhi[i].a);
+                        if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b) ans.push_back(zhi[i].a);
                     } else if(zhi[i].id==3&&zhi[j].id==2) {
                         if(zhi[i].a==zhi[j].a) {
-                            if((zhi[i].b-zhi[i].a)*(zhi[j].b-zhi[i].a)<=0)  ans.insert(zhi[i].a);
+                            if((zhi[i].b-zhi[i].a)*(zhi[j].b-zhi[i].a)<=0)  ans.push_back(zhi[i].a);
                         }
                         if(zhi[i].b==zhi[j].a) {
-                            if((zhi[i].a-zhi[i].b)*(zhi[j].b-zhi[i].b)<=0)  ans.insert(zhi[i].b);
+                            if((zhi[i].a-zhi[i].b)*(zhi[j].b-zhi[i].b)<=0)  ans.push_back(zhi[i].b);
                         }
                     } else if(zhi[i].id==3&&zhi[j].id==3) {
-                        if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b&&(zhi[i].b-zhi[i].a)*(zhi[j].b-zhi[i].a)<=0) ans.insert(zhi[i].a);
-                        else if(zhi[i].b==zhi[j].b&&zhi[i].a!=zhi[j].a&&(zhi[i].a-zhi[i].b)*(zhi[j].a-zhi[i].b)<=0) ans.insert(zhi[i].b);
-                        else if(zhi[i].a==zhi[j].b&&zhi[i].b!=zhi[j].a&&(zhi[i].b-zhi[i].a)*(zhi[j].a-zhi[i].a)<=0) ans.insert(zhi[i].a);
-                        else if(zhi[i].b==zhi[j].a&&zhi[i].a!=zhi[j].b&&(zhi[i].a-zhi[i].b)*(zhi[j].b-zhi[i].b)<=0) ans.insert(zhi[i].b);
+                        if(zhi[i].a==zhi[j].a&&zhi[i].b!=zhi[j].b&&(zhi[i].b-zhi[i].a)*(zhi[j].b-zhi[i].a)<=0) ans.push_back(zhi[i].a);
+                        else if(zhi[i].b==zhi[j].b&&zhi[i].a!=zhi[j].a&&(zhi[i].a-zhi[i].b)*(zhi[j].a-zhi[i].b)<=0) ans.push_back(zhi[i].b);
+                        else if(zhi[i].a==zhi[j].b&&zhi[i].b!=zhi[j].a&&(zhi[i].b-zhi[i].a)*(zhi[j].a-zhi[i].a)<=0) ans.push_back(zhi[i].a);
+                        else if(zhi[i].b==zhi[j].a&&zhi[i].a!=zhi[j].b&&(zhi[i].a-zhi[i].b)*(zhi[j].b-zhi[i].b)<=0) ans.push_back(zhi[i].b);
                     }
                 }
         }
@@ -1564,20 +1564,20 @@ int main()
             if(c[i].relationline(zhi[j])!=0) {
                 point tmp1,tmp2;
                 int flag=c[i].pointcrossline(zhi[j],tmp1,tmp2);
-                if(zhi[j].id==1&&flag==1)   ans.insert(tmp1);
+                if(zhi[j].id==1&&flag==1)   ans.push_back(tmp1);
                 else if(zhi[j].id==1&&flag==2) {
-                    ans.insert(tmp1);
-                    ans.insert(tmp2);
+                    ans.push_back(tmp1);
+                    ans.push_back(tmp2);
                 } else if(zhi[j].id==2&&flag==1) {
-                    if(zhi[j].pointonray(tmp1)) ans.insert(tmp1);
+                    if(zhi[j].pointonray(tmp1)) ans.push_back(tmp1);
                 } else if(zhi[j].id==2&&flag==2) {
-                    if(zhi[j].pointonray(tmp1)) ans.insert(tmp1);
-                    if(zhi[j].pointonray(tmp2)) ans.insert(tmp2);
+                    if(zhi[j].pointonray(tmp1)) ans.push_back(tmp1);
+                    if(zhi[j].pointonray(tmp2)) ans.push_back(tmp2);
                 } else if(zhi[j].id==3&&flag==1) {
-                    if(zhi[j].pointonseg(tmp1)) ans.insert(tmp1);
+                    if(zhi[j].pointonseg(tmp1)) ans.push_back(tmp1);
                 } else if(zhi[j].id==3&&flag==2) {
-                    if(zhi[j].pointonseg(tmp1)) ans.insert(tmp1);
-                    if(zhi[j].pointonseg(tmp2)) ans.insert(tmp2);
+                    if(zhi[j].pointonseg(tmp1)) ans.push_back(tmp1);
+                    if(zhi[j].pointonseg(tmp2)) ans.push_back(tmp2);
                 }
             }
         }
@@ -1589,8 +1589,8 @@ int main()
                 if(flag>=2&&flag<=4) {
                     point tmp1, tmp2;
                     int cnt = c[i].pointcrosscircle(c[j],tmp1, tmp2);
-                    if(cnt==2) ans.insert(tmp1),ans.insert(tmp2);
-                    else ans.insert(tmp1);
+                    if(cnt==2) ans.push_back(tmp1),ans.push_back(tmp2);
+                    else ans.push_back(tmp1);
                 }
             }
         }
