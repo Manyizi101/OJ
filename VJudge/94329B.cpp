@@ -27,19 +27,7 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-int t,n;
-
 int main()
 {
-    scanf("%d", &t);
-    while(t--) {
-        scanf("%d", &n);
-        int tmp = floor(sqrt(n));
-        for(int i=tmp; i>=1; --i) {
-            if(n%i==0) {
-                printf("%d\n", 2*(i+n/i));
-                break;
-            }
-        }
-    }
+
 }
