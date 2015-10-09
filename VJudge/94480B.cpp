@@ -47,10 +47,16 @@ int main()
             else ou++;
         }
         sort(a,a+n);
+        int cnt = 1;
         for(int i=1; i<n; ++i) {
-            if(a[i]==a[i-1])    same++;
+            if(a[i]==a[i-1]) {
+                same+=cnt;
+                cnt++;
+            } else {
+                cnt = 1;
+            }
         }
-        shang=ji*ou+same*(same-1)/2;
+        shang=ji*ou+same;
         if(shang==0) {
             printf("0/1\n");
             continue;
