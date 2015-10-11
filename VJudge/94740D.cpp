@@ -119,7 +119,6 @@ int main()
                 printf("%.5f %.5f %.5f\n", ans[0],-cnt+y3,ans[2]);
                 printf("%.5f %.5f %.5f\n", ans[0],cnt+y3,ans[2]);
             } else {
-                cout<<"xxx"<<endl;
                 cout<<1<<endl;
                 cnt = sqrt(x*x+y*y);
                 printf("%.5f %.5f %.5f\n", ans[0],ans[1],cnt);
