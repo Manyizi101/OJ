@@ -95,7 +95,7 @@ int main()
         a[2][3]=r2*r2+x3*x3-x2*x2+y3*y3-y2*y2;
 
         int x = solve(a,l,ans,3);
-        if(sgn(ans[2])!=1) {
+        if(sgn(ans[2])==-1) {
             cout<<0<<endl;
             continue;
         }
