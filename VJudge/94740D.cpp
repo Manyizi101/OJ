@@ -117,6 +117,10 @@ int main()
                 cnt = sqrt(r*r-(x-x3)*(x-x3));
                 printf("%.8f %.8f %.8f\n", ans[0],cnt+y3,ans[2]);
                 printf("%.8f %.8f %.8f\n", ans[0],-cnt+y3,ans[2]);
+            } else {
+                cout<<1<<endl;
+                cnt = sqrt(x*x+y*y);
+                printf("%.8f %.8f %.8f\n", ans[0],ans[1],cnt);
             }
         } else {
             cout<<0<<endl;
