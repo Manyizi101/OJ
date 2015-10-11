@@ -22,7 +22,7 @@
 
 typedef long long int ll;
 const double pi = acos(-1.0);
-const double eps = 1e-8;
+const double eps = 1e-6;
 const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
@@ -101,7 +101,7 @@ int main()
         }
         if(x==0) {
             cout<<1<<endl;
-            printf("%.8f %.8f %.8f\n", ans[0],ans[1],ans[2]);
+            printf("%.5f %.5f %.5f\n", ans[0],ans[1],ans[2]);
         } else if(x>0) {
             double r = ans[2];
             double x = ans[0];
@@ -110,17 +110,17 @@ int main()
             if(!l[0]) {
                 cout<<2<<endl;
                 cnt = sqrt(r*r-(y-y3)*(y-y3));
-                printf("%.8f %.8f %.8f\n", cnt+x3,ans[1],ans[2]);
-                printf("%.8f %.8f %.8f\n", -cnt+x3,ans[1],ans[2]);
+                printf("%.5f %.5f %.5f\n", -cnt+x3,ans[1],ans[2]);
+                printf("%.5f %.5f %.5f\n", cnt+x3,ans[1],ans[2]);
             } else if(!l[1]) {
                 cout<<2<<endl;
                 cnt = sqrt(r*r-(x-x3)*(x-x3));
-                printf("%.8f %.8f %.8f\n", ans[0],cnt+y3,ans[2]);
-                printf("%.8f %.8f %.8f\n", ans[0],-cnt+y3,ans[2]);
+                printf("%.5f %.5f %.5f\n", ans[0],-cnt+y3,ans[2]);
+                printf("%.5f %.5f %.5f\n", ans[0],cnt+y3,ans[2]);
             } else {
                 cout<<1<<endl;
                 cnt = sqrt(x*x+y*y);
-                printf("%.8f %.8f %.8f\n", ans[0],ans[1],cnt);
+                printf("%.5f %.5f %.5f\n", ans[0],ans[1],cnt);
             }
         } else {
             cout<<0<<endl;
