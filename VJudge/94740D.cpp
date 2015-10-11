@@ -72,6 +72,7 @@ int t;
 
 int main()
 {
+    freopen("94740D.txt", "w",stdout);
     double x1,y1,r1,x2,y2,r2,x3,y3;
     scanf("%d", &t);
     while(t--) {
@@ -118,6 +119,7 @@ int main()
                 printf("%.5f %.5f %.5f\n", ans[0],-cnt+y3,ans[2]);
                 printf("%.5f %.5f %.5f\n", ans[0],cnt+y3,ans[2]);
             } else {
+                cout<<"xxx"<<endl;
                 cout<<1<<endl;
                 cnt = sqrt(x*x+y*y);
                 printf("%.5f %.5f %.5f\n", ans[0],ans[1],cnt);
@@ -128,3 +130,15 @@ int main()
     }
     return 0;
 }
+
+
+/*
+7
+12 10 1 8 10 1 10 10
+20 40 5 -20 -40 6 5 5
+2 4 8 33 -55 9 50 50
+1 2 5 100 200 8 30 50
+2 5 10 -1000 -2000 19 -10 -20
+2 10 3 2 30 2 4 4
+10 100 5 -100 100 8 5 5
+**/
