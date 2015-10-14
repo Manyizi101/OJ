@@ -40,32 +40,10 @@ int main()
             a[i]=tmp%p;
         }
         sort(a,a+n);
-        ll ans=-1;
-        for(int i=n-1; i>=0; --i) {
-            int flag = lower_bound(a,a+i,p-a[i]-1)-a;
-            if(a[flag]==p-a[i]-1) {
-                ans = max(ans,p-1);
-            } else if(a[flag]>p-a[i]-1) {
-                if(flag)
-                    ans = max(ans,a[i]+a[flag-1]);
-                else
-                    continue;
-            } else {
-                ans = max(ans,a[i]+a[flag]);
-            }
-        }
-        for(int i=n-1; i>=0; --i) {
-            int flag = lower_bound(a,a+i,2*p-a[i]-1)-a;
-            if(a[flag]==2*p-a[i]-1) {
-                ans = max(ans,(2*p-1)%p);
-            } else if(a[flag]>2*p-a[i]-1) {
-                if(flag)
-                    ans = max(ans,(a[i]+a[flag-1])%p);
-                else
-                    continue;
-            } else {
-                ans = max(ans,(a[i]+a[flag])%p);
-            }
+        ll ans=(a[n-1]+a[n-2])%p;
+        for(int i=0; i<n-2; ++i) {
+            int flag = lower_bound(a+i+1,a+n,p-a[i])-a;
+            ans=max(ans,(a[i]+a[flag-1])%p);
         }
         printf("%I64d\n", ans);
     }
