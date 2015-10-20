@@ -27,36 +27,15 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int NP = 1000005;
-int ispri[NP] = {}, prime[NP], pcnt = 0;
-void getprime()
-{
-    ispri[0] = ispri[1] = 1;
-    for (long long i = 2; i < NP; i++)
-        if (ispri[i] == 0) {
-            prime[++pcnt] = i;
-            for (long long j = i * i; j < NP; j += i)
-                ispri[j] = 1;
-        }
-}
-
-int cnt, f[NP],n;
+int n;
 
 int main()
 {
-    getprime();
-    for(int i=2; i<NP; ++i) {
-        if(ispri[i])    f[cnt++]=i;
-    }
     while(~scanf("%d", &n)) {
-        for(int i=0; f[i]<=n/2; ++i) {
-            int flag = lower_bound(f,f+cnt,n-f[i])-f;
-            //cout<<flag<<endl;
-            if(f[flag]==n-f[i]) {
-                cout<<f[i]<<" "<<n-f[i]<<endl;
-                break;
-            } else continue;
-        }
+        if(n&1)
+            printf("%d 9", n-9);
+        else
+            printf("%d 4", n-4);
     }
     return 0;
 }
