@@ -19,32 +19,21 @@
 #include <sstream>
 #include <fstream>
 #define debug puts("-----")
-#define pi (acos(-1.0))
-#define eps (1e-8)
-#define inf (1<<28)
-#define ll long long int
+
+typedef long long int ll;
+const double pi = acos(-1.0);
+const double eps = 1e-8;
+const int inf = 0x3f3f3f3f;
+const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
 int n;
-string a[5] = {"Sheldon", "Leonard", "Penny", "Rajesh", "Howard"};
+string x[5]= {"Sheldon", "Leonard", "Penny", "Rajesh", "Howard"};
 
-int main(int argc, char const *argv[])
+int main()
 {
-	scanf("%d", &n);
-	if (n > 5)
-	{
-		int x = ceil(log2(double(n) / 5.0));
-		int y = n - 5 * (int)pow(2, x - 1);
-		int tmp1 = y / (int)pow(2, x);
-		int tmp2 = y % (int)pow(2, x);
-		if (tmp2 == 0)
-			cout << a[tmp1 - 1];
-		else
-			cout << a[tmp1];
-	}
-	else
-	{
-		cout << a[n - 1];
-	}
-	return 0;
+    while(~scanf("%d", &n)) {
+        while(n>5)  n=n/2-2;
+        cout<<x[n-1]<<endl;
+    }
 }
