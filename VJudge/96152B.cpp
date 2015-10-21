@@ -27,43 +27,51 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-const int maxn = 5e4+10;
+const int MAXN = 5e6+10;
 const ll mod = 998244353;
 
-int t;
-int n;
-ll a[maxn],ans;
-ll x[maxn],y[maxn],nx,ny;
+struct Trie {
+    int ch[MAXN][2],val[MAXN],cnt;
+    ll ans;
+    void init()
+    {
+        ans = cnt = val[0] = ch[0][0] = ch[0][1] = 0;
+    }
+    void insert(int v)
+    {
+        val[0]++;
+        int deep = 0,num = val[0],next = 0;
+        for(int i = 0; i < 30; i++) {
+            int c = v & 1;
+            if(!ch[next][c]) {
+                ch[next][c] = ++cnt;
+                val[cnt] = ch[cnt][0] = ch[cnt][1] = 0;
+            }
+            val[ch[next][c]]++;
+            deep++;
+            ans += ((num - val[ch[next][c]]) << deep);
+            ans %= mod;
+            next = ch[next][c];
+            v >>= 1;
+            num = val[next];
 
-inline ll lowbit(ll x)
-{
-    return x&(-x);
-}
+        }
+    }
+} trie;
+
+int t,n,cs=1;
+int a;
 
 int main()
 {
     scanf("%d", &t);
     while(t--) {
-        ans=0;
-        nx=ny=0;
-        scanf("%d",&n);
+        trie.init();
+        scanf("%d", &n);
         for(int i=0; i<n; ++i) {
-            scanf("%I64d", &a[i]);
-            if(a[i]&1)   x[nx++]=a[i];
-            else    y[ny++]=a[i];
+            scanf("%d", &a);
+            trie.insert(a);
         }
-        for(int i=0; i<nx-1; ++i) {
-            for(int j=i+1; j<nx; ++j) {
-                ans += lowbit(x[i]^x[j]);
-                ans %= mod;
-            }
-        }
-        for(int i=0; i<ny-1; ++i) {
-            for(int j=i+1; j<ny; ++j) {
-                ans += lowbit(y[i]^y[j]);
-                ans %= mod;
-            }
-        }
-        printf("%I64d\n", (ans*2+nx*ny+n-1)%mod);
+        printf("Case #%d: %I64d\n", cs++, trie.ans);
     }
 }
