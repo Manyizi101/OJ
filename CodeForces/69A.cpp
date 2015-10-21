@@ -27,7 +27,20 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
+int n,x,y,z,a,b,c;
+
 int main()
 {
-
+    while(~scanf("%d",&n)) {
+        x=y=z=0;
+        for(int i=0; i<n; ++i) {
+            scanf("%d%d%d", &a,&b,&c);
+            x+=a;
+            y+=b;
+            z+=c;
+        }
+        //cout<<x<<" "<<y<<" "<<z<<endl;
+        if(x||y||z) puts("NO");
+        else puts("YES");
+    }
 }
