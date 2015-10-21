@@ -27,13 +27,20 @@ const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3fLL;
 using namespace std;
 
-int a,b,c;
-int f1,f2;
-int ans;
+int t;
+int a,b,ans;
+int s[4]= {1000,1500,2000,2500};
+int cs=1;
 
 int main()
 {
-    while(~scanf("%d%d%d", &a,&b,&c)) {
-        cout<<max(a+b+c,max(a+b*c, max((a+b)*c,max(a*b+c,max(a*(b+c),a*b*c)))))<<endl;;
+    scanf("%d", &t);
+    while(t--) {
+        ans = 0;
+        for(int i=0; i<4; ++i) {
+            scanf("%d%d", &a,&b);
+            ans += max((int)(s[i]*0.4),(int)((250-a)*s[i]/250-b*50));
+        }
+        printf("Case #%d: %d\n", cs++, ans);
     }
 }
