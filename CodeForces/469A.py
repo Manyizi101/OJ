@@ -16,7 +16,7 @@ for i in b[1:]:
 
 flag = 0
 
-for i in ans:
+for i in ans[1:]:
     if i == 0:
         flag = 1
         break
