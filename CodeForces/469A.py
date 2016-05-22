@@ -1,27 +1,12 @@
-import io
 n = int(input())
-a = input().split(' ')
-b = input().split(' ')
+target = [0] * (n+1)
 
-ans = []
+for i in range(2):
+    a = list(map(int, input().split(' ')))
+    for j in a[1:]:
+        target[j] = 1
 
-for i in range(n+1):
-    ans.append(0)
-
-for i in a[1:]:
-    ans[int(i)] = 1
-
-for i in b[1:]:
-    ans[int(i)] = 1
-
-flag = 0
-
-for i in ans[1:]:
-    if i == 0:
-        flag = 1
-        break
-
-if flag:
-    print("Oh, my keyboard!")
-else:
+if n == sum(target):
     print("I become the guy.")
+else:
+    print("Oh, my keyboard!")
