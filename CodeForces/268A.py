@@ -1,16 +1,12 @@
 n = int(input())
-a = []
-b = []
+a = [0] * n
+b = [0] * n
 ans = 0
 
 for i in range(n):
-    x = list(map(int, input().split(' ')))
-    a.append(x[0])
-    b.append(x[1])
+    a[i], b[i] = list(map(int, input().split(' ')))
 
 for i in a:
-    for j in b:
-        if i == j:
-            ans += 1
+    ans += b.count(i)
 
 print(ans)
