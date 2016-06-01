@@ -1,5 +1,4 @@
-n = int(input())
-i = 1
+i, n = 1, int(input())
 
 while n>=0:
     n-=i*(i+1)/2
